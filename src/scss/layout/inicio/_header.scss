@@ -1,0 +1,202 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+// Empieza la navegación
+// .seccion1-header{
+
+// }
+
+.barra-navegacion{ 
+    
+    position:fixed;
+    top:0;
+    z-index: 10;
+    padding-top: 0.5rem;
+    width: 100%;
+    
+    display:flex;
+    flex-direction:column;
+    
+    &.fijo-js{
+        background-color: v.$negro;
+    }
+
+    @include m.tablet{
+        padding-top: 2rem;
+        width: 100%;
+        height: 6rem;
+
+        //fila/columna, nowrap, align-h, align-v, espaciado
+        @include m.flex(row, wrap, flex-end, center, 0, 0);
+    }
+
+    
+    // Contenedor de la imagen
+    .fondo-menu, .fondo-logo{
+        display: block;
+        padding:1.5rem 2rem;
+        
+        img{
+            height: 3rem;
+        }
+        
+        @include m.tablet{
+            display: none;
+        }
+    }
+    
+    // Contenedor de la imagen
+    .fondo-logo{
+        //Sobreescribimos el tamaño de la imagen
+        img{
+            height: 4rem;
+        }
+    } 
+}
+
+// Contenedor del menú de navegacion
+.navegacion-menu{
+    position:fixed;
+    width:100%;
+    left:-100%;
+    top:0;
+    bottom: 0;
+    background-color: rgba($color: v.$negro, $alpha: 0.9);
+    transition-duration: 0.25s;
+    
+    display:flex;
+    flex-direction:column;
+    
+    //Resolución teléfono
+    @include m.telefono{
+        &.mostrarMenu-js{
+            left:0;
+            z-index: 10000000;
+        }
+    }
+    
+    @include m.tablet{
+        flex-direction:row;
+        position: relative;
+        background-color: transparent;
+        width: auto;
+        left:0;
+    }
+    
+    //Enlaces del menú 
+    a{        
+        //Se utiliza transparente para quitar el efecto de salto que tienen los enlaces al momento de agregar una linea con un grosor de 1px 
+        border-bottom: 1px solid transparent;
+        color: v.$blanco;
+        // font-size: 1.6rem;
+        padding:1rem 0 1rem 2rem;
+        transition-duration: 0.25s;
+        
+        &:hover{
+            cursor: pointer;
+            background-color: v.$blanco-hueso;
+            color: v.$negro;
+        }
+        
+        // El primer elemento es la X de cerrar la ventana en movil
+        &:first-of-type{
+            display: block;
+            text-align: right;
+            padding:2rem;
+            font-size:2rem;
+
+            &:hover{
+                background-color: transparent;
+                color: v.$blanco;
+            }
+        }
+        
+        @include m.tablet{
+            padding:0 0 1rem 0;
+            margin-right:5rem;
+            
+            &:hover{
+                background-color: transparent;
+                color: v.$blanco;
+                border-bottom: 1px solid v.$blanco;
+            }
+        
+            &:first-of-type{
+                display: none;
+            }
+        
+            // &:last-of-type{
+            //     margin-right:0;
+            // }
+        }
+
+    }
+
+}
+
+// Termina la navegación
+.header-inicio{
+    position:relative;
+    z-index: 0;
+    padding:6rem 0 1rem 0;
+    min-height: 90vh;
+
+    background-image: url('../img/sistema/header.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+    transition-duration: 0.5s;
+
+    &::before{
+        content: '';
+        position: absolute;
+        z-index: 1;
+        background-color: rgba($color: v.$negro, $alpha: 0.75);
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+    }
+}
+
+// Comienza la sección del título y el fomulario
+.seccion2-header{
+    position: relative;
+    z-index: 5;
+    color:v.$blanco;
+    min-height: 80vh; 
+    padding:3rem 0;
+
+    //Una sola columna 
+    @include m.grid(1, center, start, 0px, 0px);
+
+    //Resolución desktop
+    @include m.desktop{
+        //Dos columnas
+        @include m.grid(2, center, center, 0px, 0px);
+    }
+
+    //Contenedor de la imagen y el titulo
+    .titulo{
+        //Una sola columna
+        @include m.grid(1, center, center, 0px, 0px);
+        
+        img{
+            margin:2rem 0;
+            
+            @include m.tablet{
+                margin:4rem 0;
+            }
+
+            //Resolución desktop
+            @include m.desktop{
+                width:90%;
+            }
+        }
+
+        h1{
+            margin:0 0 4rem 0;
+        }
+    }
+}

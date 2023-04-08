@@ -1,0 +1,53 @@
+// Fuentes
+@font-face {
+    font-family: 'Roboto';
+    src: url("../fonts/Roboto-Light.ttf") format('truetype');
+    font-style: normal;
+    font-weight: 300;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url("../fonts/Roboto-Regular.ttf") format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url("../fonts/Roboto-Black.ttf") format('truetype');
+    font-style: normal;
+    font-weight: 900;
+}
+
+$fuente_principal: 'Roboto', 'Arial', sans-serif;
+// Tamaño de Media Queries
+$telefono: 599px;
+$tablet: 600px;
+$desktop: 1024px;
+
+// Colores
+$negro:#000000;
+$negro-claro: #333;
+
+$blanco: #fffffff6;
+$blanco-hueso:#ffffff;
+$azul: #1782FF;
+$azul-claro: #5ea4f5;
+$azul-darken: #0975f0dc;
+$azul-turquesa:#00F0FF;
+$gris-claro: #e7e4e4;
+$gris: #BBB9B9;
+$gris-oscuro: #807b7b;
+$transparente: transparent;
+$rojo: #ff0000;
+$rosado: #ff9f9f;
+$amarillo:#f2ff02;
+$verde: rgb(6, 128, 46);
+$verde-claro: rgb(11, 255, 93);
+
+$separacion: 5rem;
+
+// Fuentes
+$delgada: 300;
+$regular : 400;
+$bold: 700;
+$black: 900;

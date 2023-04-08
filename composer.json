@@ -1,0 +1,23 @@
+{
+    "name": "byron/sacinv",
+    "description": "Proyecto de grado, MVC, HTML, SASS, JS",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./",
+            "Model\\": "./models",
+            "Controllers\\": "./controllers",
+            "Classes\\": "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Byron Fandiño Morales",
+            "email": "31166032+byronfandino@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.6",
+        "intervention/image": "^2.7"
+    }
+}

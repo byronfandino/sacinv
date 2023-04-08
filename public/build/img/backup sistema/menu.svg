@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="215" height="169" viewBox="0 0 215 169">
+  <g id="Grupo_1" data-name="Grupo 1" transform="translate(-220 -87)">
+    <g id="Rectángulo_1" data-name="Rectángulo 1" transform="translate(220 151)" fill="#fff" stroke="#fff" stroke-width="1">
+      <rect width="215" height="41" rx="20.5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="214" height="40" rx="20" fill="none"/>
+    </g>
+    <g id="Rectángulo_2" data-name="Rectángulo 2" transform="translate(220 87)" fill="#fff" stroke="#fff" stroke-width="1">
+      <rect width="215" height="41" rx="20.5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="214" height="40" rx="20" fill="none"/>
+    </g>
+    <g id="Rectángulo_3" data-name="Rectángulo 3" transform="translate(220 215)" fill="#fff" stroke="#fff" stroke-width="1">
+      <rect width="215" height="41" rx="20.5" stroke="none"/>
+      <rect x="0.5" y="0.5" width="214" height="40" rx="20" fill="none"/>
+    </g>
+  </g>
+</svg>

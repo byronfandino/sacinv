@@ -1,0 +1,190 @@
+@use 'base/mixins' as m;
+@use 'base/variables' as v;
+
+
+
+.barra{
+    position: fixed;
+    z-index: 10;
+    background-color: v.$negro;
+    width: 100%;
+    top: 0;
+    
+    //Resolución tablet
+    @include m.desktop{
+        display:none;
+    }
+
+    &__figure{
+        padding: 1rem;
+    }
+}
+// Este nav es independiente de la clase barra
+.nav{
+    position: fixed;
+    overflow: scroll;
+    z-index: 15;
+    background-color:v.$negro;
+    width: 100%;
+    top: 0;
+    left:-100%;
+    height: 100%;
+    transition-duration: 0.15s;
+
+    //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+    @include m.flex(column, nowrap, flex-start, flex-start, 0, 0);
+    
+    // //Resolución desktop
+    @include m.desktop{
+        left: 0;
+        width: 7rem;
+    }
+    
+    &.show{
+        left:0;
+        //Resolución tablet
+        @include m.tablet{
+            width: 20rem;            
+        }
+    }
+    
+    &:hover{
+        //Resolución desktop
+        @include m.desktop{
+            width: 20rem;            
+        }
+    }
+
+}
+
+.nav__a{
+
+    color: v.$blanco;
+    font-size: 1.4rem;
+    padding:1.5rem 0 1.5rem 1.2rem;
+    width: 100%;
+    transition-duration: 0.2s;
+
+    //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+    @include m.flex(row, nowrap, flex-start, center, 0, 1.5rem);
+    
+    &:hover{
+        background-color: v.$negro-claro;
+    }
+
+    //El primer elemento lo movemos hacia la derecha (botón cerrar menú)
+    &:first-of-type{
+        justify-content: flex-end;
+        padding: 1.5rem 2rem 1rem 0;
+        background-color: v.$negro;
+        color:v.$blanco;
+
+        &:hover span{
+            color: v.$blanco;
+        }
+
+        & span{
+            border-radius: 50%;
+            border: 1px solid v.$blanco;
+            padding:0.3rem 1rem;
+        }
+
+        //Quitamos el primer elemento en la resolución de tablet
+        //Resolución tablet
+        @include m.desktop{
+            display:none;
+        }
+    }
+
+    //hacemos referencia al segundo item donde se encuentra el usuario para que su posicion sea al inicio de la barra de navegacion
+    &:nth-of-type(2){
+        align-items: flex-start;
+
+        & p{
+            padding:0;
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+
+            // escogemos el ultimo parrafo para cambiar el tamaño (Administrador/Usuario)
+            &:last-of-type{
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+    & .hat{
+        font-size: 4rem;
+        padding-top: 1rem;
+        height: 1.5rem;
+        
+        flex: 1;
+        text-align: right;
+        padding-right: 1rem;
+
+        transition: transform .8s linear;
+        transform: rotateX(180deg);
+        
+        //Resolución tablet
+        @include m.tablet{
+            text-align:left;
+        }
+
+        &.cerrar-item{
+            transform: rotateX(0deg);
+        }
+    }
+}
+
+//seccion navegación
+.subnav{
+        
+    @include m.flex(column, nowrap, flex-start, flex-start, 0, 0);
+    width: 100%;
+    background-color: lighten(v.$negro, 15%);
+    max-height: auto;
+    opacity: 1;
+    transition: opacity .4s linear,
+                max-height .4s linear;
+
+    &.ocultar{
+        opacity: 0;
+        max-height: 0;
+    };
+}
+
+.subnav__a{
+    width: 100%;
+    padding: 1.5rem 0.5rem 1.5rem 5.5rem;
+    max-height: 500px;
+    
+    //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+    @include m.flex(row, nowrap, flex-start, center, 0, 0);
+
+    opacity:1;
+    transition: opacity .1s linear,
+                padding .2s linear,
+                max-height .3s linear;
+    &.ocultar{
+
+        overflow: hidden;
+        opacity: 0;
+        padding:0 0.5rem 0rem 5.5rem;
+        max-height: 0;
+    }
+
+    &:hover{
+        background-color: v.$negro-claro;
+    }
+  
+}
+
+.subnav__img{
+    height: 1.6rem;
+    margin-right: 1rem;
+}
+
+.subnav__span{
+    color:v.$blanco;
+    font-size: 1.4rem;
+}

@@ -1,0 +1,96 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.main{
+    padding-top: 2.6rem;
+    .caracteristicas{
+        @include  m.grid(1, center, start, 1rem, 0);
+        width: 100%;
+        margin:2rem auto 6rem auto;
+        
+        //Resolución tablet
+        @include m.tablet{
+            width:70%;
+            grid-row-gap:3.5rem;
+        }
+
+        //Resolución desktop
+        @include m.desktop{
+            //Una sola columna
+            @include m.grid(2, center, start, 5rem, 2rem);
+            
+            width:80%;
+
+        }
+
+        .caract-item{
+            // border:1px solid v.$azul;
+            //fila o columna, wrap, align-h, aling-v, esp-h esp-v
+            @include m.flex(column, wrap, flex-start, center, 0, 0);
+            
+            //Resolución tablet
+            @include m.tablet{
+                //fila o columna, wrap, align-h, aling-v, esp-h esp-v
+                @include m.flex(row, nowrap, center, center, 0, 1.6rem);
+            }
+
+            //Resolución desktop
+            @include m.desktop{
+               align-items: center;
+            }
+
+            p{
+                // border:1px solid red;
+                margin-top:1.8rem;
+                text-align:center;
+                width:25rem;
+
+                //Resolución tablet
+                @include m.tablet{
+                    margin: 0;
+                    width:27.6rem;
+                    text-align: left;
+                }
+
+                //Resolución desktop
+                @include m.desktop{
+                    width:32rem;
+                }
+            }
+        }
+    }
+}
+
+.seccion-nosotros{
+    position: relative;
+    background-image: url('../img/sistema/nosotros.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    padding:6rem 0;
+
+    z-index: -2;
+
+    &::before{
+        content: '';
+        position: absolute;
+        background-color: rgba($color: v.$negro, $alpha: 0.7);
+        top:0;
+        left:0;
+        right: 0;
+        bottom:0;
+        z-index: -1;
+    }
+
+    h2{
+        position:relative;
+        margin-bottom:3rem;
+        color:v.$blanco;
+    }
+    
+    p{
+        position:relative;
+        color:v.$blanco;
+    }
+}

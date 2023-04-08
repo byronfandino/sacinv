@@ -1,0 +1,42 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.contenedor-olvide{
+
+    text-align: center;
+    width:100vw;
+    min-height: 100vh;
+    background-image: linear-gradient( 109.6deg,  rgba(15,2,2,1) 11.2%, rgba(36,163,190,1) 91.1% );
+    
+    .header-olvide{
+        margin:3.5rem auto;
+
+        img{
+            width:30rem;
+            height: auto;
+        }
+    }
+    
+    main{
+        
+        h1{
+            color:v.$blanco;
+            margin-top:0;
+        }
+        
+        form{
+            text-align: left;
+            max-width: 50rem;
+            padding-top:4rem;
+            padding-bottom:4rem;
+        }
+    
+        a{
+            display: block;
+            margin:3rem 0;
+            font-weight: 500;
+            color:v.$blanco;
+            font-size: 2rem;
+        }
+    }
+}
