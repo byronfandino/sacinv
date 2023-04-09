@@ -5,19 +5,34 @@ const labelSugr = campo.querySelector('.form__labelSugerencia');
 const labelError = campo.querySelector('.form__labelError');
 const iconoError = campo.querySelector('.form__iconError');
 const iconoLimpiar = campo.querySelector('.form__limpiar');
-const btnSubmitCampo = campo.querySelector('[data-button="btn-envio"]');
+const btnSubmitCampo = campo.parentElement.querySelector('[data-button="btn-envio"]');
+
+export let objetoUniCampo =  {
+    entidad:'',
+    url:'',
+    expresion : '', 
+    msg : '', 
+    stringDescripcion : '', 
+    llaves : [], 
+    arrayDescripcion : [],
+    registrosAPI : '',
+    registrosAPIEntidad : ''
+}
+
 
 export class EntidadUniCampo{
-    constructor (url, expresion, msg, entidad, registrosAPI, registrosAPIEntidad, stringDescripcion, llaves, arrayDescripcion){
-        this.url = url;        
-        this.expresion = expresion;
-        this.msg = msg;
-        this.entidad =  entidad;
-        this.registrosAPI = registrosAPI;
-        this.registrosAPIEntidad = registrosAPIEntidad;
-        this.stringDescripcion = stringDescripcion;
-        this.llaves = llaves;
-        this.arrayDescripcion = arrayDescripcion;        
+    constructor (){}
+
+    eventListeners(){
+
+        if(inputNombre){
+            // Verificamos si la ruta corresponde a editar
+            if (window.location.pathname.includes('/editar')){
+                inputNombre.addEventListener('input', rutaEditar);
+            }else{
+                inputNombre.addEventListener('input', rutaPrincipal);
+            }
+        }
     }
 
     // Funciones de API
@@ -40,15 +55,19 @@ export class EntidadUniCampo{
 
             setTimeout(() => {
                 borrarFilas();
-                this.mostrarRegistrosAPI('input', formatearTexto(inputNombre.value));
+                mostrarRegistrosAPI('input', formatearTexto(inputNombre.value));
+                this.estadoRegistro();
             }, 300);
         }
     }
 
     verificarMensajeGeneral(){
         const alerta = document.querySelector('.alerta');
+
         if (alerta){
+
             let textoAlerta = alerta.textContent;
+
             if(alerta.className.includes('error')){
                 Swal.fire({
                     icon: 'error',
@@ -98,183 +117,63 @@ export class EntidadUniCampo{
         });
     }
 
-    mostrarRegistrosAPI(evento = 'DOM', valor = ''){
+    cargarComboBox(){
 
-        const tabla = document.querySelector('.table');
-    
-        if (this.registrosAPI){
-            
-            this.registrosAPI.forEach( registro => {
-                
-                if (this.llaves.length === 0){
-                    this.llaves = Object.keys(registro);
-                }
-    
-                // Obtenemos el valor que se encuentra en la segunda posición del objeto mediante el object values retorna un arreglo y accedemos a la segunda posición
-                const valorCampo  = Object.values(registro)[1];
-                
-                if(evento === 'DOM' && valor === ''){
-                    this.arrayDescripcion.push(formatearTexto(valorCampo));
-                    if (tabla){
-                        crearRegistro(registro);
-                    }
-                }
-                
-                // Si lo que digitó el usuario se encuentra dentro de la descripción entonces se agrega el registro
-                if(evento === 'input' && formatearTexto(valorCampo).includes(valor)){
-                    if(tabla){
-                        crearRegistro(registro);
-                    }
-                }
-    
-                if(evento === 'modal' && valor === ''){
-                    this.arrayDescripcion.push(formatearTexto(valorCampo));
-                }
-    
-            });
-        }
-    
-        // Guardamos todos los nombres de las categorias en un solo string para utilizarlo en el filtro del campo
-        this.stringDescripcion="";
-        this.arrayDescripcion.forEach(nombre => {
-            this.stringDescripcion += nombre.toString() + ",";
+        // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
+        const comboBox = document.querySelector(`#${objetoUniCampo.entidad}`);
+        let optionEntidad='';
+        
+        // Borramos las opciones que puedan existir
+        const options = comboBox.querySelectorAll('option');
+        options.forEach( option => {
+            if (option.getAttribute('value') != "" ){
+                option.remove();
+            }
         });
     
+        let resultado = obtenerRegistrosAPI(objetoUniCampo.entidad);
+    
+        resultado.then(result => {
+    
+            if (result){
+    
+                let keysObject = Object.keys(objetoUniCampo.registrosAPIEntidad[0]);
+    
+                if (objetoUniCampo.registrosAPIEntidad){
+    
+                    objetoUniCampo.registrosAPIEntidad.forEach( registro => {
+    
+                        if(registro[keysObject[2]] == 'E'){
+            
+                            optionEntidad = document.createElement('OPTION'); 
+                            optionEntidad.setAttribute('value', registro[keysObject[0]]);
+                            optionEntidad.textContent=registro[keysObject[1]];
+                            comboBox.appendChild(optionEntidad);
+                        }
+                    });
+                }   
+            }
+        });
+    }
+
+    estadoRegistro(){
         botonStatus();
     }
-}
 
+    estadoBotonSubmit(){
+        estadoBoton();
+    }
 
-// // Variables Globales
-// export let globales = {
-//     // variables de la tabla
-//     url : '',
-//     expresion : "", 
-//     msg : "",
-//     entidad : "",
-
-//     // Variables utilizadas por las funciones
-//     registrosAPI: "",
-//     registrosAPIEntidad:'',
-//     stringDescripcion : '',
-//     llaves : [],
-//     arrayDescripcion : []
-// }
-
-
-// esta función es utilizada unicamente para llenar los comboBox de otras tablas diferentes a la principal
-export function cargarComboBox(){
-
-    // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
-    const comboBox = document.querySelector(`#${globales.entidad}`);
-    let optionEntidad='';
-    
-    // Borramos las opciones que puedan existir
-    const options = comboBox.querySelectorAll('option');
-    options.forEach( option => {
-        if (option.getAttribute('value') != "" ){
-            option.remove();
-        }
-    });
-
-    let resultado = obtenerRegistrosAPI(globales.entidad);
-
-    resultado.then(result => {
-
-        if (result){
-
-            let keysObject = Object.keys(globales.registrosAPIEntidad[0]);
-
-            if (globales.registrosAPIEntidad){
-
-                globales.registrosAPIEntidad.forEach( registro => {
-
-                    if(registro[keysObject[2]] == 'E'){
-        
-                        optionEntidad = document.createElement('OPTION'); 
-                        optionEntidad.setAttribute('value', registro[keysObject[0]]);
-                        optionEntidad.textContent=registro[keysObject[1]];
-                        comboBox.appendChild(optionEntidad);
-                    }
-                });
-            }   
-        }
+    // limpia el campo
+    botonLimpiar(){
+    const iconoLimpiar = document.querySelector('.form__limpiar');
+    iconoLimpiar.addEventListener('click', (e) => {
+        e.preventDefault();
+        borrarFilas();
+        limpiarCaja();
     });
 }
 
-// Funciones
-export function eventListeners(){
-
-    if(inputNombre){
-        // Verificamos si la ruta corresponde a editar
-        if (window.location.pathname.includes('/editar')){
-            inputNombre.addEventListener('input', rutaEditar);
-        }else{
-            inputNombre.addEventListener('input', rutaPrincipal);
-        }
-    }
-}
-
-export function rutaEditar(e){
-
-    if(e.target.value.match(globales.expresion)){
-        mostrarOcultarSugerencias('', false);
-        estadoBoton(true);
-    }else{
-        mostrarOcultarSugerencias(globales.msg, true);
-        estadoBoton(false);
-    }
-
-    if(labelError && labelError.textContent != ''){
-        // Se oculta el error porque el usuario empieza a digitar
-        alertaErrorCampo(false);
-    }
-}
-
-export function rutaPrincipal(e){
-
-    let expresionRegular;
-    expresionRegular = e.target.value.match(globales.expresion);
-    let texto = formatearTexto(e.target.value);
-    let existeRegistro = globales.arrayDescripcion.includes(texto);
-
-    if(expresionRegular && !existeRegistro){
-        mostrarOcultarSugerencias('', false);
-        estadoBoton(true);
-        
-    }else if(!expresionRegular && !existeRegistro){
-        mostrarOcultarSugerencias(globales.msg, true);
-        estadoBoton(false);
-        
-    }else if((!expresionRegular && existeRegistro)||(expresionRegular && existeRegistro)){
-        mostrarOcultarSugerencias('Esta categoría ya se encuentra registrada', true);
-        estadoBoton(false);
-    }
-
-    let coincidencia = globales.stringDescripcion.includes(texto);
-
-    if(coincidencia){
-        borrarFilas();
-        mostrarRegistrosAPI('input', texto);
-    }else{
-        borrarFilas();
-        mostrarRegistrosAPI();
-    }
-
-    if(labelError && labelError.textContent != ''){
-        alertaErrorCampo(false);
-    }
-
-}  
-
-export function estadoBoton(estado = false){
-    if (estado){
-        btnSubmitCampo.classList.remove('disabled');
-        btnSubmitCampo.removeAttribute('disabled');                                
-    }else{
-        btnSubmitCampo.classList.add('disabled');
-        btnSubmitCampo.setAttribute('disabled', '');                                
-    }
 }
 
 export function botonStatus(){
@@ -314,7 +213,7 @@ export function botonStatus(){
                 resultado.then(result => {
                     if (result){
                         // como el resultado fue satisfactorio, procedemos a cambiar el estado en el arreglo de objetos cargado en memoria
-                        globales.registrosAPI.forEach( registro => {
+                        objetoUniCampo.registrosAPI.forEach( registro => {
                             if(Object.values(registro)[0] == id){
                                 let campo = Object.keys(registro)[2];
                                 registro[campo]=valor.value;
@@ -322,9 +221,115 @@ export function botonStatus(){
                         });
                     }
                 });
-                
             });
         });
+    }
+}
+
+export function rutaEditar(e){
+
+    if(e.target.value.match(objetoUniCampo.expresion)){
+        mostrarOcultarSugerencias('', false);
+        estadoBoton(true);
+    }else{
+        mostrarOcultarSugerencias(objetoUniCampo.msg, true);
+        estadoBoton(false);
+    }
+
+    if(labelError && labelError.textContent != ''){
+        // Se oculta el error porque el usuario empieza a digitar
+        alertaErrorCampo(false);
+    }
+}
+
+export function rutaPrincipal(e){
+
+    let expresionRegular;
+    expresionRegular = e.target.value.match(objetoUniCampo.expresion);
+    let texto = formatearTexto(e.target.value);
+    let existeRegistro = objetoUniCampo.arrayDescripcion.includes(texto);
+
+    if(expresionRegular && !existeRegistro){
+        mostrarOcultarSugerencias('', false);
+        estadoBoton(true);
+        
+    }else if(!expresionRegular && !existeRegistro){
+        mostrarOcultarSugerencias(objetoUniCampo.msg, true);
+        estadoBoton(false);
+        
+    }else if((!expresionRegular && existeRegistro)||(expresionRegular && existeRegistro)){
+        mostrarOcultarSugerencias('Esta categoría ya se encuentra registrada', true);
+        estadoBoton(false);
+    }
+
+    let coincidencia = objetoUniCampo.stringDescripcion.includes(texto);
+
+    if(coincidencia){
+        borrarFilas();
+        mostrarRegistrosAPI('input', texto);
+    }else{
+        borrarFilas();
+        mostrarRegistrosAPI();
+    }
+
+    if(labelError && labelError.textContent != ''){
+        alertaErrorCampo(false);
+    }
+
+}  
+
+export function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
+
+    const tabla = document.querySelector('.table');
+
+    if (objetoUniCampo.registrosAPI){
+        
+        objetoUniCampo.registrosAPI.forEach( registro => {
+            
+            if (objetoUniCampo.llaves.length === 0){
+                objetoUniCampo.llaves = Object.keys(registro);
+            }
+
+            // Obtenemos el valor que se encuentra en la segunda posición del objeto mediante el object values retorna un arreglo y accedemos a la segunda posición
+            const valorCampo  = Object.values(registro)[1];
+            
+            if(evento === 'DOM' && valor === ''){
+                objetoUniCampo.arrayDescripcion.push(formatearTexto(valorCampo));
+                if (tabla){
+                    crearRegistro(registro);
+                }
+            }
+            
+            // Si lo que digitó el usuario se encuentra dentro de la descripción entonces se agrega el registro
+            if(evento === 'input' && formatearTexto(valorCampo).includes(valor)){
+                if(tabla){
+                    crearRegistro(registro);
+                }
+            }
+
+            if(evento === 'modal' && valor === ''){
+                objetoUniCampo.arrayDescripcion.push(formatearTexto(valorCampo));
+            }
+
+        });
+    }
+
+    // Guardamos todos los nombres de las categorias en un solo string para utilizarlo en el filtro del campo
+    objetoUniCampo.stringDescripcion="";
+    objetoUniCampo.arrayDescripcion.forEach(nombre => {
+        objetoUniCampo.stringDescripcion += nombre.toString() + ",";
+    });
+
+    botonStatus();
+}
+
+export function estadoBoton(estado = false){
+    if (estado){
+        btnSubmitCampo.classList.remove('disabled');
+        btnSubmitCampo.removeAttribute('disabled');                                
+    }else{
+        btnSubmitCampo.classList.add('disabled');
+        btnSubmitCampo.setAttribute('disabled', '');                                
     }
 }
 
@@ -370,21 +375,11 @@ export function formatearTexto(cadena){
     return cadena;
 }
 
-// limpia el campo
-export function botonLimpiar(){
-    const iconoLimpiar = document.querySelector('.form__limpiar');
-    iconoLimpiar.addEventListener('click', (e) => {
-        e.preventDefault();
-        borrarFilas();
-        limpiarCaja();
-    });
-}
-
 function limpiarVariables(){
-    globales.registrosAPI = "";
-    globales.stringDescripcion = '';
-    globales.llaves = [];
-    globales.arrayDescripcion = [];
+    objetoUniCampo.registrosAPI = "";
+    objetoUniCampo.stringDescripcion = '';
+    objetoUniCampo.llaves = [];
+    objetoUniCampo.arrayDescripcion = [];
 }
 
 // limpia el campo y los mensajes de error
@@ -418,8 +413,6 @@ export function borrarFilas(){
     filas.forEach( fila => {
         fila.remove();
     });
-
-    // globales.arrayDescripcion = [];
 }
 
 export function crearRegistro(registro){
@@ -527,7 +520,7 @@ export function crearRegistro(registro){
     imgModificar.setAttribute('alt','Imagen Editar');
 
     const linkModificar = document.createElement('A');
-    linkModificar.setAttribute('href', `/${globales.entidad}/editar?id=${id}`);
+    linkModificar.setAttribute('href', `/${objetoUniCampo.entidad}/editar?id=${id}`);
     linkModificar.appendChild(imgModificar);
     linkModificar.appendChild(spanModificar);
 
@@ -602,7 +595,7 @@ export function confirmarEliminacion(id){
         cancelButtonColor: '##3085d6',
         confirmButtonText: 'Si, eliminar'
 
-        }).then((result) => {
+    }).then((result) => {
 
         if (result.isConfirmed) {
 
@@ -638,20 +631,20 @@ export function confirmarEliminacion(id){
 export async function obtenerRegistrosAPI(tabla = ''){
 
     try {
-        // console.log(tabla);
-        const resultado = await fetch(globales.url + "/api");
+        const resultado = await fetch(objetoUniCampo.url + "/api");
         if (tabla === '' ){
             // se cargaran los registros de la tabla principal
-            globales.registrosAPI = await resultado.json();
+            objetoUniCampo.registrosAPI = await resultado.json();
             mostrarRegistrosAPI();
         }else{
             // Se cargarán los registros de la tabla incluida dentro de la otra tabla
-            globales.registrosAPIEntidad = await resultado.json();
+            objetoUniCampo.registrosAPIEntidad = await resultado.json();
         }
 
         return true;
 
     } catch (error) {
+
         Swal.fire({
             icon:'error',
             title:'Error',
@@ -659,6 +652,7 @@ export async function obtenerRegistrosAPI(tabla = ''){
         });
 
         return false;
+
     }
 }
 
@@ -667,16 +661,16 @@ export async function postElemento(proceso, id, nombre = '', valor = 0 ){
 
     //FormData es como el submit de los datos de un formulario HTML pero en JavaScript 
     const datos = new FormData();
-    datos.append(globales.llaves[0], id);//Se agregan todos los datos con append
-    datos.append(globales.llaves[1], nombre);
-    datos.append(globales.llaves[2], valor);
+    datos.append(objetoUniCampo.llaves[0], id);//Se agregan todos los datos con append
+    datos.append(objetoUniCampo.llaves[1], nombre);
+    datos.append(objetoUniCampo.llaves[2], valor);
 
     try {
         let direccion;
         if(proceso == 'Modificar'){
-            direccion = globales.url + '/estado';
+            direccion = objetoUniCampo.url + '/estado';
         }else if (proceso == 'Eliminar'){
-            direccion = globales.url + '/eliminar';
+            direccion = objetoUniCampo.url + '/eliminar';
         }
         // Petición hacia la API
         const respuesta = await fetch(direccion, {

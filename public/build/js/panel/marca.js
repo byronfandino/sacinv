@@ -1,9 +1,12 @@
-import {EntidadUniCampo} from './class/ModelUniCampo.js';
+console.log('Probando consola desde marca');
+import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
 
-let marca = new EntidadUniCampo('http://192.168.18.120:3000/marca',
-                                "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
-                                "Solo debe contener letras, mayor a 2 caracteres",
-                                "marca", "", "", "", [], []);
+let marca = new EntidadUniCampo();
+
+objetoUniCampo.entidad = 'marca';
+objetoUniCampo.url = 'http://192.168.18.120:3000/marca';
+objetoUniCampo.expresion = "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$";
+objetoUniCampo.msg = "Solo debe contener letras, mayor a 2 caracteres";
 
 // import {globales,
 //     managerAlert,
@@ -15,11 +18,11 @@ let marca = new EntidadUniCampo('http://192.168.18.120:3000/marca',
 
 marca.managerAlert();
 marca.verificarMensajeGeneral();
-// managerAlert();
-// verificarMensajeGeneral();
 
 // Carga de funciones de forma directa de la pagina
-eventListeners();
-botonStatus();
-estadoBoton();
-botonLimpiar();
+marca.eventListeners();
+marca.estadoRegistro();
+
+// botonStatus();
+marca.estadoBotonSubmit();
+marca.botonLimpiar();
