@@ -1,23 +1,18 @@
-import {globales,
-         managerAlert,
-         verificarMensajeGeneral,
-         eventListeners,
-         botonStatus,
-         estadoBoton,
-         botonLimpiar} from './class/ModelUniCampo.js';
+import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
 
-globales.url = 'http://192.168.18.120:3000/categoria';
-globales.expresion = "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$";
-globales.msg = "Solo debe contener letras, mayor a 2 caracteres";
-globales.entidad = "categoria";
+let categoria = new EntidadUniCampo();
 
+objetoUniCampo.entidad = 'categoria';
+objetoUniCampo.url = 'http://192.168.18.120:3000/categoria';
+objetoUniCampo.expresion = "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$";
+objetoUniCampo.msg = "Solo debe contener letras, mayor a 2 caracteres";
 
-// Verificación de alertas
-managerAlert();
-verificarMensajeGeneral();
+categoria.managerAlert();
+categoria.verificarMensajeGeneral();
 
 // Carga de funciones de forma directa de la pagina
-eventListeners();
-botonStatus();
-estadoBoton();
-botonLimpiar();
+categoria.eventListeners();
+categoria.estadoRegistro();
+
+categoria.estadoBotonSubmit();
+categoria.botonLimpiar();

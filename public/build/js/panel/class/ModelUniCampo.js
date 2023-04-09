@@ -176,7 +176,7 @@ export class EntidadUniCampo{
 
 }
 
-export function botonStatus(){
+function botonStatus(){
 
     const checks = document.querySelectorAll('.check');
 
@@ -226,7 +226,7 @@ export function botonStatus(){
     }
 }
 
-export function rutaEditar(e){
+function rutaEditar(e){
 
     if(e.target.value.match(objetoUniCampo.expresion)){
         mostrarOcultarSugerencias('', false);
@@ -242,7 +242,7 @@ export function rutaEditar(e){
     }
 }
 
-export function rutaPrincipal(e){
+function rutaPrincipal(e){
 
     let expresionRegular;
     expresionRegular = e.target.value.match(objetoUniCampo.expresion);
@@ -278,7 +278,7 @@ export function rutaPrincipal(e){
 
 }  
 
-export function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
+function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
 
     const tabla = document.querySelector('.table');
 
@@ -323,7 +323,7 @@ export function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
     botonStatus();
 }
 
-export function estadoBoton(estado = false){
+function estadoBoton(estado = false){
     if (estado){
         btnSubmitCampo.classList.remove('disabled');
         btnSubmitCampo.removeAttribute('disabled');                                
@@ -334,7 +334,7 @@ export function estadoBoton(estado = false){
 }
 
 // Esta función se dispara cuando se encuentran errores provenientes del backend
-export function alertaErrorCampo(estado){
+function alertaErrorCampo(estado){
     if (estado === true){
         labelError.classList.remove('ocultar');
         iconoError.classList.remove('ocultar');
@@ -347,7 +347,7 @@ export function alertaErrorCampo(estado){
     }
 }
 
-export function mostrarOcultarSugerencias(msg, estado){
+function mostrarOcultarSugerencias(msg, estado){
     if (estado){
         labelSugr.classList.remove('ocultar');
         // labelSugr.textContent=msg;
@@ -357,7 +357,7 @@ export function mostrarOcultarSugerencias(msg, estado){
     labelSugr.textContent=msg;
 }
 
-export function formatearTexto(cadena){
+function formatearTexto(cadena){
     
     cadena=cadena.toLowerCase().trim();
     // cadena=cadena.toLowerCase();
@@ -383,7 +383,7 @@ function limpiarVariables(){
 }
 
 // limpia el campo y los mensajes de error
-export function limpiarCaja(){
+function limpiarCaja(){
 
     // Ocultamos y vaciamos los errores
     if (!labelSugr.className.includes('ocultar')){
@@ -408,14 +408,14 @@ export function limpiarCaja(){
     inputNombre.focus();
 }
 
-export function borrarFilas(){
+function borrarFilas(){
     const filas = document.querySelectorAll('.tbody tr');
     filas.forEach( fila => {
         fila.remove();
     });
 }
 
-export function crearRegistro(registro){
+function crearRegistro(registro){
     
     const id =  Object.values(registro)[0]; //Obtenemos el valor del id
     const descripcion =  Object.values(registro)[1]; //Obtenemos el valor de la descripcion
@@ -531,13 +531,13 @@ export function crearRegistro(registro){
     // Eliminar------------------------------------------
     const spanEliminar = document.createElement('SPAN');
     spanEliminar.textContent="Eliminar";
-    spanEliminar.dataset.id = id;
+    spanEliminar.dataset.idItem = id;
     spanEliminar.onclick = eliminarItem;
 
     const imgEliminar = document.createElement('IMG');
     imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
     imgEliminar.setAttribute('alt','Imagen Eliminar');
-    imgEliminar.dataset.id = id;
+    imgEliminar.dataset.idItem = id;
     imgEliminar.onclick = eliminarItem;
     
     const linkEliminar = document.createElement('A');
@@ -580,11 +580,11 @@ export function crearRegistro(registro){
 
 }
 
-export function eliminarItem(e){
-    confirmarEliminacion(e.target.dataset.id );
+function eliminarItem(e){
+    confirmarEliminacion(e.target.dataset.idItem );
 }
 
-export function confirmarEliminacion(id){
+function confirmarEliminacion(id){
 
     Swal.fire({
         title: '¿Confirma que desea eliminar este registro?',
@@ -628,7 +628,7 @@ export function confirmarEliminacion(id){
 }
 
 // funciones asíncronas
-export async function obtenerRegistrosAPI(tabla = ''){
+async function obtenerRegistrosAPI(tabla = ''){
 
     try {
         const resultado = await fetch(objetoUniCampo.url + "/api");
@@ -657,7 +657,7 @@ export async function obtenerRegistrosAPI(tabla = ''){
 }
 
 // Se define como POST Elemento, porque es lo que ocurre en el POST
-export async function postElemento(proceso, id, nombre = '', valor = 0 ){
+async function postElemento(proceso, id, nombre = '', valor = 0 ){
 
     //FormData es como el submit de los datos de un formulario HTML pero en JavaScript 
     const datos = new FormData();

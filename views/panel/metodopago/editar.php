@@ -36,6 +36,7 @@
     <div class="form__campo campo--button t-xxl">
         <input type="submit" 
                 value="Actualizar" 
+                data-button="btn-envio"
                 class="form__btn btn-primario">
 
         <a href="/metodo-pago" class="form__btn btn-secundario">Cancelar</a>
@@ -44,8 +45,8 @@
 
 <?php
     if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/panel/metodopago.js"></script>';
+        $script .= '<script src="/build/js/panel/metodopago.js" type="module"></script>';
     }else{
-        $script = '<script src="/build/js/panel/metodopago.js"></script>';
+        $script = '<script src="/build/js/panel/metodopago.js" type="module"></script>';
     }
 ?>

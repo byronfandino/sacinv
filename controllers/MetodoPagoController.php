@@ -8,6 +8,10 @@ use Model\MetodoPago;
 class MetodoPagoController{
 
     public static function listarMetodosPagos(){
+                
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
         $registros=MetodoPago::all('MP_Nombre');
         echo json_encode($registros);
     }
@@ -102,6 +106,31 @@ class MetodoPagoController{
             'metodoPago' => $metodoPago,
             'alertas' => $alertas
         ]);
+    }
+
+    
+    public static function estado(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $metodoPago = new MetodoPago($_POST);
+        $resultado = $metodoPago->guardar();
+
+        echo json_encode($resultado);
+    }
+
+    public static function eliminar(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $metodoPago = new MetodoPago($_POST);
+        $resultado = $metodoPago->eliminar($metodoPago->MP_Id);
+
+        echo json_encode($resultado);
     }
 }
 

@@ -17,6 +17,7 @@
     <div class="form__campo campo--button t-xxl">
         <input type="submit" 
                 value="Guardar" 
+                data-button="btn-envio"
                 class="form__btn btn-primario " 
                 >
     </div>
@@ -32,6 +33,7 @@
                 <th>Estado</th>
                 <th class="thead__th--icon">Modificar</th>
                 <th class="thead__th--icon">Historial</th>
+                <th class="thead__th--icon">Eliminar</th>
             </tr>
         </thead>
         <tbody class="tbody">
@@ -50,9 +52,9 @@
 
 <?php
     if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/panel/metodopago.js"></script>';
+        $script .= '<script src="/build/js/panel/metodopago.js" type="module"></script>';
     }else{
-        $script = '<script src="/build/js/panel/metodopago.js"></script>';
+        $script = '<script src="/build/js/panel/metodopago.js" type="module"></script>';
     }
 ?>
 

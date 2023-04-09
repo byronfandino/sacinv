@@ -81,6 +81,8 @@ $router->get('/metodo-pago', [MetodoPagoController::class,'index']);
 $router->post('/metodo-pago', [MetodoPagoController::class,'index']);
 $router->get('/metodo-pago/editar', [MetodoPagoController::class,'editar']);
 $router->post('/metodo-pago/editar', [MetodoPagoController::class,'editar']);
+$router->post('/metodo-pago/estado', [MetodoPagoController::class,'estado']);
+$router->post('/metodo-pago/eliminar', [MetodoPagoController::class,'eliminar']);
 
 // Tablas
 $router->get('/tabla/api', [TablaController::class,'listarTablas']);
@@ -88,6 +90,8 @@ $router->get('/tabla', [TablaController::class,'index']);
 $router->post('/tabla', [TablaController::class,'index']);
 $router->get('/tabla/editar', [TablaController::class,'editar']);
 $router->post('/tabla/editar', [TablaController::class,'editar']);
+$router->post('/tabla/estado', [TablaController::class,'estado']);
+$router->post('/tabla/eliminar', [TablaController::class,'eliminar']);
 
 // Parametro
 $router->get('/parametro', [ParametroController::class,'index']);

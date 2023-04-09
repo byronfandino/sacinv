@@ -107,6 +107,31 @@ class TablaController{
             'alertas' => $alertas
         ]);
     }
+
+        
+    public static function estado(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $tabla = new Tabla($_POST);
+        $resultado = $tabla->guardar();
+
+        echo json_encode($resultado);
+    }
+
+    public static function eliminar(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $tabla = new Tabla($_POST);
+        $resultado = $tabla->eliminar($tabla->Tb_Id);
+
+        echo json_encode($resultado);
+    }
 }
 
 ?>

@@ -177,9 +177,9 @@ function clickItem(idItem, tipoItem){
     items.forEach(item => {
     
        let imagen = item.firstElementChild;
-       texto = item.firstElementChild.nextElementSibling;
+       let texto = item.firstElementChild.nextElementSibling;
        let ruta = imagen.getAttribute('src');
-    
+       
        if(tipoItem === 'nivel1'){
            // Si el id que itera es diferente al id seleccionado por el usuario
            if(item.getAttribute('data-id') !== idItem){

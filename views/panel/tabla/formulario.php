@@ -1,4 +1,5 @@
 <div class="form__campo t-xxl">
+    
     <label for="tabla" class="form__label--campo">Nombre de la tabla</label>
     <input type="text"
             id="tabla"

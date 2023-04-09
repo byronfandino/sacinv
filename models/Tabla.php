@@ -5,15 +5,17 @@ namespace Model;
 class Tabla extends ActiveRecord{
     
     protected static $tabla = 'tbltabla';
-    protected static $columnasDB = ['Tb_Id', 'Tb_Nombre'];
+    protected static $columnasDB = ['Tb_Id', 'Tb_Nombre', 'Tb_Status'];
 
     public $Tb_Id;
     public $Tb_Nombre;    
+    public $Tb_Status;    
 
     public function __construct($args = [])
     {
         $this->Tb_Id = $args['Tb_Id'] ?? null;
         $this->Tb_Nombre = $args['Tb_Nombre'] ?? '';
+        $this->Tb_Status = $args['Tb_Status'] ?? '';
     }
 
     public function validar(){
