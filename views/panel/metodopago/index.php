@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-metodoPago']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/metodo-pago" class="form">
+<form method="POST" data-form="metodo-pago"  action="/metodo-pago" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
 

@@ -11,7 +11,7 @@
 <?php } ?>
 
 <!-- Ventana Modal -->
-<div class="fondo-notificacion">
+<div class="fondo-notificacion marca ocultar">
     <div class="contenedor-notificacion">
         <?php 
             include_once __DIR__ . '/../marca/modal.php';
@@ -19,7 +19,16 @@
     </div>
 </div>
 
-<form method="POST" action="/producto" class="form" enctype="multipart/form-data" data-cy="form-producto">
+<!-- Ventana Modal -->
+<div class="fondo-notificacion categoria ocultar">
+    <div class="contenedor-notificacion">
+        <?php 
+            include_once __DIR__ . '/../categoria/modal.php';
+        ?>
+    </div>
+</div>
+
+<form method="POST" action="/producto" data-form="producto" class="form" enctype="multipart/form-data" data-cy="form-producto">
 
     <?php include_once 'formulario.php'; ?>
 

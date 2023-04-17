@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-marca']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/marca" class="form">
+<form method="POST" action="/marca" data-form="marca" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
 
@@ -21,8 +21,6 @@
                 data-button="btn-marca" 
                 >
         <button class="form__btn btn-secundario "
-                data-button="btn-cancelar">Cancelar</button>
+                data-button="btn-cancelar-modal">Cancelar</button>
     </div>
 </form>
-
-

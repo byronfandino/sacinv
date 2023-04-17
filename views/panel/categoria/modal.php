@@ -20,33 +20,7 @@
                 value="Guardar" 
                 class="form__btn btn-primario " 
                 >
+        <button class="form__btn btn-secundario "
+                data-button="btn-cancelar-modal">Cancelar</button>
     </div>
 </form>
-
-<h2 class="panel__h2">Listado de registros</h2>
-
-<div class="contenedor-table">
-    <table class="table">
-        <thead class="thead">
-            <tr>
-                <th>Nombre de la categoría</th>
-                <th>Habilitado</th>
-                <th class="thead__th--icon">Modificar</th>
-                <th class="thead__th--icon">Historial</th>
-                <th class="thead__th--icon">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody class="tbody">
-            
-        </tbody>
-    </table>
-</div>
-
-<?php
-    if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/panel/categoria.js" type="module"></script>';
-    }else{
-        $script = '<script src="/build/js/panel/categoria.js" type="module"></script>';
-    }
-?>
-

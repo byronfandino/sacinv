@@ -1,134 +1,363 @@
-
+import { objeto } from "../backup/ModelMultiCampo.js";
+import { rutaServidor } from "./Parametros.js";
 // Guarda los registros de la tabla y de los combobox
-export let globalVariables = {
+export let objetoMultiCampo = {
 
-    url : '',
     entidad : '',
     registrosAPI : '',
     camposIndividuales : [],
     tabla:[],
     
     // Se guarda en un array
-    arrayDescripcion : new Array(),
-    arrayCodigoBarras : new Array(),
-    arrayCodigoManual : new Array(),
-    stringDescripcion : '',
-    stringCodigoBarras : '',
-    stringCodigoManual : '',
-    cntEstado:0
+    arrayAPI: [],
+    stringAPI:[],
+    convertirMinusculas:[],
+    cntEstado:0,
+
+    campos : {},
+    reglas : {},
+    sugerencias : {}
+
 }
 
-// Se personalizan las propiedades de los objetos
-export let objeto = {};
+export class EntidadMultiCampo{
 
-// Se personalizan las reglas de cada campo
-export let reglas = {};
+    // Valida las sugerencias y los errores
+    asignarValidacion(){
+    
+        const campos = document.querySelectorAll(`[data-form="${objetoMultiCampo.entidad}"] .form__campo`);
+        // const btnEliminar = document.querySelector('.eliminar-imagen');
+    
+        campos.forEach(campo => {
+    
+            const input = campo.querySelector('input');
+            const select = campo.querySelector('select');
+            const labelSugr = campo.querySelector('.form__labelSugerencia');
+            const labelError = campo.querySelector('.form__labelError');
+            const iconoError = campo.querySelector('.form__iconError');
+    
+            let tipo;
+            let regla;
+            let msg;
+            let expresionRegular;
 
-// Se personalizan las reglas de cada campo
-export let sugerencias = {};
-
-// Valida las sugerencias y los errores
-export function asignarValidacion(){
-
-    const campos = document.querySelectorAll('.form__campo');
-    // const btnEliminar = document.querySelector('.eliminar-imagen');
-
-    campos.forEach(campo => {
-
-        const input = campo.querySelector('input:not([data-tipo="nombre"])');
-        const select = campo.querySelector('select');
-        const labelSugr = campo.querySelector('.form__labelSugerencia');
-        const labelError = campo.querySelector('.form__labelError');
-        const iconoError = campo.querySelector('.form__iconError');
-        
-        console.log(input);
-
-        let tipo;
-        let regla;
-        let msg;
-        let expresionRegular;
-
-        //Aquí se valida únicamente los inputs
-        if(input){
-
-            tipo = input.getAttribute('data-tipo');
-            
-            // Si el campo NO corresponde al que se encuentra guardado en las excepciones
-            if(!globalVariables.camposIndividuales.includes(tipo)){
- 
-                regla = reglaInput(tipo);
-                msg = mensajeSugerencia(tipo);
-
-                // Evento de carga de formulario---------
-                expresionRegular = input.value.match(regla);
-
-                if(expresionRegular){
-                    estadoCampo(tipo, true);
-                }else{
-                    estadoCampo(tipo, false);
-                }
-
-                //---TERMINA LA EVALUACIÓN DE LOS CAMPOS
-                input.addEventListener('input', e => {
-                    expresionRegular = e.target.value.match(regla);
+            //Aquí se valida únicamente los inputs
+            if(input){
+    
+                tipo = input.getAttribute('data-tipo');
+                
+                // Si el campo NO corresponde al que se encuentra guardado en las excepciones
+                if(!objetoMultiCampo.camposIndividuales.includes(tipo)){
+     
+                    regla = reglaInput(tipo);
+                    msg = mensajeSugerencia(tipo);
+    
+                    // Evento de carga de formulario---------
+                    expresionRegular = input.value.match(regla);
+    
                     if(expresionRegular){
                         estadoCampo(tipo, true);
-                        mostrarOcultarSugerencias(labelSugr, '', false);
                     }else{
                         estadoCampo(tipo, false);
-                        mostrarOcultarSugerencias(labelSugr, msg, true);
                     }
-                    if(labelError && labelError.textContent != ''){
+    
+                    //---TERMINA LA EVALUACIÓN DE LOS CAMPOS
+                    input.addEventListener('input', e => {
+
+                        expresionRegular = e.target.value.match(regla);
+
+                        if(expresionRegular){
+                            estadoCampo(tipo, true);
+                            mostrarOcultarSugerencias(labelSugr, '', false);
+                        }else{
+                            estadoCampo(tipo, false);
+                            mostrarOcultarSugerencias(labelSugr, msg, true);
+                        }
+
+                        if(labelError && labelError.textContent != ''){
+                            ocultarError(labelError, iconoError);
+                        }
+                    });
+                }// evento de cambios
+            }//Fin de las acciones de los inputs
+    
+            if(select){
+                tipo = select.getAttribute('data-tipo');
+                msg = mensajeSugerencia(tipo);
+    
+                // Se coloca esta condición para activar el botón cuando carga el formulario
+                if(select.value != ''){
+                    estadoCampo(tipo, true);
+                }
+    
+                select.addEventListener('change', ()=>{
+                    if (select.value !== ''){
+                        mostrarOcultarSugerencias(labelSugr, '', false);
+                        estadoCampo(tipo, true);
                         ocultarError(labelError, iconoError);
+                    }else{
+                        mostrarOcultarSugerencias(labelSugr, msg, true);
+                        estadoCampo(tipo, false);
                     }
                 });
             }
-            // evento de cambios
-        }//Fin de las acciones de los inputs
+        });
+    }
+   
+    mostrarModal(modal){
 
-        if(select){
-            tipo = select.getAttribute('data-tipo');
-            msg = mensajeSugerencia(tipo);
+        const comboBox = document.querySelector(`#${modal}`);
+        comboBox.addEventListener('change', e => {
 
-            // Se coloca esta condición para activar el botón cuando carga el formulario
-            if(select.value != ''){
-                estadoCampo(tipo, true);
+            if(e.target.value === ""){
+
+                const notificacion = document.querySelector(`.fondo-notificacion.${modal}`);
+
+                if (notificacion){
+                    notificacion.classList.remove('ocultar');
+                }
+
+            }
+        });
+        
+        const contenedor = document.querySelector(`.fondo-notificacion.${modal}`);
+        const input = contenedor.querySelector('input');
+        input.removeAttribute('required');
+        // console.log(input);
+        // const formulario = document.querySelector(`[data-form="${modal}"]`);
+        const btnCancelar = contenedor.querySelector('[data-button="btn-cancelar-modal"]');
+    
+        btnCancelar.addEventListener('click', e => {
+            e.preventDefault();
+            if (contenedor){
+                contenedor.classList.add('ocultar');
+            }
+        });
+
+    }
+
+    guardarRegistroModal(){
+        
+    }
+    // Muestra la alerta de carga de datos y ejecuta la función de consulta la APi de categorías
+    managerAlert(){
+
+        const alertaExito = document.querySelector('.alerta.exito');
+        const alertaError = document.querySelector('.alerta.error');
+            
+        // Si existe una alerta de exito proveniente del servidor se da un tiempo de espera para que la alerta de cargar registros
+        if (alertaExito){
+            setTimeout(() => {
+                cargaRegistros();
+            },2000);
+        }else if(!alertaError){
+            cargaRegistros();
+        }
+
+        // Verificamos el error local del campo
+        let labelsError = document.querySelectorAll('.form__labelError');
+
+        // Mostrar los mensajes de error que aparecen en el label cuando provienen del servidor
+        labelsError.forEach( label => {
+            const campo = label.parentElement;
+            const iconoError = campo.querySelector('.form__iconError');
+            const iconoLimpiar = campo.querySelector('.form__limpiar');
+            
+            if(label.textContent != ''){
+
+                label.classList.remove('ocultar');
+                iconoError.classList.remove('ocultar');
+
+                if (iconoLimpiar){
+                    iconoLimpiar.style.right = "3rem";
+                }
+
+            }else{
+
+                label.classList.add('ocultar');
+                iconoError.classList.add('ocultar');
+
+                if(iconoLimpiar){
+                    iconoLimpiar.style.right = "0.5rem";
+                }
+            }
+        });
+    }
+
+    estadoRegistro(){
+        botonStatus();
+    }
+
+    // Mostrar Alerta de error o Exito con Sweet Alert
+    verificarMensajeGeneral(){
+        const alerta = document.querySelector('.alerta');
+
+        if (alerta){
+            let textoAlerta = alerta.textContent;
+
+            if(alerta.className.includes('error')){
+                Swal.fire({
+                    icon: 'error',
+                    title: textoAlerta,
+                    showConfirmButton: true
+                });
+            }
+            
+            if(alerta.className.includes('exito')){              
+                Swal.fire({
+                    icon: 'success',
+                    title: textoAlerta,
+                    timer:1800
+                }); 
+            }
+        }
+    }
+
+     
+    botonAdjuntarArchivo(){
+
+        const btnAdjuntar = document.querySelector(`[data-tipo="boton-adjuntar"]`);
+        
+        let crearBotonAdjuntar = true;
+        
+        btnAdjuntar.addEventListener('click', () =>{
+
+            // Verificamos si se adjuntaron 
+            const filesAttachment = document.querySelectorAll('.textFileSelect');
+            if (filesAttachment){
+                filesAttachment.forEach( file => {
+                    if (file.textContent!=''){
+                        crearBotonAdjuntar = true;
+                    }else{
+                        crearBotonAdjuntar = false;
+                    }
+                });
             }
 
-            select.addEventListener('change', ()=>{
-                if (select.value !== ''){
-                    mostrarOcultarSugerencias(labelSugr, '', false);
-                    estadoCampo(tipo, true);
-                    ocultarError(labelError, iconoError);
-                }else{
-                    mostrarOcultarSugerencias(labelSugr, msg, true);
-                    estadoCampo(tipo, false);
-                }
-            });
-        }
-    });
+            if(crearBotonAdjuntar){
+            
+                const inputFile = document.createElement('INPUT');
+                inputFile.setAttribute('type','file');
+                inputFile.setAttribute('data-tipo','archivo');
+                inputFile.setAttribute('name','ImVd_Nombre[]');
+                inputFile.setAttribute('accept','image/png,image/jpg,image/jpeg,video/mp4');
 
-    // if (btnEliminar){
+                const inputBoton = document.createElement('INPUT');
+                inputBoton.setAttribute('type', 'button');
+                inputBoton.setAttribute('data-tipo', 'boton-archivo');
+                inputBoton.setAttribute('value', 'Seleccionar archivo');
+                inputBoton.classList.add('form__btn');
+                inputBoton.classList.add('btn-terciario');
+
+                const imgError = document.createElement('IMG');
+                imgError.setAttribute('src','/build/img/sistema/error.svg');
+                imgError.setAttribute('alt','icono de error');
+                imgError.classList.add('form__iconError');
+                imgError.classList.add('ocultar');
+                
+                const span = document.createElement('SPAN');
+                span.classList.add('textFileSelect');
+                
+                const imgEliminar = document.createElement('IMG');
+                imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
+                imgEliminar.setAttribute('alt','icono de eliminar');
+                
+                const linkEliminar = document.createElement('A');
+                linkEliminar.setAttribute('href', '#');
+                linkEliminar.classList.add('ocultar','eliminarFile');
+                linkEliminar.appendChild(imgEliminar);
+                linkEliminar.onclick=eliminarFile;
+
+                const divFile = document.createElement('DIV');
+                divFile.classList.add('divFile');
+                divFile.appendChild(span);
+                divFile.appendChild(linkEliminar);
+                
+                const labelSugerencia = document.createElement('LABEL');
+                labelSugerencia.classList.add('form__labelSugerencia');
+                labelSugerencia.classList.add('ocultar');
+                
+                const labelError = document.createElement('LABEL');
+                labelError.classList.add('form__labelError');
+                labelError.classList.add('ocultar');
+                // labelError.textContent = "<?php echo tipoAlerta($alertas, 'error-archivo', 'nombre');?>";
+
+                const divContenedor = document.createElement('DIV');
+                divContenedor.classList.add('form__campo');
+                divContenedor.classList.add('campo--file');
+                divContenedor.classList.add('t-xxl');
+
+                divContenedor.appendChild(inputFile);
+                divContenedor.appendChild(inputBoton);
+                // divContenedor.appendChild(span);
+                // divContenedor.appendChild(imgError);
+                divContenedor.appendChild(divFile);
+                divContenedor.appendChild(labelSugerencia);
+                divContenedor.appendChild(labelError);
+                
+                const formulario = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"]`);
+
+                const boton = document.querySelector('.form__button');
+                formulario.insertBefore(divContenedor, boton);
+                
+                this.campoFile();
+            }
+        });
+    }
         
-    //     btnEliminar.addEventListener('click', () => {
+    campoFile(){
+        const inputFiles = document.querySelectorAll(`[type="file"]`);
+        
+        inputFiles.forEach(inputFile => {
 
-    //         Swal.fire({
-    //             title: '¿Está seguro(a) de eliminar la imagen?',
-    //             // text: "You won't be able to revert this!",
-    //             icon: 'warning',
-    //             showCancelButton: true,
-    //             confirmButtonColor: '#d33',
-    //             cancelButtonColor: '#3085d6',
-    //             confirmButtonText: 'Si, Eliminar!',
-    //             cancelButtonText: 'No, Cancelar'
-    //         }).then((result) => {
-    //             if (result.isConfirmed) {
-    
-    //                 eliminarLogo();
-    //             }
-    //         })
-    //     })
-    // }
+            const campo = inputFile.parentElement;
+            const fileSelect = campo.querySelector('.textFileSelect');
+            const inputbutton = campo.querySelector(`[type="button"]`);
+            const iconoError = campo.querySelector('.campo--file > .form__iconError');
+            const iconoEliminar = campo.querySelector('.eliminarFile');
+
+            // const labelSugerencia = campo.querySelector('.campo--file > .form__labelSugerencia');
+            const labelError = campo.querySelector('.campo--file > .form__labelError');
+        
+            if (inputFile && inputbutton){
+                inputbutton.addEventListener('click', ()=>{
+                    inputFile.click();
+                    inputFile.addEventListener('input', ()=>{
+        
+                        fileSelect.textContent = inputFile.value;
+                        
+                        if (fileSelect.textContent !== ''){
+                            iconoEliminar.classList.remove('ocultar');
+                        }
+
+                        if(fileSelect.textContent !== '' && !labelError.className.includes('ocultar')){
+                            labelError.classList.add('ocultar');
+                            iconoError.classList.add('ocultar');
+                        }
+
+                        // RESTRICIONES DE ARCHIVO
+                        
+                        // console.log(inputFile.files[0]);
+                        // let pesoArchivo = inputFile.files[0].size;
+        
+                        // let pesoMB = (pesoArchivo / 1000000).toFixed(2);
+                        
+                        // if(pesoArchivo > 500000){
+                        //     labelSugerencia.textContent = `El archivo seleccionado tiene un peso de ${pesoMB} MB, y NO debe superar el peso de 500 KB`;
+                        //     labelSugerencia.classList.remove('ocultar');
+                        // }
+        
+                        // let tipoArchivo = inputFile.files[0].type;
+                        // if(!(tipoArchivo === "image/jpeg" || tipoArchivo === "image/jpg" || tipoArchivo === "image/png")){
+                        //     labelSugerencia.textContent = `Seleccionó un archivo que NO es permitido`;
+                        //     labelSugerencia.classList.remove('ocultar');
+                        // }
+                    });
+                });
+            }
+        });
+    }
+
 }
 
 export function btnSubmit(e){
@@ -142,43 +371,43 @@ export function btnSubmit(e){
             formulario.submit();
         }
     });
-
 }
 
 /* CAMPOS EN ESPECIFICO */
 export function estadoCampo(tipo, estado = false){
     
-    if (Object.keys(objeto).includes(tipo)){
-        objeto[tipo]=estado;
+    if (Object.keys(objetoMultiCampo.campos).includes(tipo)){
+        objetoMultiCampo.campos[tipo]=estado;
     }
 
-    for (let llave in objeto){
-        if(objeto[llave] == false){
-            globalVariables.cntEstado=0;
+    for (let llave in objetoMultiCampo.campos){
+        if(objetoMultiCampo.campos[llave] == false){
+            objetoMultiCampo.cntEstado=0;
         }else{
-            globalVariables.cntEstado++;
+            objetoMultiCampo.cntEstado++;
         }
     }
     
-    if(globalVariables.cntEstado == 6){
+    if(objetoMultiCampo.cntEstado == 6){
         estadoBoton(true);
     }else{
         estadoBoton(false);
     }
 
-    globalVariables.cntEstado=0;
+    objetoMultiCampo.cntEstado=0;
+
 }
 
 /* FINALIZA CAMPOS */
 export function reglaInput(tipo){
-    if(Object.keys(reglas).includes(tipo)){
-        return reglas[tipo];
+    if(Object.keys(objetoMultiCampo.reglas).includes(tipo)){
+        return objetoMultiCampo.reglas[tipo];
     }
 }
 
 export function mensajeSugerencia(tipo){
-    if(Object.keys(sugerencias).includes(tipo)){
-        return sugerencias[tipo];
+    if(Object.keys(objetoMultiCampo.sugerencias).includes(tipo)){
+        return objetoMultiCampo.sugerencias[tipo];
     }
 }
 
@@ -213,52 +442,6 @@ export function estadoBoton(estado){
     }
 }
 
-// Muestra la alerta de carga de datos y ejecuta la función de consulta la APi de categorías
-export function managerAlert(){
-
-    const alertaExito = document.querySelector('.alerta.exito');
-    const alertaError = document.querySelector('.alerta.error');
-
-        
-    // Si existe una alerta de exito proveniente del servidor se da un tiempo de espera para que la alerta de cargar registros
-    if (alertaExito){
-        setTimeout(() => {
-            cargaRegistros();
-        },2000);
-    }else if(!alertaError){
-        cargaRegistros();
-    }
-
-    // Verificamos el error local del campo
-    let labelsError = document.querySelectorAll('.form__labelError');
-
-    // Mostrar los mensajes de error que aparecen en el label cuando provienen del servidor
-    labelsError.forEach( label => {
-        const campo = label.parentElement;
-        const iconoError = campo.querySelector('.form__iconError');
-        const iconoLimpiar = campo.querySelector('.form__limpiar');
-        
-        if(label.textContent != ''){
-
-            label.classList.remove('ocultar');
-            iconoError.classList.remove('ocultar');
-
-            if (iconoLimpiar){
-                iconoLimpiar.style.right = "3rem";
-            }
-
-        }else{
-
-            label.classList.add('ocultar');
-            iconoError.classList.add('ocultar');
-
-            if(iconoLimpiar){
-                iconoLimpiar.style.right = "0.5rem";
-            }
-        }
-    });
-}
-
 function cargaRegistros(){
     
     Swal.fire({
@@ -284,11 +467,11 @@ async function obtenerRegistrosAPI(){
 
     try {
 
-        // const url='http://192.168.18.120:3000/producto/api';
-        const resultado = await fetch(globalVariables.url + '/api');
-        globalVariables.registrosAPI = await resultado.json();
+        const resultado = await fetch(rutaServidor + objetoMultiCampo.entidad + '/api');
+        objetoMultiCampo.registrosAPI = await resultado.json();
 
         mostrarRegistrosAPI();
+        botonStatus();
 
         return true;
 
@@ -302,74 +485,117 @@ async function obtenerRegistrosAPI(){
     }
 }
 
+
 // Función dependiente de la función 'obtenerRegistrosAPI()'
 // Muestra en el HTML los resultados de la API
 // Utilizamos el evento para evitar cargar el arreglo general de nombres en un evento diferente a la carga del formulario
 export function mostrarRegistrosAPI( evento = 'DOM', campo = '', valor = ''){
     // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
     const tabla = document.querySelector('.table');
-
-    if (globalVariables.registrosAPI){
-
-
+    let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
+    // console.log(objetoMultiCampo.arrayAPI);
+    
+    if (objetoMultiCampo.registrosAPI){
+        
         if (evento === 'DOM'){
 
-            globalVariables.arrayDescripcion=[];
-            globalVariables.arrayCodigoBarras=[];
-            globalVariables.arrayCodigoManual=[];
-
+            llavesArray.forEach( key => {
+                objetoMultiCampo.arrayAPI[key]='';
+            });
         }
-
-        globalVariables.registrosAPI.forEach( registro => {
-            
-            const {Prod_Descripcion, Cod_Manual, Cod_Barras} = registro;
+        
+        objetoMultiCampo.registrosAPI.forEach( registro => {
             
             if(evento === 'DOM' && valor === ''){
+                // Cargamos los array
+                llavesArray.forEach( key => {
+                    objetoMultiCampo.arrayAPI[key] = [...objetoMultiCampo.arrayAPI[key], registro[key]];
+                });
 
-                // Almacenamos en el arreglo global 'nombreCategorias' todos los nombres para usarlos en otra función
-                globalVariables.arrayDescripcion.push(formatearTexto(Prod_Descripcion));
-                globalVariables.arrayCodigoManual.push(Cod_Manual);
-                globalVariables.arrayCodigoBarras.push(Cod_Barras);
-    
-                // Si la tabla si existe, entonces se procede a cargar los registros 
                 if (tabla){
                     crearRegistro(registro);
                 }
             }
+
+            // console.log(llavesArray);
+            // console.log(llavesArray.includes(campo));
             
-            // Si lo que digitó el usuario se encuentra dentro del codigo de barras entonces se agrega el registro
-            if(evento === 'input' && campo === 'Cod_Barras' && Cod_Barras.includes(valor)){
-                if(tabla){
-                    crearRegistro(registro);
-                }
-            }
+            if( evento === 'input' && llavesArray.includes(campo) ){
+                // console.log(key);
+                // console.log(campo);
+                // console.log(objetoMultiCampo.convertirMinusculas);
+                // console.log(objetoMultiCampo.convertirMinusculas.includes(campo));
+                // console.log(registro[campo].includes(valor));
+                // console.log('------------------------------');
 
-            // Si lo que digitó el usuario se encuentra dentro del codigo de barras entonces se agrega el registro
-            if(evento === 'input' && campo === 'Cod_Manual' && Cod_Manual.includes(valor)){
-                if(tabla){
-                    crearRegistro(registro);
-                }
-            }
+                if (objetoMultiCampo.convertirMinusculas.length > 0 && objetoMultiCampo.convertirMinusculas.includes(campo)){
 
-            // Si lo que digitó el usuario se encuentra dentro del codigo de barras entonces se agrega el registro
-            if(evento === 'input' && campo === 'prodDescripcion' && formatearTexto(Prod_Descripcion.toLowerCase()).includes(valor)){
-                if(tabla){
-                    crearRegistro(registro);
+                    // Si no está vacío, entonces procedemos 
+                    // objetoMultiCampo.convertirMinusculas.forEach( item => {
+                        
+                        // console.log(formatearTexto(registro[campo]));
+                        // if (item === campo && formatearTexto(registro[campo]).includes(valor)){
+                        if (formatearTexto(registro[campo]).includes(valor)){
+                            if(tabla){
+                                crearRegistro(registro);
+                            }                            
+                        }
+                    // });
+                    
+                }else if(registro[campo].includes(valor)){
+
+                    if(tabla){
+                        crearRegistro(registro);
+                    }      
                 }
             }
+            // // Si lo que digitó el usuario se encuentra dentro del codigo de barras entonces se agrega el registro
+            // if(evento === 'input' && campo === 'Cod_Barras' && Cod_Barras.includes(valor)){
+            //     if(tabla){
+            //         crearRegistro(registro);
+            //     }
+            // }
+
+            // if(evento === 'input' && campo === 'Cod_Manual' && Cod_Manual.includes(valor)){
+            //     if(tabla){
+            //         crearRegistro(registro);
+            //     }
+            // }
+
+            // if(evento === 'input' && campo === 'prodDescripcion' && formatearTexto(Prod_Descripcion.toLowerCase()).includes(valor)){
+            //     if(tabla){
+            //         crearRegistro(registro);
+            //     }
+            // }
         });
     }
 
-    // Guardamos todos los nombres de las categorias en un solo string para utilizarlo en el filtro del campo
-    globalVariables.stringDescripcion=globalVariables.arrayDescripcion.toString();
-    globalVariables.stringCodigoManual=globalVariables.arrayCodigoManual.toString();
-    globalVariables.stringCodigoBarras=globalVariables.arrayCodigoBarras.toString();
+    // En caso de existir campos que deban ser convertidos a minusculas se reescribe el arreglo
+    if (objetoMultiCampo.convertirMinusculas.length !== 0){
+
+        // Guardamos la conversión del nuevo arreglo
+        let nuevoArregloCampo = [];
+
+        objetoMultiCampo.convertirMinusculas.forEach( arrayCampo => {
+
+            objetoMultiCampo.arrayAPI[arrayCampo].forEach(campo => {
+                campo = formatearTexto(campo);
+                nuevoArregloCampo = [...nuevoArregloCampo, campo];
+            });
+
+            objetoMultiCampo.arrayAPI[arrayCampo] = nuevoArregloCampo;
+
+        });
+    }
+
+    llavesArray.forEach(key => {
+        objetoMultiCampo.stringAPI[key] = objetoMultiCampo.arrayAPI[key].toString();
+    });
 
     botonStatus();
-
 }
 
-function crearRegistro(registro){
+export function crearRegistro(registro){
 
     // Obtenemos las llaves del objeto
     let llaves = Object.keys(registro);
@@ -385,9 +611,9 @@ function crearRegistro(registro){
         //     descripcion = registro[llave];
         // }
 
-        const nombreCampo = Object.values(globalVariables.tabla[index])[0];
-        const posicion = Object.values(globalVariables.tabla[index])[1];
-        const clases = Object.values(globalVariables.tabla[index])[2];
+        const nombreCampo = Object.values(objetoMultiCampo.tabla[index])[0];
+        const posicion = Object.values(objetoMultiCampo.tabla[index])[1];
+        const clases = Object.values(objetoMultiCampo.tabla[index])[2];
         const td = document.createElement('TD');
 
         // Solo se crean los elementos que se van a mostrar en la tabla
@@ -495,7 +721,7 @@ function crearRegistro(registro){
     imgModificar.setAttribute('alt','Imagen Editar');
 
     const linkModificar = document.createElement('A');
-    linkModificar.setAttribute('href', `${globalVariables.url}/editar?id=${id}`);
+    linkModificar.setAttribute('href', `${rutaServidor}${objetoMultiCampo.entidad}/editar?id=${id}`);
     linkModificar.appendChild(imgModificar);
     linkModificar.appendChild(spanModificar);
 
@@ -555,15 +781,12 @@ function crearRegistro(registro){
     document.querySelector('.tbody').appendChild(tr);
 }
 
-export function eliminarItem(e){
-    confirmarEliminacion(e.target.dataset.id );
-}
-
-export function botonStatus(){
+function botonStatus(){
 
     const checks = document.querySelectorAll('.check');
 
     if (checks){
+        
         checks.forEach( check => {
             // Evento click
             check.addEventListener('click', () => {
@@ -594,7 +817,7 @@ export function botonStatus(){
                     inputStatus.setAttribute('value','D');
 
                 }
- 
+
                 // Una vez asignado el inputStatus se envia por el POST
                 let resultado = postElemento('estado', inputId.value, inputStatus.value );
 
@@ -602,7 +825,7 @@ export function botonStatus(){
                     // console.log(result);
                     if (result){
                         // como el resultado fue satisfactorio, procedemos a cambiar el estado en el arreglo de objetos cargado en memoria
-                        globalVariables.registrosAPI.forEach( registro => {
+                        objetoMultiCampo.registrosAPI.forEach( registro => {
 
                             if(Object.values(registro)[0] == inputId.value){
 
@@ -617,6 +840,10 @@ export function botonStatus(){
             });
         });
     }
+}
+
+export function eliminarItem(e){
+    confirmarEliminacion(e.target.dataset.id );
 }
 
 export function confirmarEliminacion(id){
@@ -636,7 +863,7 @@ export function confirmarEliminacion(id){
 
             let respuesta = postElemento('eliminar', id );
             
-            console.log(respuesta);
+            // console.log(respuesta);
             respuesta.then(result => {
                 if (result === true) {
 
@@ -671,30 +898,6 @@ export function borrarFilas(){
     });
 }
 
-// Mostrar Alerta de error o Exito con Sweet Alert
-export function verificarMensajeGeneral(){
-    const alerta = document.querySelector('.alerta');
-
-    if (alerta){
-        let textoAlerta = alerta.textContent;
-
-        if(alerta.className.includes('error')){
-            Swal.fire({
-                icon: 'error',
-                title: textoAlerta,
-                showConfirmButton: true
-            });
-        }
-        
-        if(alerta.className.includes('exito')){              
-            Swal.fire({
-                icon: 'success',
-                title: textoAlerta,
-                timer:1800
-            }); 
-        }
-    }
-}
 
 // limpia el campo y los mensajes de error
 export function limpiarCaja(item, foco = true){
@@ -728,96 +931,6 @@ export function limpiarCaja(item, foco = true){
     }
 }
 
-export function botonAdjuntarArchivo(){
-
-    const btnAdjuntar = document.querySelector(`[data-tipo="boton-adjuntar"]`);
-    
-    let crearBotonAdjuntar = true;
-    
-    btnAdjuntar.addEventListener('click', () =>{
-
-        // Verificamos si se adjuntaron 
-        const filesAttachment = document.querySelectorAll('.textFileSelect');
-        if (filesAttachment){
-            filesAttachment.forEach( file => {
-                if (file.textContent!=''){
-                    crearBotonAdjuntar = true;
-                }else{
-                    crearBotonAdjuntar = false;
-                }
-            });
-        }
-
-        if(crearBotonAdjuntar){
-         
-            const inputFile = document.createElement('INPUT');
-            inputFile.setAttribute('type','file');
-            inputFile.setAttribute('data-tipo','archivo');
-            inputFile.setAttribute('name','ImVd_Nombre[]');
-            inputFile.setAttribute('accept','image/png,image/jpg,image/jpeg,video/mp4');
-
-            const inputBoton = document.createElement('INPUT');
-            inputBoton.setAttribute('type', 'button');
-            inputBoton.setAttribute('data-tipo', 'boton-archivo');
-            inputBoton.setAttribute('value', 'Seleccionar archivo');
-            inputBoton.classList.add('form__btn');
-            inputBoton.classList.add('btn-terciario');
-
-            const imgError = document.createElement('IMG');
-            imgError.setAttribute('src','/build/img/sistema/error.svg');
-            imgError.setAttribute('alt','icono de error');
-            imgError.classList.add('form__iconError');
-            imgError.classList.add('ocultar');
-            
-            const span = document.createElement('SPAN');
-            span.classList.add('textFileSelect');
-            
-            const imgEliminar = document.createElement('IMG');
-            imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
-            imgEliminar.setAttribute('alt','icono de eliminar');
-            
-            const linkEliminar = document.createElement('A');
-            linkEliminar.setAttribute('href', '#');
-            linkEliminar.classList.add('ocultar','eliminarFile');
-            linkEliminar.appendChild(imgEliminar);
-            linkEliminar.onclick=eliminarFile;
-
-            const divFile = document.createElement('DIV');
-            divFile.classList.add('divFile');
-            divFile.appendChild(span);
-            divFile.appendChild(linkEliminar);
-            
-            const labelSugerencia = document.createElement('LABEL');
-            labelSugerencia.classList.add('form__labelSugerencia');
-            labelSugerencia.classList.add('ocultar');
-            
-            const labelError = document.createElement('LABEL');
-            labelError.classList.add('form__labelError');
-            labelError.classList.add('ocultar');
-            // labelError.textContent = "<?php echo tipoAlerta($alertas, 'error-archivo', 'nombre');?>";
-
-            const divContenedor = document.createElement('DIV');
-            divContenedor.classList.add('form__campo');
-            divContenedor.classList.add('campo--file');
-            divContenedor.classList.add('t-xxl');
-
-            divContenedor.appendChild(inputFile);
-            divContenedor.appendChild(inputBoton);
-            // divContenedor.appendChild(span);
-            // divContenedor.appendChild(imgError);
-            divContenedor.appendChild(divFile);
-            divContenedor.appendChild(labelSugerencia);
-            divContenedor.appendChild(labelError);
-            
-            const formulario = document.querySelector('.form');
-
-            const boton = document.querySelector('.form__button');
-            formulario.insertBefore(divContenedor, boton);
-            
-            campoFile();
-        }
-    });
-}
 
 function eliminarFile(e){
     // obtenemos el texto que se encuentra en el span
@@ -826,59 +939,6 @@ function eliminarFile(e){
         let divContenedor = e.target.parentElement.parentElement.parentElement;
         divContenedor.remove();
     }
-}
-
-export function campoFile(){
-    const inputFiles = document.querySelectorAll(`[type="file"]`);
-    
-    inputFiles.forEach(inputFile => {
-
-        const campo = inputFile.parentElement;
-        const fileSelect = campo.querySelector('.textFileSelect');
-        const inputbutton = campo.querySelector(`[type="button"]`);
-        const iconoError = campo.querySelector('.campo--file > .form__iconError');
-        const iconoEliminar = campo.querySelector('.eliminarFile');
-
-        // const labelSugerencia = campo.querySelector('.campo--file > .form__labelSugerencia');
-        const labelError = campo.querySelector('.campo--file > .form__labelError');
-    
-        if (inputFile && inputbutton){
-            inputbutton.addEventListener('click', ()=>{
-                inputFile.click();
-                inputFile.addEventListener('input', ()=>{
-    
-                    fileSelect.textContent = inputFile.value;
-                    
-                    if (fileSelect.textContent !== ''){
-                        iconoEliminar.classList.remove('ocultar');
-                    }
-
-                    if(fileSelect.textContent !== '' && !labelError.className.includes('ocultar')){
-                        labelError.classList.add('ocultar');
-                        iconoError.classList.add('ocultar');
-                    }
-
-                    // RESTRICIONES DE ARCHIVO
-                    
-                    // console.log(inputFile.files[0]);
-                    // let pesoArchivo = inputFile.files[0].size;
-    
-                    // let pesoMB = (pesoArchivo / 1000000).toFixed(2);
-                    
-                    // if(pesoArchivo > 500000){
-                    //     labelSugerencia.textContent = `El archivo seleccionado tiene un peso de ${pesoMB} MB, y NO debe superar el peso de 500 KB`;
-                    //     labelSugerencia.classList.remove('ocultar');
-                    // }
-    
-                    // let tipoArchivo = inputFile.files[0].type;
-                    // if(!(tipoArchivo === "image/jpeg" || tipoArchivo === "image/jpg" || tipoArchivo === "image/png")){
-                    //     labelSugerencia.textContent = `Seleccionó un archivo que NO es permitido`;
-                    //     labelSugerencia.classList.remove('ocultar');
-                    // }
-                });
-            });
-        }
-    });
 }
 
 export function formatearTexto(cadena){
@@ -911,9 +971,9 @@ export async function postElemento(proceso, id, valor = 0 ){
     try {
         let direccion;
         if(proceso == 'estado'){
-            direccion = globalVariables.url + '/estado';
+            direccion = rutaServidor + objetoMultiCampo.entidad + '/estado';
         }else if (proceso == 'eliminar'){
-            direccion = globalVariables.url + '/eliminar';
+            direccion = rutaServidor + objetoMultiCampo.entidad + '/eliminar';
         }
 
         // Petición hacia la API

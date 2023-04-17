@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-ubicacion']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/ubicacion" class="form">
+<form method="POST" action="/ubicacion" data-form="ubicacion" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
 

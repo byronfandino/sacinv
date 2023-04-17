@@ -17,6 +17,10 @@
     //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
     @include m.flex(row, wrap, center, center, 0, 0);
 
+    &.ocultar{
+        display: none;
+    }
+
     .contenedor-notificacion{
         width:90%;
         max-width: 50rem;

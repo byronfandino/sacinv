@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-parametro']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/parametro" class="form" enctype="multipart/form-data">
+<form method="POST" action="/parametro" data-form="parametro"  class="form" enctype="multipart/form-data">
     <div class="form__campo t-sm">
         <label for="nit" class="form__label--campo">Nit<span class="obligatorio">*</span></label>
         <input type="text" 

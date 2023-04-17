@@ -1,5 +1,8 @@
+import { rutaServidor } from "./Parametros.js";
+
 // Selectores de campos
 const campo = document.querySelector('[data-tipo="nombre"]').parentElement;
+
 const inputNombre = campo.querySelector('[data-tipo="nombre"]');
 const labelSugr = campo.querySelector('.form__labelSugerencia');
 const labelError = campo.querySelector('.form__labelError');
@@ -9,7 +12,6 @@ const btnSubmitCampo = campo.parentElement.querySelector('[data-button="btn-envi
 
 export let objetoUniCampo =  {
     entidad:'',
-    url:'',
     expresion : '', 
     msg : '', 
     stringDescripcion : '', 
@@ -19,9 +21,7 @@ export let objetoUniCampo =  {
     registrosAPIEntidad : ''
 }
 
-
 export class EntidadUniCampo{
-    constructor (){}
 
     eventListeners(){
 
@@ -35,6 +35,10 @@ export class EntidadUniCampo{
         }
     }
 
+    validacionModal(){
+        inputNombre.addEventListener('input', rutaPrincipal);
+    }
+    
     // Funciones de API
     managerAlert(){
         const alertaExito = document.querySelector('.alerta.exito');
@@ -172,8 +176,7 @@ export class EntidadUniCampo{
         borrarFilas();
         limpiarCaja();
     });
-}
-
+    }
 }
 
 function botonStatus(){
@@ -631,7 +634,8 @@ function confirmarEliminacion(id){
 async function obtenerRegistrosAPI(tabla = ''){
 
     try {
-        const resultado = await fetch(objetoUniCampo.url + "/api");
+        
+        const resultado = await fetch(rutaServidor + objetoUniCampo.entidad + "/api");
         if (tabla === '' ){
             // se cargaran los registros de la tabla principal
             objetoUniCampo.registrosAPI = await resultado.json();
@@ -668,9 +672,9 @@ async function postElemento(proceso, id, nombre = '', valor = 0 ){
     try {
         let direccion;
         if(proceso == 'Modificar'){
-            direccion = objetoUniCampo.url + '/estado';
+            direccion = rutaServidor + objetoUniCampo.entidad + '/estado';
         }else if (proceso == 'Eliminar'){
-            direccion = objetoUniCampo.url + '/eliminar';
+            direccion = rutaServidor + objetoUniCampo.entidad + '/eliminar';
         }
         // Petición hacia la API
         const respuesta = await fetch(direccion, {

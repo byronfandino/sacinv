@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-tabla']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="" class="form">
+<form method="POST" data-form="tabla" action="" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
     

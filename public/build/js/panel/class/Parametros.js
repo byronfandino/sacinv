@@ -1,0 +1,1 @@
+export const rutaServidor = 'http://192.168.18.90:3000/'; 
