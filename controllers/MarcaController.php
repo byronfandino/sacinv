@@ -17,6 +17,41 @@ class MarcaController{
         echo json_encode($registros);
     }
 
+    public static function guardarAPI(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $marca = new Marca();
+        $alertas = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            
+            //1. Primero sincronizamos los datos
+            $marca->sincronizar($_POST);
+
+            //2.Validamos si no hay errores en la digitación del usuario
+            $alertas = $marca->validar();
+
+            //3. Si hay alertas se termina la ejecución del código
+            if(empty($alertas)){
+                
+                //4. Procedemos a verificar que no exista en la base de datos
+                $existe = Marca::where('Mc_Descripcion', trim($marca->Mc_Descripcion));
+
+                if(!$existe){
+
+                    // Si el registro no existe en la base de datos se procede a guardar
+                    $resultado = $marca->guardar(); 
+                    echo json_encode($resultado);
+                    
+                }
+            }
+        }
+        // $alertas=Categoria::getAlertas();
+    }
+
     public static function index(Router $router){
 
         if(!isset($_SESSION['nombre'])){

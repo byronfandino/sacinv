@@ -1,5 +1,6 @@
+import { formatearTexto, mostrarOcultarSugerencias } from './class/Parametros.js';
 import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
-
+import { Modal } from './class/Modal.js';
 import {
     EntidadMultiCampo,
     objetoMultiCampo,
@@ -7,11 +8,9 @@ import {
     mensajeSugerencia,
     estadoCampo,
     limpiarCaja,
-    mostrarOcultarSugerencias,
     borrarFilas,
     mostrarRegistrosAPI,
     ocultarError,
-    formatearTexto,
     btnSubmit
 } from './class/ModelMultiCampo.js';
 
@@ -314,8 +313,6 @@ function campoDescripcion() {
         if (expresionRegular) {
             // Se elimina cualquier sugerencia que se haya generado
             mostrarOcultarSugerencias(labelSugr, '', false);
-            console.log(objetoMultiCampo.stringAPI.Prod_Descripcion);
-            console.log(objetoMultiCampo.stringAPI.Prod_Descripcion.includes(texto));
             // Verificamos si coincide de forma parcial o completa
             if (objetoMultiCampo.stringAPI.Prod_Descripcion.includes(texto)) {
 
@@ -383,31 +380,45 @@ document.addEventListener('DOMContentLoaded', () => {
     objetoUniCampo.entidad = "categoria";
     let categoria = new EntidadUniCampo;
     categoria.cargarComboBox();
-    categoria.validacionModal();
 
     // Cargar el comboBox de Marca
     objetoUniCampo.entidad = "marca";
     let marca = new EntidadUniCampo;
     marca.cargarComboBox();
-
+    
     objetoMultiCampo.entidad = "producto";
-
     renombrarObjetos();
     producto.asignarValidacion();
-    producto.mostrarModal('marca');
-    producto.mostrarModal('categoria');
     producto.verificarMensajeGeneral();
     producto.managerAlert();
     producto.botonAdjuntarArchivo();
     producto.campoFile();
-    producto.estadoRegistro();
     botonesSubmit();
     botonLimpiar();
     campoCodigoBarras();
     campoCodigoManual();
     campoDescripcion();
+    producto.estadoRegistro();
 
+    //cargar modal-------------------------
+
+    let marcaModal = new Modal("marca",
+    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
+    "Solo debe contener letras, mayor a 2 caracteres",
+    "Mc_Descripcion");
+    marcaModal.mostrarModal();
+    marcaModal.getRegistrosAPI();
+    marcaModal.cargarRegistros();
+    marcaModal.asignarValidacion();
+    
+    let categoriaModal = new Modal("categoria",
+    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
+    "Solo debe contener letras, mayor a 2 caracteres",
+    "Ctg_Descripcion");
+    categoriaModal.mostrarModal();
+    categoriaModal.getRegistrosAPI();
+    categoriaModal.cargarRegistros();
+    categoriaModal.asignarValidacion();
 
 });
-
 

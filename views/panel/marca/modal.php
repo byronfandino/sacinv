@@ -10,15 +10,15 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-marca']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/marca" data-form="marca" class="form">
+<form method="POST" data-form="marca" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
 
     <div class="form__campo campo--button t-xxl">
         <input type="submit" 
+                data-button="btn-envio" 
                 value="Guardar" 
                 class="form__btn btn-primario "
-                data-button="btn-marca" 
                 >
         <button class="form__btn btn-secundario "
                 data-button="btn-cancelar-modal">Cancelar</button>

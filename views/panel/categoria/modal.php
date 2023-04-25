@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-categoria']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" data-form="categoria" action="/categoria" class="form">
+<form method="POST" data-form="categoria" class="form">
 
     <?php include_once __DIR__ . '/formulario.php'; ?>
 

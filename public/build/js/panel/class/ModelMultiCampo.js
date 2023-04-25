@@ -1,5 +1,8 @@
-import { objeto } from "../backup/ModelMultiCampo.js";
-import { rutaServidor } from "./Parametros.js";
+// import { objeto } from "../backup/ModelMultiCampo.js";
+import { rutaServidor, 
+    formatearTexto, 
+    mostrarOcultarSugerencias } from "./Parametros.js";
+
 // Guarda los registros de la tabla y de los combobox
 export let objetoMultiCampo = {
 
@@ -26,7 +29,6 @@ export class EntidadMultiCampo{
     asignarValidacion(){
     
         const campos = document.querySelectorAll(`[data-form="${objetoMultiCampo.entidad}"] .form__campo`);
-        // const btnEliminar = document.querySelector('.eliminar-imagen');
     
         campos.forEach(campo => {
     
@@ -103,42 +105,7 @@ export class EntidadMultiCampo{
             }
         });
     }
-   
-    mostrarModal(modal){
 
-        const comboBox = document.querySelector(`#${modal}`);
-        comboBox.addEventListener('change', e => {
-
-            if(e.target.value === ""){
-
-                const notificacion = document.querySelector(`.fondo-notificacion.${modal}`);
-
-                if (notificacion){
-                    notificacion.classList.remove('ocultar');
-                }
-
-            }
-        });
-        
-        const contenedor = document.querySelector(`.fondo-notificacion.${modal}`);
-        const input = contenedor.querySelector('input');
-        input.removeAttribute('required');
-        // console.log(input);
-        // const formulario = document.querySelector(`[data-form="${modal}"]`);
-        const btnCancelar = contenedor.querySelector('[data-button="btn-cancelar-modal"]');
-    
-        btnCancelar.addEventListener('click', e => {
-            e.preventDefault();
-            if (contenedor){
-                contenedor.classList.add('ocultar');
-            }
-        });
-
-    }
-
-    guardarRegistroModal(){
-        
-    }
     // Muestra la alerta de carga de datos y ejecuta la función de consulta la APi de categorías
     managerAlert(){
 
@@ -398,7 +365,6 @@ export function estadoCampo(tipo, estado = false){
 
 }
 
-/* FINALIZA CAMPOS */
 export function reglaInput(tipo){
     if(Object.keys(objetoMultiCampo.reglas).includes(tipo)){
         return objetoMultiCampo.reglas[tipo];
@@ -418,20 +384,9 @@ export function ocultarError(labelError, iconoError){
     iconoError.previousElementSibling.style.right = "0.5rem";
 }
 
-// muestra u oculta el error
-export function mostrarOcultarSugerencias(label, msg, estado){
-    if (estado){
-        label.classList.remove('ocultar');
-        label.textContent=msg;
-    }else{
-        label.classList.add('ocultar');
-        label.textContent="";
-    }
-}
-
 // activa o desactiva el botón de Guardar
 export function estadoBoton(estado){
-    const boton = document.querySelector(`[data-btn="btn-enviar"]`);
+    const boton = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"] [data-btn="btn-enviar"]`);
 
     if (estado){
         boton.classList.remove('disabled');
@@ -471,7 +426,6 @@ async function obtenerRegistrosAPI(){
         objetoMultiCampo.registrosAPI = await resultado.json();
 
         mostrarRegistrosAPI();
-        botonStatus();
 
         return true;
 
@@ -484,7 +438,6 @@ async function obtenerRegistrosAPI(){
         return false;
     }
 }
-
 
 // Función dependiente de la función 'obtenerRegistrosAPI()'
 // Muestra en el HTML los resultados de la API
@@ -898,7 +851,6 @@ export function borrarFilas(){
     });
 }
 
-
 // limpia el campo y los mensajes de error
 export function limpiarCaja(item, foco = true){
     const input = item.querySelector('.form__input');
@@ -931,7 +883,6 @@ export function limpiarCaja(item, foco = true){
     }
 }
 
-
 function eliminarFile(e){
     // obtenemos el texto que se encuentra en el span
     const texto = e.target.parentElement.previousElementSibling.textContent;
@@ -939,24 +890,6 @@ function eliminarFile(e){
         let divContenedor = e.target.parentElement.parentElement.parentElement;
         divContenedor.remove();
     }
-}
-
-export function formatearTexto(cadena){
-    
-    cadena=cadena.toLowerCase().trim();
-    cadena=cadena.replaceAll('á', 'a');
-    cadena=cadena.replaceAll('é', 'e');
-    cadena=cadena.replaceAll('í', 'i');
-    cadena=cadena.replaceAll('ó', 'o');
-    cadena=cadena.replaceAll('ú', 'u');
-    
-    cadena=cadena.replaceAll('à', 'a');
-    cadena=cadena.replaceAll('è', 'e');
-    cadena=cadena.replaceAll('ì', 'i');
-    cadena=cadena.replaceAll('ò', 'o');
-    cadena=cadena.replaceAll('ù', 'u');
-    return cadena;
-
 }
 
 // Se define como POST Elemento, porque es lo que ocurre en el POST
@@ -1018,3 +951,16 @@ export async function postElemento(proceso, id, valor = 0 ){
         }
     }
 }
+
+// se utiliza para refrescar el letrero del combobox cuando se agrega desde una nueva ventada modal
+export function validarCombo(entidad){
+    const combo = document.querySelector(`#${entidad}`);
+    const label = combo.parentElement.querySelector('.form__labelSugerencia');
+    setTimeout(() => {
+        if (combo.value != ""){
+            estadoCampo(entidad, true);
+            mostrarOcultarSugerencias(label, '', false);
+        }
+
+    },1000);
+}  

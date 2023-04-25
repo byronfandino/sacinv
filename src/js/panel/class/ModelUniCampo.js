@@ -1,4 +1,8 @@
-import { rutaServidor } from "./Parametros.js";
+import { rutaServidor, 
+    formatearTexto, 
+    mostrarOcultarSugerencias, 
+    estadoBoton,
+    alertaErrorCampo } from "./Parametros.js";
 
 // Selectores de campos
 const campo = document.querySelector('[data-tipo="nombre"]').parentElement;
@@ -35,10 +39,6 @@ export class EntidadUniCampo{
         }
     }
 
-    validacionModal(){
-        inputNombre.addEventListener('input', rutaPrincipal);
-    }
-    
     // Funciones de API
     managerAlert(){
         const alertaExito = document.querySelector('.alerta.exito');
@@ -55,7 +55,7 @@ export class EntidadUniCampo{
         // Mostrar los mensajes de error que aparecen en el label cuando provienen del servidor
         if(labelError.textContent !== ''){
             // Mostramos el error general
-            alertaErrorCampo(true);
+            alertaErrorCampo(labelError, iconoError, iconoLimpiar, true);
 
             setTimeout(() => {
                 borrarFilas();
@@ -165,7 +165,7 @@ export class EntidadUniCampo{
     }
 
     estadoBotonSubmit(){
-        estadoBoton();
+        estadoBoton(btnSubmitCampo, false);
     }
 
     // limpia el campo
@@ -233,15 +233,15 @@ function rutaEditar(e){
 
     if(e.target.value.match(objetoUniCampo.expresion)){
         mostrarOcultarSugerencias('', false);
-        estadoBoton(true);
+        estadoBoton(btnSubmitCampo, true);
     }else{
         mostrarOcultarSugerencias(objetoUniCampo.msg, true);
-        estadoBoton(false);
+        estadoBoton(btnSubmitCampo, false);
     }
 
     if(labelError && labelError.textContent != ''){
         // Se oculta el error porque el usuario empieza a digitar
-        alertaErrorCampo(false);
+        alertaErrorCampo(labelError, iconoError, iconoLimpiar, false);
     }
 }
 
@@ -254,15 +254,15 @@ function rutaPrincipal(e){
 
     if(expresionRegular && !existeRegistro){
         mostrarOcultarSugerencias('', false);
-        estadoBoton(true);
+        estadoBoton(btnSubmitCampo, true);
         
     }else if(!expresionRegular && !existeRegistro){
         mostrarOcultarSugerencias(objetoUniCampo.msg, true);
-        estadoBoton(false);
+        estadoBoton(btnSubmitCampo, false);
         
     }else if((!expresionRegular && existeRegistro)||(expresionRegular && existeRegistro)){
         mostrarOcultarSugerencias('Esta categoría ya se encuentra registrada', true);
-        estadoBoton(false);
+        estadoBoton(btnSubmitCampo, false);
     }
 
     let coincidencia = objetoUniCampo.stringDescripcion.includes(texto);
@@ -276,9 +276,8 @@ function rutaPrincipal(e){
     }
 
     if(labelError && labelError.textContent != ''){
-        alertaErrorCampo(false);
+        alertaErrorCampo(labelError, iconoError, iconoLimpiar, false);
     }
-
 }  
 
 function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
@@ -326,57 +325,6 @@ function mostrarRegistrosAPI(evento = 'DOM', valor = ''){
     botonStatus();
 }
 
-function estadoBoton(estado = false){
-    if (estado){
-        btnSubmitCampo.classList.remove('disabled');
-        btnSubmitCampo.removeAttribute('disabled');                                
-    }else{
-        btnSubmitCampo.classList.add('disabled');
-        btnSubmitCampo.setAttribute('disabled', '');                                
-    }
-}
-
-// Esta función se dispara cuando se encuentran errores provenientes del backend
-function alertaErrorCampo(estado){
-    if (estado === true){
-        labelError.classList.remove('ocultar');
-        iconoError.classList.remove('ocultar');
-        iconoLimpiar.style.right = "3rem";
-    }else{
-        labelError.textContent='';
-        labelError.classList.add('ocultar');
-        iconoError.classList.add('ocultar');
-        iconoLimpiar.style.right = "0.5rem";
-    }
-}
-
-function mostrarOcultarSugerencias(msg, estado){
-    if (estado){
-        labelSugr.classList.remove('ocultar');
-        // labelSugr.textContent=msg;
-    }else{
-        labelSugr.classList.add('ocultar');
-    }
-    labelSugr.textContent=msg;
-}
-
-function formatearTexto(cadena){
-    
-    cadena=cadena.toLowerCase().trim();
-    // cadena=cadena.toLowerCase();
-    cadena=cadena.replaceAll('á', 'a');
-    cadena=cadena.replaceAll('é', 'e');
-    cadena=cadena.replaceAll('í', 'i');
-    cadena=cadena.replaceAll('ó', 'o');
-    cadena=cadena.replaceAll('ú', 'u');
-    
-    cadena=cadena.replaceAll('à', 'a');
-    cadena=cadena.replaceAll('è', 'e');
-    cadena=cadena.replaceAll('ì', 'i');
-    cadena=cadena.replaceAll('ò', 'o');
-    cadena=cadena.replaceAll('ù', 'u');
-    return cadena;
-}
 
 function limpiarVariables(){
     objetoUniCampo.registrosAPI = "";

@@ -49,9 +49,10 @@ $router->get('/panel-usuario', [PanelUsuarioController::class,'index']);
 $router->get('/usuario/api', [UsuarioController::class,'listarNicknames']);
 
 // Categoria
-$router->get('/categoria/api', [CategoriaController::class,'listarCategorias']);
 $router->get('/categoria', [CategoriaController::class,'index']);
 $router->post('/categoria', [CategoriaController::class,'index']);
+$router->get('/categoria/api', [CategoriaController::class,'listarCategorias']);
+$router->post('/categoria/api', [CategoriaController::class,'guardarAPI']);
 $router->post('/categoria/estado', [CategoriaController::class,'estado']);
 $router->get('/categoria/editar', [CategoriaController::class,'editar']);
 $router->post('/categoria/editar', [CategoriaController::class,'editar']);
@@ -59,6 +60,7 @@ $router->post('/categoria/eliminar', [CategoriaController::class,'eliminar']);
 
 // Marca
 $router->get('/marca/api', [MarcaController::class,'listarMarcas']);
+$router->post('/marca/api', [MarcaController::class,'guardarAPI']);
 $router->get('/marca', [MarcaController::class,'index']);
 $router->post('/marca', [MarcaController::class,'index']);
 $router->get('/marca/editar', [MarcaController::class,'editar']);
