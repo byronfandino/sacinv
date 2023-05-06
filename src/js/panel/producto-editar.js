@@ -69,28 +69,21 @@ function renombrarObjetos() {
     objetoMultiCampo.reglas = {};
     objetoMultiCampo.sugerencias = {};
 
-    if (window.location.pathname.includes('editar')){
+    objetoMultiCampo.arrayAPI = {
 
-        
+        Prod_Descripcion: [],
+        Cod_Manual: [],
+        Cod_Barras: []
 
-    }else{
-        
-        objetoMultiCampo.arrayAPI = {
-    
-            Prod_Descripcion: [],
-            Cod_Manual: [],
-            Cod_Barras: []
-    
-        };
-    
-        objetoMultiCampo.stringAPI = {
-    
-            Prod_Descripcion: '',
-            Cod_Manual: '',
-            Cod_Barras: ''
-    
-        };
-    }
+    };
+
+    objetoMultiCampo.stringAPI = {
+
+        Prod_Descripcion: '',
+        Cod_Manual: '',
+        Cod_Barras: ''
+
+    };
 
     objetoMultiCampo.convertirMinusculas = ['Prod_Descripcion'];
 
@@ -130,110 +123,115 @@ function renombrarObjetos() {
 
 function campoCodigoBarras() {
     const txtCodigoBarras = document.querySelector('#codigoBarras');
-    const labelSugr = txtCodigoBarras.parentElement.querySelector('.form__labelSugerencia');
-    const labelError = txtCodigoBarras.parentElement.querySelector('.form__labelError');
-    const iconoError = txtCodigoBarras.parentElement.querySelector('.form__iconError');
-    const txtCodigoManual = document.querySelector('#codigoManual');
 
-    let expresionRegular;
-    let tipo = txtCodigoBarras.getAttribute('data-tipo');
-    let regla = reglaInput(tipo);
-    let msg = mensajeSugerencia(tipo);
+    if(txtCodigoBarras){
 
-    txtCodigoBarras.addEventListener('input', e => {
-
-        // Convertir a mayusculas el contenido
-        txtCodigoBarras.value = e.target.value.toUpperCase();
-
-        // Agregamos de forma automática el código manual 
-        let texto = e.target.value;
-
-        if (e.target.value.length > 5) {
-            
-            let conteo = parseInt(e.target.value.length) - 6;
-            let stringCortado = e.target.value.substr(conteo, 6);
-            //  Convertir a mayusculas el contenido
-            txtCodigoManual.value = stringCortado.toUpperCase();
-
-            // ----------------------------------------------------
-
-            let expresionRegular2;
-            let tipo2 = txtCodigoManual.getAttribute('data-tipo');
-            let regla2 = reglaInput(tipo2);
-            let msg2 = mensajeSugerencia(tipo2);
-            expresionRegular2 = txtCodigoManual.value.match(regla2);
-            let labelSugr2 = txtCodigoManual.nextElementSibling.nextElementSibling.nextElementSibling;
-
-            // Si cumple con la expresión regular
-            if (expresionRegular2) {
-
-                // Si coincide la cadena de forma completa se muestra la alerta que este código ya se encuentra registrado
-                if (objetoMultiCampo.arrayAPI.Cod_Manual.includes(txtCodigoManual.value)) {
-
-                    mostrarOcultarSugerencias(labelSugr2, 'Este código ya se encuentra registrado', true);
-
+        const labelSugr = txtCodigoBarras.parentElement.querySelector('.form__labelSugerencia');
+        const labelError = txtCodigoBarras.parentElement.querySelector('.form__labelError');
+        const iconoError = txtCodigoBarras.parentElement.querySelector('.form__iconError');
+        const txtCodigoManual = document.querySelector('#codigoManual');
+    
+        let expresionRegular;
+        let tipo = txtCodigoBarras.getAttribute('data-tipo');
+        let regla = reglaInput(tipo);
+        let msg = mensajeSugerencia(tipo);
+    
+        txtCodigoBarras.addEventListener('input', e => {
+    
+            // Convertir a mayusculas el contenido
+            txtCodigoBarras.value = e.target.value.toUpperCase();
+    
+            // Agregamos de forma automática el código manual 
+            let texto = e.target.value;
+    
+            if (e.target.value.length > 5) {
+                
+                let conteo = parseInt(e.target.value.length) - 6;
+                let stringCortado = e.target.value.substr(conteo, 6);
+                //  Convertir a mayusculas el contenido
+                txtCodigoManual.value = stringCortado.toUpperCase();
+    
+                // ----------------------------------------------------
+    
+                let expresionRegular2;
+                let tipo2 = txtCodigoManual.getAttribute('data-tipo');
+                let regla2 = reglaInput(tipo2);
+                let msg2 = mensajeSugerencia(tipo2);
+                expresionRegular2 = txtCodigoManual.value.match(regla2);
+                let labelSugr2 = txtCodigoManual.nextElementSibling.nextElementSibling.nextElementSibling;
+    
+                // Si cumple con la expresión regular
+                if (expresionRegular2) {
+    
+                    // Si coincide la cadena de forma completa se muestra la alerta que este código ya se encuentra registrado
+                    if (objetoMultiCampo.arrayAPI.Cod_Manual.includes(txtCodigoManual.value)) {
+    
+                        mostrarOcultarSugerencias(labelSugr2, 'Este código ya se encuentra registrado', true);
+    
+                    } else {
+                        // Si no coincide en su totalidad con algún registro entonces quitamos la alerta
+                        mostrarOcultarSugerencias(labelSugr2, '', false);
+                        estadoCampo('codigoManual', true);
+                    }
+    
                 } else {
-                    // Si no coincide en su totalidad con algún registro entonces quitamos la alerta
-                    mostrarOcultarSugerencias(labelSugr2, '', false);
-                    estadoCampo('codigoManual', true);
+                    mostrarOcultarSugerencias(labelSugr2, msg2, true);
+                    estadoCampo('codigoManual', false);
                 }
-
+    
+    
             } else {
-                mostrarOcultarSugerencias(labelSugr2, msg2, true);
+    
+                txtCodigoManual.value = "";
+                limpiarCaja(txtCodigoManual.parentElement, false);
                 estadoCampo('codigoManual', false);
+    
             }
-
-
-        } else {
-
-            txtCodigoManual.value = "";
-            limpiarCaja(txtCodigoManual.parentElement, false);
-            estadoCampo('codigoManual', false);
-
-        }
-
-        //buscamos los registros que coincidan
-        expresionRegular = e.target.value.match(regla);
-
-        // Si cumple con la expresión regular
-        if (expresionRegular) {
-
-            // Se elimina cualquier sugerencia que se haya generado
-            mostrarOcultarSugerencias(labelSugr, '', false);
-            // console.log(objetoMultiCampo.stringAPI.Cod_Barras.includes(txtCodigoBarras.value));
-            if (objetoMultiCampo.stringAPI.Cod_Barras.includes(txtCodigoBarras.value)) {
-
-                // Se mostrarán los registros que coinciden de forma parcial o completa los registros
-                borrarFilas();
-                mostrarRegistrosAPI('input', 'Cod_Barras', e.target.value);
-
-
+    
+            //buscamos los registros que coincidan
+            expresionRegular = e.target.value.match(regla);
+    
+            // Si cumple con la expresión regular
+            if (expresionRegular) {
+    
+                // Se elimina cualquier sugerencia que se haya generado
+                mostrarOcultarSugerencias(labelSugr, '', false);
+                // console.log(objetoMultiCampo.stringAPI.Cod_Barras.includes(txtCodigoBarras.value));
+                if (objetoMultiCampo.stringAPI.Cod_Barras.includes(txtCodigoBarras.value)) {
+    
+                    // Se mostrarán los registros que coinciden de forma parcial o completa los registros
+                    borrarFilas();
+                    mostrarRegistrosAPI('input', 'Cod_Barras', e.target.value);
+    
+    
+                } else {
+    
+                    //Si no coincide la busqueda se muestran todos los registros de la base de datos
+                    borrarFilas();
+                    mostrarRegistrosAPI();
+    
+                }
+    
             } else {
-
-                //Si no coincide la busqueda se muestran todos los registros de la base de datos
+                // Si no cumple con la expresión regular se muestra la sugerencia
+                mostrarOcultarSugerencias(labelSugr, msg, true);
+                // Se muestran todos los registros porque no cumple con el requisito principal de la validación por expresión regular
                 borrarFilas();
                 mostrarRegistrosAPI();
-
             }
-
-        } else {
-            // Si no cumple con la expresión regular se muestra la sugerencia
-            mostrarOcultarSugerencias(labelSugr, msg, true);
-            // Se muestran todos los registros porque no cumple con el requisito principal de la validación por expresión regular
-            borrarFilas();
-            mostrarRegistrosAPI();
-        }
-
-        // Ocultar los errores de la base de datos en caso de que se muestren en pantalla
-        if (labelError && labelError.textContent != '') {
-            ocultarError(labelError, iconoError);
-        }
-    });
+    
+            // Ocultar los errores de la base de datos en caso de que se muestren en pantalla
+            if (labelError && labelError.textContent != '') {
+                ocultarError(labelError, iconoError);
+            }
+        });
+    }
 }
 
 function campoCodigoManual() {
 
     const txtCodigoManual = document.querySelector(`[data-tipo="codigoManual"]`);
+    
     const labelSugr = txtCodigoManual.parentElement.querySelector('.form__labelSugerencia');
     const labelError = txtCodigoManual.parentElement.querySelector('.form__labelError');
     const iconoError = txtCodigoManual.parentElement.querySelector('.form__iconError');
@@ -365,41 +363,6 @@ function campoDescripcion() {
     });
 }
 
-function campoDescripcionEditar() {
-
-    const txtDescripcion = document.querySelector(`[data-tipo="prodDescripcion"]`);
-    const labelSugr = txtDescripcion.parentElement.querySelector('.form__labelSugerencia');
-    const labelError = txtDescripcion.parentElement.querySelector('.form__labelError');
-    const iconoError = txtDescripcion.parentElement.querySelector('.form__iconError');
-
-    let expresionRegular;
-    let tipo = txtDescripcion.getAttribute('data-tipo');
-    let regla = reglaInput(tipo);
-    let msg = mensajeSugerencia(tipo);
-
-    txtDescripcion.addEventListener('input', e => {
-
-        expresionRegular = e.target.value.match(regla);
-
-        // Si cumple con la expresión regular
-        if (expresionRegular) {
-            // Se elimina cualquier sugerencia que se haya generado
-            estadoCampo('prodDescripcion', true);
-            mostrarOcultarSugerencias(labelSugr, '', false);
-
-        } else {
-            // Si no cumple con la expresión regular se muestra la sugerencia
-            estadoCampo('prodDescripcion', false);
-            mostrarOcultarSugerencias(labelSugr, msg, true);
-        }
-
-        // Ocultar los errores de la base de datos en caso de que se muestren en pantalla
-        if (labelError && labelError.textContent != '') {
-            ocultarError(labelError, iconoError);
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Estos son los campos que tienen un tratamiento diferente
     objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion']
@@ -439,12 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     botonLimpiar();
     campoCodigoBarras();
     campoCodigoManual();
-
-    if (!window.location.href.includes('editar')){
-        campoDescripcion();
-    }else{
-        campoDescripcionEditar();
-    }
+    campoDescripcion();
     producto.estadoRegistro();
 
     //cargar modal-------------------------

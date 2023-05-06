@@ -69,28 +69,21 @@ function renombrarObjetos() {
     objetoMultiCampo.reglas = {};
     objetoMultiCampo.sugerencias = {};
 
-    if (window.location.pathname.includes('editar')){
+    objetoMultiCampo.arrayAPI = {
 
-        
+        Prod_Descripcion: [],
+        Cod_Manual: [],
+        Cod_Barras: []
 
-    }else{
-        
-        objetoMultiCampo.arrayAPI = {
-    
-            Prod_Descripcion: [],
-            Cod_Manual: [],
-            Cod_Barras: []
-    
-        };
-    
-        objetoMultiCampo.stringAPI = {
-    
-            Prod_Descripcion: '',
-            Cod_Manual: '',
-            Cod_Barras: ''
-    
-        };
-    }
+    };
+
+    objetoMultiCampo.stringAPI = {
+
+        Prod_Descripcion: '',
+        Cod_Manual: '',
+        Cod_Barras: ''
+
+    };
 
     objetoMultiCampo.convertirMinusculas = ['Prod_Descripcion'];
 
@@ -365,41 +358,6 @@ function campoDescripcion() {
     });
 }
 
-function campoDescripcionEditar() {
-
-    const txtDescripcion = document.querySelector(`[data-tipo="prodDescripcion"]`);
-    const labelSugr = txtDescripcion.parentElement.querySelector('.form__labelSugerencia');
-    const labelError = txtDescripcion.parentElement.querySelector('.form__labelError');
-    const iconoError = txtDescripcion.parentElement.querySelector('.form__iconError');
-
-    let expresionRegular;
-    let tipo = txtDescripcion.getAttribute('data-tipo');
-    let regla = reglaInput(tipo);
-    let msg = mensajeSugerencia(tipo);
-
-    txtDescripcion.addEventListener('input', e => {
-
-        expresionRegular = e.target.value.match(regla);
-
-        // Si cumple con la expresión regular
-        if (expresionRegular) {
-            // Se elimina cualquier sugerencia que se haya generado
-            estadoCampo('prodDescripcion', true);
-            mostrarOcultarSugerencias(labelSugr, '', false);
-
-        } else {
-            // Si no cumple con la expresión regular se muestra la sugerencia
-            estadoCampo('prodDescripcion', false);
-            mostrarOcultarSugerencias(labelSugr, msg, true);
-        }
-
-        // Ocultar los errores de la base de datos en caso de que se muestren en pantalla
-        if (labelError && labelError.textContent != '') {
-            ocultarError(labelError, iconoError);
-        }
-    });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Estos son los campos que tienen un tratamiento diferente
     objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion']
@@ -439,12 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     botonLimpiar();
     campoCodigoBarras();
     campoCodigoManual();
-
-    if (!window.location.href.includes('editar')){
-        campoDescripcion();
-    }else{
-        campoDescripcionEditar();
-    }
+    campoDescripcion();
     producto.estadoRegistro();
 
     //cargar modal-------------------------

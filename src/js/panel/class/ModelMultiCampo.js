@@ -31,7 +31,7 @@ export class EntidadMultiCampo{
         const campos = document.querySelectorAll(`[data-form="${objetoMultiCampo.entidad}"] .form__campo`);
     
         campos.forEach(campo => {
-    
+            
             const input = campo.querySelector('input');
             const select = campo.querySelector('select');
             const labelSugr = campo.querySelector('.form__labelSugerencia');
@@ -179,8 +179,7 @@ export class EntidadMultiCampo{
             }
         }
     }
-
-     
+    
     botonAdjuntarArchivo(){
 
         const btnAdjuntar = document.querySelector(`[data-tipo="boton-adjuntar"]`);
@@ -271,7 +270,7 @@ export class EntidadMultiCampo{
             }
         });
     }
-        
+    
     campoFile(){
         const inputFiles = document.querySelectorAll(`[type="file"]`);
         
@@ -444,9 +443,8 @@ async function obtenerRegistrosAPI(){
 // Utilizamos el evento para evitar cargar el arreglo general de nombres en un evento diferente a la carga del formulario
 export function mostrarRegistrosAPI( evento = 'DOM', campo = '', valor = ''){
     // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
-    const tabla = document.querySelector('.table');
+    const tabla = document.querySelector(`table[data-tipo=""]`);
     let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
-    // console.log(objetoMultiCampo.arrayAPI);
     
     if (objetoMultiCampo.registrosAPI){
         
@@ -469,24 +467,14 @@ export function mostrarRegistrosAPI( evento = 'DOM', campo = '', valor = ''){
                     crearRegistro(registro);
                 }
             }
-
-            // console.log(llavesArray);
-            // console.log(llavesArray.includes(campo));
             
             if( evento === 'input' && llavesArray.includes(campo) ){
-                // console.log(key);
-                // console.log(campo);
-                // console.log(objetoMultiCampo.convertirMinusculas);
-                // console.log(objetoMultiCampo.convertirMinusculas.includes(campo));
-                // console.log(registro[campo].includes(valor));
-                // console.log('------------------------------');
 
                 if (objetoMultiCampo.convertirMinusculas.length > 0 && objetoMultiCampo.convertirMinusculas.includes(campo)){
 
                     // Si no está vacío, entonces procedemos 
                     // objetoMultiCampo.convertirMinusculas.forEach( item => {
-                        
-                        // console.log(formatearTexto(registro[campo]));
+                       
                         // if (item === campo && formatearTexto(registro[campo]).includes(valor)){
                         if (formatearTexto(registro[campo]).includes(valor)){
                             if(tabla){
@@ -702,13 +690,13 @@ export function crearRegistro(registro){
     // Eliminar-----------------------------------------------
      const spanEliminar = document.createElement('SPAN');
      spanEliminar.textContent="Eliminar";
-     spanEliminar.dataset.id = id;
+     spanEliminar.dataset.idRegistro = id;
      spanEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
  
      const imgEliminar = document.createElement('IMG');
      imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
      imgEliminar.setAttribute('alt','Imagen Eliminar');
-     imgEliminar.dataset.id = id;
+     imgEliminar.dataset.idRegistro = id;
      imgEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
      
      const linkEliminar = document.createElement('A');
@@ -796,7 +784,7 @@ function botonStatus(){
 }
 
 export function eliminarItem(e){
-    confirmarEliminacion(e.target.dataset.id );
+    confirmarEliminacion(e.target.dataset.idRegistro );
 }
 
 export function confirmarEliminacion(id){
@@ -852,12 +840,12 @@ export function borrarFilas(){
 }
 
 // limpia el campo y los mensajes de error
-export function limpiarCaja(item, foco = true){
-    const input = item.querySelector('.form__input');
-    const labelSugerencia = item.querySelector('.form__labelSugerencia');
-    const labelError = item.querySelector('.form__labelError');
-    const iconoError = item.querySelector('.form__iconError');
-    const iconoLimpiar = item.querySelector('.form__limpiar');
+export function limpiarCaja(campoSelec, foco = true){
+    const input = campoSelec.querySelector('.form__input');
+    const labelSugerencia = campoSelec.querySelector('.form__labelSugerencia');
+    const labelError = campoSelec.querySelector('.form__labelError');
+    const iconoError = campoSelec.querySelector('.form__iconError');
+    const iconoLimpiar = campoSelec.querySelector('.form__limpiar');
     // const tipo = input.getAttribute('data-tipo');
 
     // Ocultamos y vaciamos los errores

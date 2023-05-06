@@ -10,6 +10,7 @@ use Controllers\PanelAdminController;
 use Controllers\PanelUsuarioController;
 use Controllers\ParametroController;
 use Controllers\ProductoController;
+use Controllers\ProductoImgVideoController;
 use Controllers\TablaController;
 use Controllers\UbicacionController;
 use Controllers\UsuarioController;
@@ -100,13 +101,19 @@ $router->get('/parametro', [ParametroController::class,'index']);
 $router->post('/parametro', [ParametroController::class,'index']);
 $router->post('/parametro/eliminar-logo', [ParametroController::class, 'eliminarLogo']);
 
-// 
+// Producto
 $router->get('/producto/api', [ProductoController::class,'listarProductos']);
 $router->get('/producto', [ProductoController::class,'index']);
 $router->post('/producto', [ProductoController::class,'index']);
 $router->post('/producto/estado', [ProductoController::class,'estado']);
+$router->get('/producto/editar', [ProductoController::class,'editar']);
 $router->get('/producto/eliminar', [ProductoController::class,'eliminar']);
 $router->post('/producto/eliminar', [ProductoController::class,'eliminar']);
+$router->get('/producto/items/api', [ProductoController::class,'listarItems']);
+
+// Producto Imagen Video
+$router->get('/productoimgvideo/api', [ProductoImgVideoController::class,'listarImgVideo']);
+
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

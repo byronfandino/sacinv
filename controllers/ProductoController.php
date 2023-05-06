@@ -4,9 +4,7 @@ namespace Controllers;
 
 use Intervention\Image\ImageManagerStatic as Image;
 use MVC\Router;
-use Model\Marca;
 use Model\Producto;
-use Model\Categoria;
 use Model\CompraDetalle;
 use Model\InventarioFifo;
 use Model\ProductoCodigo;
@@ -15,8 +13,30 @@ use Model\ProductoImgVideo;
 use Model\ProductoAPI;
 use Model\VentaDetalle;
 
-
 class ProductoController{
+
+    // Esta función solo se utllizara para mostrar en tablas los items a mostrar
+    public static function listarItems(){
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $id = $_GET['id'];
+
+        //2. Verificar si hay un elemento get y es un número
+        if(!is_numeric($id)) return;
+
+        $consultaCodigos = "SELECT Cod_Id, Cod_Barras, Cod_Manual FROM tblproducto_codigo WHERE Cod_FkProd_Id = " . $id;
+        $resultadoCodigos = ProductoCodigo::SQL($consultaCodigos);
+
+        $consultaOfertas = "SELECT PO_Id, PO_Cant, PO_ValorOferta FROM tblproducto_oferta WHERE PO_FkProducto_Id = " . $id;
+        $resultadoOfertas = ProductoOferta::SQL($consultaOfertas);
+
+        $consultaImgVideos = "SELECT ImVd_Id, ImVd_Nombre FROM tblproducto_img_video WHERE ImVd_FkProd_Id = " . $id;
+        $resultadoImgVideos = ProductoImgVideo::SQL($consultaImgVideos);
+
+        echo json_encode([$resultadoCodigos,  $resultadoOfertas, $resultadoImgVideos]);
+    }
 
     // API para mostrar el listado de categorias en formato JSON
     public static function listarProductos (){    
@@ -56,9 +76,6 @@ class ProductoController{
             header('Location: /');
         }
 
-        $categorias = Categoria::all('Ctg_Descripcion'); 
-        $marcas = Marca::all('Mc_Descripcion');
-
         $producto = new Producto();
         $codigoProducto = new ProductoCodigo();
         $ofertasProducto = new ProductoOferta();
@@ -68,7 +85,6 @@ class ProductoController{
         
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-            // debuguear($_FILES);
             //1. Primero sincronizamos los datos
             $producto->sincronizar($_POST);
             $codigoProducto->sincronizar($_POST);
@@ -99,12 +115,7 @@ class ProductoController{
                 //1. Guardamos en la tabla producto y obtenemos el id
                 $resultadoProducto = $producto->guardar();
                 $id = $resultadoProducto['id'];
-
-                // echo '<pre>';
-                // echo "Resultado Producto<br>";
-                // echo var_dump($resultadoProducto);
-                // echo '</pre>';
-                
+               
                 //2. Guardamos los codígos manual y de barras con el id del producto
                 // Si guardó adecuadamente el producto, procedemos a guardar el código de barras
                 $resultadoCodigo=false;
@@ -118,11 +129,6 @@ class ProductoController{
                         Producto::setAlerta('error-producto','codigo','No fue posible agregar el registro del producto');
                     }
 
-                    // echo '<pre>';
-                    // echo "Resultado Codigo<br>";
-                    // echo var_dump($resultadoCodigo);
-                    // echo '</pre>';
-                    
                     //3. Verificamos si hay ofertas de venta para agregar un nuevo registro con el id del producto
                     if($ofertasProducto->PO_Cant != "" ){
                         
@@ -137,12 +143,6 @@ class ProductoController{
                         }
 
                     }
-                    
-                    // echo '<pre>';
-                    // echo "Resultado Oferta<br>";
-                    // echo var_dump($resultadoOferta);
-                    // echo '</pre>';
-
 
                     //4. Verificamos si hay archivos adjuntos y en un arreglo se agregan todos los archivos al servidor y base de datos
                     if(isset($_FILES['ImVd_Nombre']['tmp_name'][0]) && $_FILES['ImVd_Nombre']['tmp_name'][0]!=""){
@@ -155,10 +155,6 @@ class ProductoController{
                         $j=0;
 
                         foreach($_FILES['ImVd_Nombre']['tmp_name'] as $archivo){
-
-                            // echo '<pre>';
-                            // echo var_dump($_FILES['ImVd_Nombre']['tmp_name'][$j]);
-                            // echo '</pre>';
 
                             if ($_FILES['ImVd_Nombre']['tmp_name'][$j]){
     
@@ -188,10 +184,6 @@ class ProductoController{
     
                                 // Guardamos el registro en la base de datos
                                 $resultadoImVd = $archivoProducto->guardar();
-                                // echo 'Registro de arhivo guardado';
-                                // echo '<pre>';
-                                // echo var_dump($resultadoImVd);
-                                // echo '</pre>';
                                 
                                 $j++;
     
@@ -212,8 +204,6 @@ class ProductoController{
         $alertas=Producto::getAlertas();
 
         $router->renderPanel('/panel/productos/index', [
-            'categorias' => $categorias,
-            'marcas' => $marcas,
             'alertas' => $alertas
         ]);
     }
@@ -243,21 +233,28 @@ class ProductoController{
 
             if(empty($alertas)){
                 
-                // Si el nombre de la descripción no existe en la base de datos se procede a guardar
+                // 3. Si el nombre de la descripción no existe en la base de datos se procede a guardar
                 $resultado = $producto->guardar();
 
                 if($resultado){
-                    Producto::setAlerta('exito-marca', 'general', 'El registro ha sido guardado satisfactoriamente');
+                    Producto::setAlerta('exito-producto', 'general', 'El registro ha sido guardado satisfactoriamente');
                 }else{
-                    Producto::setAlerta('error-marca', 'general', 'No fue posible guardar el registro. Posiblemente ya exista un registro con la misma descripción o no hay conexión con la base de datos');
+                    Producto::setAlerta('error-producto', 'general', 'No fue posible guardar el registro. Posiblemente ya exista un registro con la misma descripción o no hay conexión con la base de datos');
                 }
             }
             $alertas=Producto::getAlertas();
         }
 
+        $producto->Prod_ValorVenta = number_format($producto->Prod_ValorVenta, 0, '','');
+        $producto->Prod_ValorDesc = number_format($producto->Prod_ValorDesc, 0, '','');
+
+        echo '<pre>';
+        echo var_dump($producto);
+        echo '</pre>';
+        
         //4. Verificamos si realiza algún cambio en el método POST
         $router->renderPanel('panel/productos/editar',[
-            'marca' => $producto,
+            'producto' => $producto,
             'alertas' => $alertas
         ]);
     }

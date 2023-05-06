@@ -84,6 +84,7 @@ function itemsSubMenu(){
 
 // Se evalua el evento hover y clic sobre los items del menu
 function eventosItems(items, tipoItem){
+
     items.forEach( item => {
 
         //Asignamos la funcionalidad cuando el mouse da clic sobre algún item del menu
@@ -166,8 +167,8 @@ function cambiarEstadoItem(item, ruta, texto, estado, tipoItem){
 // Esta función es utilizada en otra función para cambiar el estado del item o subitem en el evento Click
 function clickItem(idItem, tipoItem){
     // Volvemos a seleccionar todos los items 
-
     let items;
+
     if(tipoItem === 'nivel1'){
         items = document.querySelectorAll(`[data-id]`);
     }else{

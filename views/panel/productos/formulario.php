@@ -39,7 +39,7 @@
             name="Prod_Descripcion" 
             data-tipo="prodDescripcion" 
             data-cy="prodDescripcion"
-            value=""
+            value="<?php echo isset($producto->Prod_Descripcion) ? s($producto->Prod_Descripcion) : ''; ?>"
             autocomplete="off"
             class="form__input input--bl"
             >
@@ -89,7 +89,7 @@
             name="Prod_CantMinStock" 
             data-tipo="cantStock"
             data-cy="cantStock"
-            value=""
+            value="<?php echo isset($producto->Prod_CantMinStock) ? s($producto->Prod_CantMinStock) : ''; ?>"
             autocomplete="off"
             class="form__input input--bl"
             >
@@ -106,7 +106,7 @@
             name="Prod_ValorVenta" 
             data-tipo="valorVenta"
             data-cy="valorVenta"
-            value=""
+            value="<?php echo isset($producto->Prod_ValorVenta) ? s($producto->Prod_ValorVenta) : ''; ?>"
             autocomplete="off"
             class="form__input input--bl"
             >
@@ -123,7 +123,7 @@
             name="Prod_ValorDesc" 
             data-tipo="valorDescuento"
             data-cy="valorDescuento"
-            value=""
+            value="<?php echo isset($producto->Prod_ValorDesc) ? s($producto->Prod_ValorDesc) : ''; ?>"
             autocomplete="off"
             class="form__input input--bl"
             >
@@ -174,7 +174,7 @@
             name="Prod_Observ" 
             data-tipo="prodObservaciones"
             data-cy="prodObservaciones" 
-            value=""
+            value="<?php echo isset($producto->Prod_Observ) ? s($producto->Prod_Observ) : ''; ?>"
             autocomplete="off"
             class="form__input input--bl">
     <a href="#" class="form__limpiar">x</a> 

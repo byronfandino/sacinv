@@ -420,8 +420,26 @@ textarea{
     &__button{
         width: 19rem;
     }
+
+
 }
 
+.form__multirregistros__tabla{
+    display: flex;
+    flex-direction: column;
+}
+
+.form__contenedor__multirregistros{
+    display: flex;
+    flex-flow: column wrap;
+    width: 85%;
+
+    //Resolución tablet
+    @include m.tablet{
+        flex-flow: row wrap;
+    }
+    
+}
 //Se utilizan dos botones para ocultar uno detras del otro con el fin de llamar el método click desde el botón con estilos css
 .campo--file{
 

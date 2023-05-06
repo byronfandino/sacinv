@@ -125,6 +125,7 @@ export class EntidadUniCampo{
 
         // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
         const comboBox = document.querySelector(`#${objetoUniCampo.entidad}`);
+        const id = comboBox.getAttribute('data-value-server');
         let optionEntidad='';
         
         // Borramos las opciones que puedan existir
@@ -151,6 +152,10 @@ export class EntidadUniCampo{
             
                             optionEntidad = document.createElement('OPTION'); 
                             optionEntidad.setAttribute('value', registro[keysObject[0]]);
+                            if (id == registro[keysObject[0]]){
+                                // optionSelected = document.querySelector(`#${objetoUniCampo.entidad}`);
+                                optionEntidad.selected = true;
+                            }
                             optionEntidad.textContent=registro[keysObject[1]];
                             comboBox.appendChild(optionEntidad);
                         }

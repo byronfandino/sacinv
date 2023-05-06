@@ -44,7 +44,8 @@
 <h2 class="panel__h2">Listado de registros</h2>
 
 <div class="contenedor-table">
-    <table class="table">
+    <!-- La propiedad data-tipo solo la tienen las tablas complejas, ya que pueden contener más tablas de entidades sencillas-->
+    <table class="table" data-tipo="">
         <thead class="thead">
             <tr>
                 <th>DESCRIPCION</th>
