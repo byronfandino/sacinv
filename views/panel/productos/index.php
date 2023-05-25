@@ -45,7 +45,7 @@
 
 <div class="contenedor-table">
     <!-- La propiedad data-tipo solo la tienen las tablas complejas, ya que pueden contener más tablas de entidades sencillas-->
-    <table class="table" data-tipo="">
+    <table class="table" data-tipo="producto">
         <thead class="thead">
             <tr>
                 <th>DESCRIPCION</th>

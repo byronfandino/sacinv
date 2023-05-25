@@ -16,7 +16,7 @@ class ProductoCodigo extends ActiveRecord{
         $this->Cod_Id=$args['Cod_Id'] ?? null;
         $this->Cod_Barras=$args['Cod_Barras'] ?? '';
         $this->Cod_Manual=$args['Cod_Manual'] ?? '';
-        $this->Cod_FkProd_Id=$args['Cod_FkProd_Id'] ?? 'E';
+        $this->Cod_FkProd_Id=$args['Cod_FkProd_Id'] ?? '';
     }
 
     public function validar(){

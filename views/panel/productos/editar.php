@@ -211,7 +211,7 @@
         </div>
 
         <div class="contenedor-table">
-            <table class="table listado" data-tipo="codigo">
+            <table class="table" data-tipo="tblCodigo">
                 <thead class="thead">
                     <tr>
                         <th>COD. BARRAS</th>
@@ -275,7 +275,7 @@
         </div>
 
         <div class="contenedor-table">
-            <table class="table" >
+            <table class="table" data-tipo="tblOferta">
                 <thead class="thead">
                     <tr>
                         <th>Cant. Oferta</th>
@@ -305,6 +305,10 @@
                 value="Actualizar" 
                 class="form__btn btn-primario " 
         >
+    </div>
+    <div class="contenedor-files">
+        
+        <img src="/build/img/productos/02ff9ff4a2f4abfff9ecd78e8ae1c4a1.jpeg"/>
     </div>
 </form>
 

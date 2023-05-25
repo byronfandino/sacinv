@@ -109,10 +109,11 @@ $router->post('/producto/estado', [ProductoController::class,'estado']);
 $router->get('/producto/editar', [ProductoController::class,'editar']);
 $router->get('/producto/eliminar', [ProductoController::class,'eliminar']);
 $router->post('/producto/eliminar', [ProductoController::class,'eliminar']);
-$router->get('/producto/items/api', [ProductoController::class,'listarItems']);
+$router->get('/productocodigos/api', [ProductoController::class,'listarCodigos']);
+$router->get('/productoofertas/api', [ProductoController::class,'listarOfertas']);
+$router->get('/productoimgvideo/api', [ProductoController::class,'listarArchivos']);
 
 // Producto Imagen Video
-$router->get('/productoimgvideo/api', [ProductoImgVideoController::class,'listarImgVideo']);
 
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

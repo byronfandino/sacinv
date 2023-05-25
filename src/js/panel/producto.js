@@ -3,16 +3,20 @@ import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
 import { Modal } from './class/Modal.js';
 import {
     EntidadMultiCampo,
+    cargaRegistros,
     objetoMultiCampo,
     reglaInput,
     mensajeSugerencia,
     estadoCampo,
     limpiarCaja,
     borrarFilas,
+    llamarObtenerRegistros,
     mostrarRegistrosAPI,
     ocultarError,
     btnSubmit
 } from './class/ModelMultiCampo.js';
+import { RegistrosItems } from './class/RegistrosItems.js';
+
 
 let producto = new EntidadMultiCampo();
 
@@ -65,32 +69,54 @@ function botonLimpiar() {
 // Agregamos las propiedades y los valores a los objetos
 function renombrarObjetos() {
 
-    objetoMultiCampo.campos = {};
+    objetoMultiCampo.nombreTabla = 'producto';
+
+    objetoMultiCampo.datosTabla.nombre = "producto";
+    objetoMultiCampo.datosTabla.tipo = "";
+    // objetoMultiCampo.datosTabla.posicion = 0;
+
+
+    objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion'];
+    
+    if (!window.location.pathname.includes('editar')){
+
+        objetoMultiCampo.tabla = [
+
+            { id: 'Id', posicion: null, class: [] },
+            { codigoManual: 'Cod. Manual', posicion: 1, class: [] },
+            { codigoBarras: 'Cod. Barras', posicion: null, class: [] },
+            { descripcion: 'Descripción', posicion: 0, class: [] },
+            { categoria: 'Categoría', posicion: 2, class: [] },
+            { marca: 'Marca', posicion: 3, class: [] },
+            { valorVenta: 'Valor Venta', posicion: 5, class: ['tbody__td--center', 'tbody__td--verde'] },
+            { valorDescuento: 'Valor Descuento', posicion: 6, class: ['tbody__td--center', 'tbody__td--rojo'] },
+            { cantMinStock: 'Cant Min. Stock', posicion: 4, class: ['tbody__td--center'] },
+            { cantOferta: 'Cant. Oferta', posicion: 7, class: ['tbody__td--center', 'tbody__td--azul'] },
+            { valorOrferta: 'Valor Oferta', posicion: 8, class: ['tbody__td--center', 'tbody__td--azul'] },
+            { estado: 'Estado', posicion: 9, class: [] }
+
+        ];
+    }
+
+    // objetoMultiCampo.campos = {};
     objetoMultiCampo.reglas = {};
     objetoMultiCampo.sugerencias = {};
 
-    if (window.location.pathname.includes('editar')){
+    objetoMultiCampo.arrayAPI = {
 
-        
+        Prod_Descripcion: [],
+        Cod_Manual: [],
+        Cod_Barras: []
 
-    }else{
-        
-        objetoMultiCampo.arrayAPI = {
-    
-            Prod_Descripcion: [],
-            Cod_Manual: [],
-            Cod_Barras: []
-    
-        };
-    
-        objetoMultiCampo.stringAPI = {
-    
-            Prod_Descripcion: '',
-            Cod_Manual: '',
-            Cod_Barras: ''
-    
-        };
-    }
+    };
+
+    objetoMultiCampo.stringAPI = {
+
+        Prod_Descripcion: '',
+        Cod_Manual: '',
+        Cod_Barras: ''
+
+    };
 
     objetoMultiCampo.convertirMinusculas = ['Prod_Descripcion'];
 
@@ -400,23 +426,87 @@ function campoDescripcionEditar() {
     });
 }
 
+function cargarRegistrosCodigos(){
+
+    let registrosCodigos = new RegistrosItems(
+        "productocodigos",
+        "tblCodigo",
+        [
+            { id: 'Id', posicion: null, class: [] },
+            { codigoBarras: 'Cod. Barras', posicion: 0, class: [] },
+            { codigoManual: 'Cod. Manual', posicion: 1, class: [] }
+        ],
+        {
+            Cod_Manual: [],
+            Cod_Barras: []
+        },
+        {
+            Cod_Manual: '',
+            Cod_Barras: ''
+        }
+    );
+
+    const params = new URLSearchParams(window.location.search);
+    // Obtiene el valor de la variable "variable"
+    const valorId = params.get('id');
+    
+    registrosCodigos.obtenerRegistros(valorId);
+}
+
+function cargarRegistrosOfertas(){
+    
+    let registrosOfertas = new RegistrosItems(
+        "productoofertas",
+        "tblOferta",
+        [
+            { id: 'Id', posicion: null, class: [] },
+            { cant: 'Cantidad', posicion: 0, class: [] },
+            { valorOferta: 'Valor Oferta', posicion: 1, class: [] }
+        ],
+        {
+            Cant: [],
+            Valor_Oferta: []
+        },
+        {
+            Cant: '',
+            Valor_Oferta: ''
+        }
+    );
+
+    const params = new URLSearchParams(window.location.search);
+    // Obtiene el valor de la variable "variable"
+    const valorId = params.get('id');
+    
+    registrosOfertas.obtenerRegistros(valorId);
+}
+
+function cargarArchivos(){
+    
+    let registrosArchivos = new RegistrosItems(
+        "productoimgvideo",
+        "tblOferta",
+        [
+            { id: 'Id', posicion: null, class: [] },
+            { nombre: 'Cod. Barras', posicion: 0, class: [] }
+        ],//campos
+        {
+            Cant: [],
+            Valor_Oferta: []
+        },
+        {
+            Cant: '',
+            Valor_Oferta: ''
+        }
+    );
+
+    const params = new URLSearchParams(window.location.search);
+    // Obtiene el valor de la variable "variable"
+    const valorId = params.get('id');
+    
+    registrosArchivos.getFiles(valorId);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Estos son los campos que tienen un tratamiento diferente
-    objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion']
-    objetoMultiCampo.tabla = [
-        { id: 'Id', posicion: null, class: [] },
-        { codigoManual: 'Cod. Manual', posicion: 1, class: [] },
-        { codigoBarras: 'Cod. Barras', posicion: null, class: [] },
-        { descripcion: 'Descripción', posicion: 0, class: [] },
-        { categoria: 'Categoría', posicion: 2, class: [] },
-        { marca: 'Marca', posicion: 3, class: [] },
-        { valorVenta: 'Valor Venta', posicion: 5, class: ['tbody__td--center', 'tbody__td--verde'] },
-        { valorDescuento: 'Valor Descuento', posicion: 6, class: ['tbody__td--center', 'tbody__td--rojo'] },
-        { cantMinStock: 'Cant Min. Stock', posicion: 4, class: ['tbody__td--center'] },
-        { cantOferta: 'Cant. Oferta', posicion: 7, class: ['tbody__td--center', 'tbody__td--azul'] },
-        { valorOrferta: 'Valor Oferta', posicion: 8, class: ['tbody__td--center', 'tbody__td--azul'] },
-        { estado: 'Estado', posicion: 9, class: [] }
-    ];
 
     //Cargar el ComboBox de Categoría 
     objetoUniCampo.entidad = "categoria";
@@ -427,26 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     objetoUniCampo.entidad = "marca";
     let marca = new EntidadUniCampo;
     marca.cargarComboBox();
-    
-    objetoMultiCampo.entidad = "producto";
-    renombrarObjetos();
-    producto.asignarValidacion();
-    producto.verificarMensajeGeneral();
-    producto.managerAlert();
-    producto.botonAdjuntarArchivo();
-    producto.campoFile();
-    botonesSubmit();
-    botonLimpiar();
-    campoCodigoBarras();
-    campoCodigoManual();
-
-    if (!window.location.href.includes('editar')){
-        campoDescripcion();
-    }else{
-        campoDescripcionEditar();
-    }
-    producto.estadoRegistro();
-
+ 
     //cargar modal-------------------------
 
     let marcaModal = new Modal("marca",
@@ -466,6 +537,32 @@ document.addEventListener('DOMContentLoaded', () => {
     categoriaModal.getRegistrosAPI();
     categoriaModal.cargarRegistros();
     categoriaModal.asignarValidacion();
+    
+    if (window.location.pathname.includes('editar')){
+        cargarRegistrosCodigos();
+        cargarRegistrosOfertas();
+        cargarArchivos();
+        
+        campoDescripcionEditar();
+    }else{
+
+        objetoMultiCampo.entidad = "producto";
+        renombrarObjetos();
+        producto.asignarValidacion();
+        producto.verificarMensajeGeneral();
+        producto.managerAlert();
+        producto.botonAdjuntarArchivo();
+        producto.campoFile();
+        botonesSubmit();
+        botonLimpiar();
+        campoCodigoBarras();
+        campoCodigoManual();
+        campoDescripcion();
+        producto.estadoRegistro();
+    }
+
 
 });
+
+
 

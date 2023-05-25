@@ -19,8 +19,13 @@ export let objetoMultiCampo = {
 
     campos : {},
     reglas : {},
-    sugerencias : {}
-
+    sugerencias : {},
+    
+    datosTabla : {
+        nombre:'',
+        tipo:'',
+        posicion:''
+    }
 }
 
 export class EntidadMultiCampo{
@@ -396,7 +401,7 @@ export function estadoBoton(estado){
     }
 }
 
-function cargaRegistros(){
+export function cargaRegistros(){
     
     Swal.fire({
         title: 'Cargando registros...',
@@ -413,6 +418,16 @@ function cargaRegistros(){
           }); 
         }
     });
+
+}
+
+export function llamarObtenerRegistros(){
+    let resultado = obtenerRegistrosAPI();
+    resultado.then(result =>{
+        console.log(result);
+        return result;
+
+    });
 }
 
 //Función dependiente de la función cargaRegistros
@@ -421,7 +436,18 @@ async function obtenerRegistrosAPI(){
 
     try {
 
-        const resultado = await fetch(rutaServidor + objetoMultiCampo.entidad + '/api');
+        const params = new URLSearchParams(window.location.search);
+        // Obtiene el valor de la variable "variable"
+        const valorId = params.get('id');
+
+        let resultado = '';
+
+        if (valorId){
+            resultado = await fetch(rutaServidor + objetoMultiCampo.entidad + '/api?id=' + valorId);
+        }else{
+            resultado = await fetch(rutaServidor + objetoMultiCampo.entidad + '/api');
+        }
+
         objetoMultiCampo.registrosAPI = await resultado.json();
 
         mostrarRegistrosAPI();
@@ -441,97 +467,123 @@ async function obtenerRegistrosAPI(){
 // Función dependiente de la función 'obtenerRegistrosAPI()'
 // Muestra en el HTML los resultados de la API
 // Utilizamos el evento para evitar cargar el arreglo general de nombres en un evento diferente a la carga del formulario
-export function mostrarRegistrosAPI( evento = 'DOM', campo = '', valor = ''){
+export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
     // Verificamos que exista una tabla en el body, ya que si no está... quiere decir que estamos utilizando este codigo en editar-categoria, y allí no existe la tabla de registros
-    const tabla = document.querySelector(`table[data-tipo=""]`);
-    let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
-    
-    if (objetoMultiCampo.registrosAPI){
-        
-        if (evento === 'DOM'){
 
-            llavesArray.forEach( key => {
-                objetoMultiCampo.arrayAPI[key]='';
+    let tabla = document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"]`);
+
+    if (objetoMultiCampo.datosTabla.tipo === 'multiple'){
+        
+        let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
+        console.log(llavesArray);
+
+        if (objetoMultiCampo.registrosAPI){
+            
+            if (evento === 'DOM'){
+                // limpiar el arreglo 
+                llavesArray.forEach( key => {
+                    objetoMultiCampo.arrayAPI[key]='';
+                });
+            }
+
+            let numTabla = objetoMultiCampo.datosTabla.posicion;
+            console.log(objetoMultiCampo.registrosAPI);
+            console.log(objetoMultiCampo.registrosAPI[numTabla]);
+
+            objetoMultiCampo.registrosAPI[numTabla].forEach( registro => {
+                if(evento === 'DOM' && valor === ''){
+                    // Cargamos los array
+                    llavesArray.forEach( key => {
+                        objetoMultiCampo.arrayAPI[key] = [...objetoMultiCampo.arrayAPI[key], registro[key]];
+                    });
+                    
+                    if (objetoMultiCampo.datosTabla.nombre !== ''){
+                        crearRegistro(registro);
+                    }
+                }
+
             });
         }
-        
-        objetoMultiCampo.registrosAPI.forEach( registro => {
-            
-            if(evento === 'DOM' && valor === ''){
-                // Cargamos los array
-                llavesArray.forEach( key => {
-                    objetoMultiCampo.arrayAPI[key] = [...objetoMultiCampo.arrayAPI[key], registro[key]];
-                });
 
-                if (tabla){
-                    crearRegistro(registro);
-                }
-            }
-            
-            if( evento === 'input' && llavesArray.includes(campo) ){
+        llavesArray.forEach(key => {
+            objetoMultiCampo.stringAPI[key] = objetoMultiCampo.arrayAPI[key].toString();
+        });                        
 
-                if (objetoMultiCampo.convertirMinusculas.length > 0 && objetoMultiCampo.convertirMinusculas.includes(campo)){
+    }else{
 
-                    // Si no está vacío, entonces procedemos 
-                    // objetoMultiCampo.convertirMinusculas.forEach( item => {
+       let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
+       console.log(objetoMultiCampo.arrayAPI);
+       console.log(llavesArray);
+    
+       if (objetoMultiCampo.registrosAPI){
+           
+           if (evento === 'DOM'){
+               // limpiar el arreglo 
+            //    objetoMultiCampo.arrayAPI=[];
+
+               llavesArray.forEach( key => {
+                   objetoMultiCampo.arrayAPI[key]='';
+               });
+
+           }
+           
+           objetoMultiCampo.registrosAPI.forEach( registro => {
+               
+               if(evento === 'DOM' && valor === ''){
+                   // Cargamos los array
+                   llavesArray.forEach( key => {
+                       objetoMultiCampo.arrayAPI[key] = [...objetoMultiCampo.arrayAPI[key], registro[key]];
+                   });
+   
+                   if (tabla){
+                       crearRegistro(registro);
+                   }
+               }
+               
+               if( evento === 'input' && llavesArray.includes(campo) ){
+   
+                   if (objetoMultiCampo.convertirMinusculas.length > 0 && objetoMultiCampo.convertirMinusculas.includes(campo)){
+   
+                       if (formatearTexto(registro[campo]).includes(valor)){
+                           if(tabla){
+                               crearRegistro(registro);
+                           }                            
+                       }
                        
-                        // if (item === campo && formatearTexto(registro[campo]).includes(valor)){
-                        if (formatearTexto(registro[campo]).includes(valor)){
-                            if(tabla){
-                                crearRegistro(registro);
-                            }                            
-                        }
-                    // });
-                    
-                }else if(registro[campo].includes(valor)){
+                   }else if(registro[campo].includes(valor)){
+   
+                       if(tabla){
+                           crearRegistro(registro);
+                       }      
+                   }
+               }
+               
+           });
+       }
+   
+       // En caso de existir campos que deban ser convertidos a minusculas se reescribe el arreglo
+       if (objetoMultiCampo.convertirMinusculas.length !== 0){
+   
+           // Guardamos la conversión del nuevo arreglo
+           let nuevoArregloCampo = [];
+   
+           objetoMultiCampo.convertirMinusculas.forEach( arrayCampo => {
+   
+               objetoMultiCampo.arrayAPI[arrayCampo].forEach(campo => {
+                   campo = formatearTexto(campo);
+                   nuevoArregloCampo = [...nuevoArregloCampo, campo];
+               });
+   
+               objetoMultiCampo.arrayAPI[arrayCampo] = nuevoArregloCampo;
+   
+           });
+       }
+   
+       llavesArray.forEach(key => {
+           objetoMultiCampo.stringAPI[key] = objetoMultiCampo.arrayAPI[key].toString();
+       });
 
-                    if(tabla){
-                        crearRegistro(registro);
-                    }      
-                }
-            }
-            // // Si lo que digitó el usuario se encuentra dentro del codigo de barras entonces se agrega el registro
-            // if(evento === 'input' && campo === 'Cod_Barras' && Cod_Barras.includes(valor)){
-            //     if(tabla){
-            //         crearRegistro(registro);
-            //     }
-            // }
-
-            // if(evento === 'input' && campo === 'Cod_Manual' && Cod_Manual.includes(valor)){
-            //     if(tabla){
-            //         crearRegistro(registro);
-            //     }
-            // }
-
-            // if(evento === 'input' && campo === 'prodDescripcion' && formatearTexto(Prod_Descripcion.toLowerCase()).includes(valor)){
-            //     if(tabla){
-            //         crearRegistro(registro);
-            //     }
-            // }
-        });
     }
-
-    // En caso de existir campos que deban ser convertidos a minusculas se reescribe el arreglo
-    if (objetoMultiCampo.convertirMinusculas.length !== 0){
-
-        // Guardamos la conversión del nuevo arreglo
-        let nuevoArregloCampo = [];
-
-        objetoMultiCampo.convertirMinusculas.forEach( arrayCampo => {
-
-            objetoMultiCampo.arrayAPI[arrayCampo].forEach(campo => {
-                campo = formatearTexto(campo);
-                nuevoArregloCampo = [...nuevoArregloCampo, campo];
-            });
-
-            objetoMultiCampo.arrayAPI[arrayCampo] = nuevoArregloCampo;
-
-        });
-    }
-
-    llavesArray.forEach(key => {
-        objetoMultiCampo.stringAPI[key] = objetoMultiCampo.arrayAPI[key].toString();
-    });
 
     botonStatus();
 }
@@ -546,110 +598,108 @@ export function crearRegistro(registro){
 
     llaves.forEach( (llave, index) => {
 
-        // let descripcion = '';
+        // Verificamos que el index del registro exista en la tabla
+        if (objetoMultiCampo.tabla[index]){
 
-        // if(llave.includes('Descripcion') && descripcion === ''){
-        //     descripcion = registro[llave];
-        // }
-
-        const nombreCampo = Object.values(objetoMultiCampo.tabla[index])[0];
-        const posicion = Object.values(objetoMultiCampo.tabla[index])[1];
-        const clases = Object.values(objetoMultiCampo.tabla[index])[2];
-        const td = document.createElement('TD');
-
-        // Solo se crean los elementos que se van a mostrar en la tabla
-        if (posicion !== null){
+            const nombreCampo = Object.values(objetoMultiCampo.tabla[index])[0];
+            const posicion = Object.values(objetoMultiCampo.tabla[index])[1];
+            const clases = Object.values(objetoMultiCampo.tabla[index])[2];
+            const td = document.createElement('TD');
             
-            const span = document.createElement('SPAN');
-            span.classList.add('tbody__td--titulo');
-            span.textContent = nombreCampo;
-            
-            const texto = document.createElement('SPAN');
-
-            if(llave.includes('Status')){
+            // Solo se crean los elementos que se van a mostrar en la tabla
+            if (posicion !== null){
                 
-                const formStatus = document.createElement('FORM');
-                formStatus.classList.add('display-inline');
-                formStatus.setAttribute('method', 'POST');
-
-                const divCampoEstado = document.createElement('DIV');         
-                divCampoEstado.classList.add('form__campo', 'check');
-
-                const divContent = document.createElement('DIV');         
-                divContent.classList.add('check__content');
-
-                const divCheck = document.createElement('DIV');         
-                divCheck.classList.add('check__estado');
+                const span = document.createElement('SPAN');
+                span.classList.add('tbody__td--titulo');
+                span.textContent = nombreCampo;
                 
-                const lbSi = document.createElement('LABEL');         
-                lbSi.classList.add('check__label');
-                lbSi.textContent='Si';
-
-                const lbNo = document.createElement('LABEL');         
-                lbNo.classList.add('check__label');
-                lbNo.textContent='No';   
-
-                const inputHiddenId = document.createElement('INPUT'); 
-                inputHiddenId.setAttribute('type', 'hidden');
-                inputHiddenId.setAttribute('value', id);
-
-                const inputHiddenStatus = document.createElement('INPUT'); 
-                inputHiddenStatus.setAttribute('type', 'hidden');
-
-                if(registro[llave] === 'E'){
-
-                    if (lbSi.className.includes('ocultar')){
-                        lbSi.classList.remove('ocultar');
-                    }
-                    if (!lbNo.className.includes('ocultar')){
-                        lbNo.classList.add('ocultar');
-                    }
-                    inputHiddenStatus.setAttribute('value', 'E');
+                const texto = document.createElement('SPAN');
+    
+                if(llave.includes('Status')){
                     
+                    const formStatus = document.createElement('FORM');
+                    formStatus.classList.add('display-inline');
+                    formStatus.setAttribute('method', 'POST');
+    
+                    const divCampoEstado = document.createElement('DIV');         
+                    divCampoEstado.classList.add('form__campo', 'check');
+    
+                    const divContent = document.createElement('DIV');         
+                    divContent.classList.add('check__content');
+    
+                    const divCheck = document.createElement('DIV');         
+                    divCheck.classList.add('check__estado');
+                    
+                    const lbSi = document.createElement('LABEL');         
+                    lbSi.classList.add('check__label');
+                    lbSi.textContent='Si';
+    
+                    const lbNo = document.createElement('LABEL');         
+                    lbNo.classList.add('check__label');
+                    lbNo.textContent='No';   
+    
+                    const inputHiddenId = document.createElement('INPUT'); 
+                    inputHiddenId.setAttribute('type', 'hidden');
+                    inputHiddenId.setAttribute('value', id);
+    
+                    const inputHiddenStatus = document.createElement('INPUT'); 
+                    inputHiddenStatus.setAttribute('type', 'hidden');
+    
+                    if(registro[llave] === 'E'){
+    
+                        if (lbSi.className.includes('ocultar')){
+                            lbSi.classList.remove('ocultar');
+                        }
+                        if (!lbNo.className.includes('ocultar')){
+                            lbNo.classList.add('ocultar');
+                        }
+                        inputHiddenStatus.setAttribute('value', 'E');
+                        
+                    }else{
+                        
+                        if (!lbSi.className.includes('ocultar')){
+                            lbSi.classList.add('ocultar');
+                        }
+                        if (lbNo.className.includes('ocultar')){
+                            lbNo.classList.remove('ocultar');
+                        }
+                        
+                        inputHiddenStatus.setAttribute('value', 'D');
+    
+                        divCheck.classList.add('inactivo');
+                        divContent.classList.add('inactivo');
+                    }
+    
+                    divContent.appendChild(divCheck);
+                    divContent.appendChild(lbSi);
+                    divContent.appendChild(lbNo);
+                    divContent.appendChild(inputHiddenId);
+                    divContent.appendChild(inputHiddenStatus);
+                    
+                    divCampoEstado.appendChild(divContent);
+                    
+                    formStatus.appendChild(divCampoEstado);
+    
+                    td.appendChild(span);
+                    td.appendChild(formStatus);
+    
                 }else{
+    
+                    texto.textContent = registro[llave];
+                    td.appendChild(span);
+                    td.appendChild(texto);
                     
-                    if (!lbSi.className.includes('ocultar')){
-                        lbSi.classList.add('ocultar');
-                    }
-                    if (lbNo.className.includes('ocultar')){
-                        lbNo.classList.remove('ocultar');
+                    if(clases.length !== 0){
+                        clases.forEach( clase => {
+                            td.classList.add(clase);
+                        });
                     }
                     
-                    inputHiddenStatus.setAttribute('value', 'D');
-
-                    divCheck.classList.add('inactivo');
-                    divContent.classList.add('inactivo');
                 }
-
-                divContent.appendChild(divCheck);
-                divContent.appendChild(lbSi);
-                divContent.appendChild(lbNo);
-                divContent.appendChild(inputHiddenId);
-                divContent.appendChild(inputHiddenStatus);
-                
-                divCampoEstado.appendChild(divContent);
-                
-                formStatus.appendChild(divCampoEstado);
-
-                td.appendChild(span);
-                td.appendChild(formStatus);
-
-            }else{
-
-                texto.textContent = registro[llave];
-                td.appendChild(span);
-                td.appendChild(texto);
-                
-                if(clases.length !== 0){
-                    clases.forEach( clase => {
-                        td.classList.add(clase);
-                    });
-                }
-                
+    
+                arrayTD[posicion] = td;
+    
             }
-
-            arrayTD[posicion] = td;
-
         }
     });
 
@@ -671,21 +721,24 @@ export function crearRegistro(registro){
     tdModificar.appendChild(linkModificar);
 
     //-Historial---------------------------------------------
-    const spanHistorial = document.createElement('SPAN');
-    spanHistorial.textContent="Historial";
-
-    const imgHistorial = document.createElement('IMG');
-    imgHistorial.setAttribute('src','/build/img/sistema/historial.svg');
-    imgHistorial.setAttribute('alt','Imagen Historial');
-
-    const linkHistorial = document.createElement('A');
-    linkHistorial.setAttribute('href', `/historial?id=${id}`);
-    linkHistorial.appendChild(imgHistorial);
-    linkHistorial.appendChild(spanHistorial);
-
-    const tdHistorial = document.createElement('TD');
-    tdHistorial.classList.add('tbody__td--icon');
-    tdHistorial.appendChild(linkHistorial);
+    if (!objetoMultiCampo.entidad.includes('items')){
+        
+        const spanHistorial = document.createElement('SPAN');
+        spanHistorial.textContent="Historial";
+    
+        const imgHistorial = document.createElement('IMG');
+        imgHistorial.setAttribute('src','/build/img/sistema/historial.svg');
+        imgHistorial.setAttribute('alt','Imagen Historial');
+    
+        const linkHistorial = document.createElement('A');
+        linkHistorial.setAttribute('href', `/historial?id=${id}`);
+        linkHistorial.appendChild(imgHistorial);
+        linkHistorial.appendChild(spanHistorial);
+    
+        const tdHistorial = document.createElement('TD');
+        tdHistorial.classList.add('tbody__td--icon');
+        tdHistorial.appendChild(linkHistorial);
+    }
     
     // Eliminar-----------------------------------------------
      const spanEliminar = document.createElement('SPAN');
@@ -716,10 +769,12 @@ export function crearRegistro(registro){
     });
 
     tr.appendChild(tdModificar);
-    tr.appendChild(tdHistorial);
+    if (!objetoMultiCampo.entidad.includes('items')){
+        tr.appendChild(tdHistorial);
+    }
     tr.appendChild(tdEliminar);
 
-    document.querySelector('.tbody').appendChild(tr);
+    document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"] .tbody`).appendChild(tr);
 }
 
 function botonStatus(){
@@ -790,6 +845,7 @@ export function eliminarItem(e){
 export function confirmarEliminacion(id){
 
     Swal.fire({
+
         title: '¿Confirma que desea eliminar este registro?',
         text: "Después de eliminado no se puede recuperar",
         icon: 'warning',

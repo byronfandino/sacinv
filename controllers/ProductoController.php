@@ -16,7 +16,7 @@ use Model\VentaDetalle;
 class ProductoController{
 
     // Esta función solo se utllizara para mostrar en tablas los items a mostrar
-    public static function listarItems(){
+    public static function listarArchivos(){
         if(!isset($_SESSION['nombre'])){
             header('Location: /');
         }
@@ -26,16 +26,49 @@ class ProductoController{
         //2. Verificar si hay un elemento get y es un número
         if(!is_numeric($id)) return;
 
-        $consultaCodigos = "SELECT Cod_Id, Cod_Barras, Cod_Manual FROM tblproducto_codigo WHERE Cod_FkProd_Id = " . $id;
-        $resultadoCodigos = ProductoCodigo::SQL($consultaCodigos);
-
-        $consultaOfertas = "SELECT PO_Id, PO_Cant, PO_ValorOferta FROM tblproducto_oferta WHERE PO_FkProducto_Id = " . $id;
-        $resultadoOfertas = ProductoOferta::SQL($consultaOfertas);
-
         $consultaImgVideos = "SELECT ImVd_Id, ImVd_Nombre FROM tblproducto_img_video WHERE ImVd_FkProd_Id = " . $id;
         $resultadoImgVideos = ProductoImgVideo::SQL($consultaImgVideos);
 
-        echo json_encode([$resultadoCodigos,  $resultadoOfertas, $resultadoImgVideos]);
+        echo json_encode($resultadoImgVideos);
+
+    }
+
+    public static function listarCodigos(){
+        
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $id = $_GET['id'];
+
+        //2. Verificar si hay un elemento get y es un número
+        if(!is_numeric($id)) return;
+
+        //3. 
+        $consultaCodigos = "SELECT Cod_Id, Cod_Barras, Cod_Manual FROM tblproducto_codigo WHERE Cod_FkProd_Id = " . $id;
+        $resultadoCodigos = ProductoCodigo::SQL($consultaCodigos);
+
+        echo json_encode($resultadoCodigos);
+        
+    }
+
+    public static function listarOfertas(){
+        
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $id = $_GET['id'];
+
+        //2. Verificar si hay un elemento get y es un número
+        if(!is_numeric($id)) return;
+
+        //3. 
+        $consultaOfertas = "SELECT PO_Id, PO_Cant, PO_ValorOferta FROM tblproducto_oferta WHERE PO_FkProducto_Id = " . $id;
+        $resultadoOfertas = ProductoOferta::SQL($consultaOfertas);
+
+        echo json_encode($resultadoOfertas);
+        
     }
 
     // API para mostrar el listado de categorias en formato JSON
@@ -248,9 +281,9 @@ class ProductoController{
         $producto->Prod_ValorVenta = number_format($producto->Prod_ValorVenta, 0, '','');
         $producto->Prod_ValorDesc = number_format($producto->Prod_ValorDesc, 0, '','');
 
-        echo '<pre>';
-        echo var_dump($producto);
-        echo '</pre>';
+        // echo '<pre>';
+        // echo var_dump($producto);
+        // echo '</pre>';
         
         //4. Verificamos si realiza algún cambio en el método POST
         $router->renderPanel('panel/productos/editar',[
