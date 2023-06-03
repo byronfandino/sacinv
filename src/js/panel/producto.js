@@ -15,7 +15,7 @@ import {
     ocultarError,
     btnSubmit
 } from './class/ModelMultiCampo.js';
-import { RegistrosItems } from './class/RegistrosItems.js';
+import { RegistrosItems, cerrarPreview } from './class/RegistrosItems.js';
 
 
 let producto = new EntidadMultiCampo();
@@ -426,6 +426,38 @@ function campoDescripcionEditar() {
     });
 }
 
+function cargarCombosDatos(){
+        //Cargar el ComboBox de Categoría 
+        objetoUniCampo.entidad = "categoria";
+        let categoria = new EntidadUniCampo;
+        categoria.cargarComboBox();
+    
+        // Cargar el comboBox de Marca
+        objetoUniCampo.entidad = "marca";
+        let marca = new EntidadUniCampo;
+        marca.cargarComboBox();
+}
+
+function cargarVentanasModal(){
+    let marcaModal = new Modal("marca",
+    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
+    "Solo debe contener letras, mayor a 2 caracteres",
+    "Mc_Descripcion");
+    marcaModal.mostrarModal();
+    marcaModal.getRegistrosAPI();
+    marcaModal.cargarRegistros();
+    marcaModal.asignarValidacion();
+    
+    let categoriaModal = new Modal("categoria",
+    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
+    "Solo debe contener letras, mayor a 2 caracteres",
+    "Ctg_Descripcion");
+    categoriaModal.mostrarModal();
+    categoriaModal.getRegistrosAPI();
+    categoriaModal.cargarRegistros();
+    categoriaModal.asignarValidacion();
+}
+
 function cargarRegistrosCodigos(){
 
     let registrosCodigos = new RegistrosItems(
@@ -451,6 +483,7 @@ function cargarRegistrosCodigos(){
     const valorId = params.get('id');
     
     registrosCodigos.obtenerRegistros(valorId);
+
 }
 
 function cargarRegistrosOfertas(){
@@ -483,20 +516,11 @@ function cargarRegistrosOfertas(){
 function cargarArchivos(){
     
     let registrosArchivos = new RegistrosItems(
-        "productoimgvideo",
-        "tblOferta",
-        [
-            { id: 'Id', posicion: null, class: [] },
-            { nombre: 'Cod. Barras', posicion: 0, class: [] }
-        ],//campos
-        {
-            Cant: [],
-            Valor_Oferta: []
-        },
-        {
-            Cant: '',
-            Valor_Oferta: ''
-        }
+        'productoimgvideo',
+        '',
+        '',
+        '',
+        ''
     );
 
     const params = new URLSearchParams(window.location.search);
@@ -504,39 +528,14 @@ function cargarArchivos(){
     const valorId = params.get('id');
     
     registrosArchivos.getFiles(valorId);
+    cerrarPreview();
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    //Cargar el ComboBox de Categoría 
-    objetoUniCampo.entidad = "categoria";
-    let categoria = new EntidadUniCampo;
-    categoria.cargarComboBox();
-
-    // Cargar el comboBox de Marca
-    objetoUniCampo.entidad = "marca";
-    let marca = new EntidadUniCampo;
-    marca.cargarComboBox();
- 
-    //cargar modal-------------------------
-
-    let marcaModal = new Modal("marca",
-    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
-    "Solo debe contener letras, mayor a 2 caracteres",
-    "Mc_Descripcion");
-    marcaModal.mostrarModal();
-    marcaModal.getRegistrosAPI();
-    marcaModal.cargarRegistros();
-    marcaModal.asignarValidacion();
-    
-    let categoriaModal = new Modal("categoria",
-    "^[A-Z0-9Ña-züñáéíóúÁÉÍÓÚÜ'° ]{2,50}$",
-    "Solo debe contener letras, mayor a 2 caracteres",
-    "Ctg_Descripcion");
-    categoriaModal.mostrarModal();
-    categoriaModal.getRegistrosAPI();
-    categoriaModal.cargarRegistros();
-    categoriaModal.asignarValidacion();
+    cargarCombosDatos();
+    cargarVentanasModal();
     
     if (window.location.pathname.includes('editar')){
         cargarRegistrosCodigos();
@@ -544,6 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cargarArchivos();
         
         campoDescripcionEditar();
+
     }else{
 
         objetoMultiCampo.entidad = "producto";

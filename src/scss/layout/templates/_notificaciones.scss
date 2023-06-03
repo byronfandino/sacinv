@@ -4,7 +4,7 @@
 
 //notificaiones login
 .fondo-notificacion{
-
+    // border: 5px solid red;
     position: fixed;
     top: 0;
     left: 0;
@@ -45,5 +45,79 @@
     display: block;
     &.ocultar{
         display: none;
+    }
+}
+
+
+.preview{
+    display:flex;
+    flex-direction:column;
+    row-gap: 2rem;
+
+    // Icono Cerrar
+    a{
+        text-align: right;
+        padding-right:5rem;
+        color: v.$blanco;
+        font-weight: 400;
+        font-size: 3rem;
+        width: 90%;
+ 
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    // imagen principal
+    img{
+        //Resolución tablet
+        @include m.tablet{
+            max-height: calc(100% - 25rem);
+        }
+        //Resolución desktop
+        @include m.desktop{
+            max-height: 60rem;
+        }
+    }
+
+    // video principal
+    video{
+        width: 90%;
+
+        //Resolución tablet
+        @include m.tablet{
+            width:auto;
+            max-height: 18rem;
+        }
+        
+        //Resolución desktop
+        @include m.desktop{
+            width: 80%;
+            height: auto;   
+            // anulamos el max-height anterior
+            max-height:none;
+        }
+    }
+
+    // contenedor icono eliminar
+    figure{
+        display: block;
+        width: 90%;
+        text-align:center;
+        padding: 0;
+
+        // icono eliminar
+        img{
+            min-height: 2rem;
+            
+            //Resolución desktop
+            @include m.desktop{
+                min-height: 3rem;
+                
+            }
+            &:hover{
+                cursor: pointer;
+            }
+        }
     }
 }

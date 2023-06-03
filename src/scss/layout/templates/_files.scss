@@ -1,0 +1,56 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+// Contenedor de todos los archivos
+.file__content{
+
+    max-width: 90%;
+    //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+    @include m.flex(column, wrap, flex-start, center, 1rem, 1rem);
+    
+    //Resolución tablet
+    @include m.tablet{
+        @include m.flex(row, wrap, flex-start, flex-start, 1rem, 1rem);
+    }
+    
+    // Contenedor del item que incluye la imagen y los iconos de ver y eliminar
+    &__item{
+        
+        position:relative;
+        max-width: 15rem;
+
+        //Resolución tablet
+        @include m.tablet{
+            width:auto;
+            height: 15rem;
+        }
+
+        // Imagen que proviene del servidor
+        & > img{
+            width: auto;
+            height: 100%;
+        }
+    }
+    
+    &__acciones{
+        display: none;
+        
+        //Resolución desktop
+        @include m.desktop{
+            background-color: rgba(v.$negro, 0.4);
+            position:absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            
+            //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+            @include m.flex(row, nowrap, center, center, 0, 3rem);    
+        }
+        
+        // Imagenes de Ver y Eliminar el archivo
+        img:hover{
+            cursor: pointer;
+        }
+    }
+}

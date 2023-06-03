@@ -271,14 +271,16 @@ textarea{
         }
         
         &.t-xxl{
+            width: 90%;
+            
             //Resolución tablet
             @include m.tablet{
-                width: 100vw;
+                width: 95%;
             }
             
             //Resolución desktop
             @include m.desktop{
-                width: 90vw;
+                width: 98%;
             }
         }
 
@@ -425,8 +427,27 @@ textarea{
 }
 
 .form__multirregistros__tabla{
+    width: 100%;
     display: flex;
     flex-direction: column;
+    margin-top: 3rem;
+}
+
+.fieldset__campos{
+    width: 100%;
+    display:flex;
+    flex-flow:column wrap;
+    
+    //Resolución tablet
+    @include m.tablet{
+        flex-flow:row wrap;
+    }
+}
+
+.fieldset__archivos{
+    margin: 3rem 0;
+    width: 100%;
+
 }
 
 .form__contenedor__multirregistros{
@@ -440,6 +461,13 @@ textarea{
     }
     
 }
+
+legend{
+    font-weight: bold;
+    font-size:2rem;
+
+}
+
 //Se utilizan dos botones para ocultar uno detras del otro con el fin de llamar el método click desde el botón con estilos css
 .campo--file{
 
@@ -622,12 +650,14 @@ textarea{
     display:flex;
     flex-flow:column wrap;
     row-gap: 1.5rem;
-
+    margin: 0 auto;
+    
     //Resolución tablet
     @include m.tablet{
         flex-flow: row nowrap;
         justify-content:flex-end;
         column-gap: 1.5rem;
+        margin: auto;
     }
 }    
 
@@ -670,7 +700,8 @@ textarea{
     background-color: v.$blanco;
     color: v.$azul-darken;
     border: 1px solid v.$azul-darken;
-    font-size:1.6rem;
+    font-size:1.8rem;
+    padding:1.8rem 0 1.8rem 0;
 
     //Resolución tablet
     @include m.tablet{

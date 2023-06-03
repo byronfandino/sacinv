@@ -319,10 +319,10 @@ export class EntidadMultiCampo{
                         // }
         
                         // let tipoArchivo = inputFile.files[0].type;
-                        // if(!(tipoArchivo === "image/jpeg" || tipoArchivo === "image/jpg" || tipoArchivo === "image/png")){
-                        //     labelSugerencia.textContent = `Seleccionó un archivo que NO es permitido`;
-                        //     labelSugerencia.classList.remove('ocultar');
-                        // }
+                        if(!(tipoArchivo === "image/jpeg" || tipoArchivo === "image/jpg" || tipoArchivo === "image/png" || tipoArchivo === "video/mp4")){
+                            labelSugerencia.textContent = `Seleccionó un archivo que NO es permitido`;
+                            labelSugerencia.classList.remove('ocultar');
+                        }
                     });
                 });
             }
@@ -721,45 +721,43 @@ export function crearRegistro(registro){
     tdModificar.appendChild(linkModificar);
 
     //-Historial---------------------------------------------
-    if (!objetoMultiCampo.entidad.includes('items')){
-        
-        const spanHistorial = document.createElement('SPAN');
-        spanHistorial.textContent="Historial";
-    
-        const imgHistorial = document.createElement('IMG');
-        imgHistorial.setAttribute('src','/build/img/sistema/historial.svg');
-        imgHistorial.setAttribute('alt','Imagen Historial');
-    
-        const linkHistorial = document.createElement('A');
-        linkHistorial.setAttribute('href', `/historial?id=${id}`);
-        linkHistorial.appendChild(imgHistorial);
-        linkHistorial.appendChild(spanHistorial);
-    
-        const tdHistorial = document.createElement('TD');
-        tdHistorial.classList.add('tbody__td--icon');
-        tdHistorial.appendChild(linkHistorial);
-    }
+
+    const spanHistorial = document.createElement('SPAN');
+    spanHistorial.textContent="Historial";
+
+    const imgHistorial = document.createElement('IMG');
+    imgHistorial.setAttribute('src','/build/img/sistema/historial.svg');
+    imgHistorial.setAttribute('alt','Imagen Historial');
+
+    const linkHistorial = document.createElement('A');
+    linkHistorial.setAttribute('href', `/historial?id=${id}`);
+    linkHistorial.appendChild(imgHistorial);
+    linkHistorial.appendChild(spanHistorial);
+
+    const tdHistorial = document.createElement('TD');
+    tdHistorial.classList.add('tbody__td--icon');
+    tdHistorial.appendChild(linkHistorial);
     
     // Eliminar-----------------------------------------------
-     const spanEliminar = document.createElement('SPAN');
-     spanEliminar.textContent="Eliminar";
-     spanEliminar.dataset.idRegistro = id;
-     spanEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
- 
-     const imgEliminar = document.createElement('IMG');
-     imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
-     imgEliminar.setAttribute('alt','Imagen Eliminar');
-     imgEliminar.dataset.idRegistro = id;
-     imgEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
-     
-     const linkEliminar = document.createElement('A');
-     linkEliminar.setAttribute('href', '#');
-     linkEliminar.appendChild(imgEliminar);
-     linkEliminar.appendChild(spanEliminar);
- 
-     const tdEliminar = document.createElement('TD');
-     tdEliminar.classList.add('tbody__td--icon');
-     tdEliminar.appendChild(linkEliminar);
+    const spanEliminar = document.createElement('SPAN');
+    spanEliminar.textContent="Eliminar";
+    spanEliminar.dataset.idRegistro = id;
+    spanEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
+
+    const imgEliminar = document.createElement('IMG');
+    imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
+    imgEliminar.setAttribute('alt','Imagen Eliminar');
+    imgEliminar.dataset.idRegistro = id;
+    imgEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
+    
+    const linkEliminar = document.createElement('A');
+    linkEliminar.setAttribute('href', '#');
+    linkEliminar.appendChild(imgEliminar);
+    linkEliminar.appendChild(spanEliminar);
+
+    const tdEliminar = document.createElement('TD');
+    tdEliminar.classList.add('tbody__td--icon');
+    tdEliminar.appendChild(linkEliminar);
     // --------------------------------------------------------
 
     const tr = document.createElement('TR');
@@ -769,9 +767,7 @@ export function crearRegistro(registro){
     });
 
     tr.appendChild(tdModificar);
-    if (!objetoMultiCampo.entidad.includes('items')){
-        tr.appendChild(tdHistorial);
-    }
+    tr.appendChild(tdHistorial);
     tr.appendChild(tdEliminar);
 
     document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"] .tbody`).appendChild(tr);

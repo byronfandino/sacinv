@@ -26,7 +26,7 @@
 <h2 class="panel__h2">Listado de registros</h2>
 
 <div class="contenedor-table">
-    <table class="table">
+    <table class="table table-simple">
         <thead class="thead">
             <tr>
                 <th>Método de pago</th>

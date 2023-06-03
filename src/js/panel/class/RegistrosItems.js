@@ -26,7 +26,7 @@ export class RegistrosItems{
         let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
         
         let llavesArray = Object.keys(this.arrayAPI);
-        console.log(llavesArray);
+        
         if(this.registrosAPI){
             // Limpiamos los registros almacenados en cada array
             llavesArray.forEach( key => {
@@ -73,75 +73,6 @@ export class RegistrosItems{
                     
                     const texto = document.createElement('SPAN');
         
-                    // if(llave.includes('Status')){
-                        
-                    //     const formStatus = document.createElement('FORM');
-                    //     formStatus.classList.add('display-inline');
-                    //     formStatus.setAttribute('method', 'POST');
-        
-                    //     const divCampoEstado = document.createElement('DIV');         
-                    //     divCampoEstado.classList.add('form__campo', 'check');
-        
-                    //     const divContent = document.createElement('DIV');         
-                    //     divContent.classList.add('check__content');
-        
-                    //     const divCheck = document.createElement('DIV');         
-                    //     divCheck.classList.add('check__estado');
-                        
-                    //     const lbSi = document.createElement('LABEL');         
-                    //     lbSi.classList.add('check__label');
-                    //     lbSi.textContent='Si';
-        
-                    //     const lbNo = document.createElement('LABEL');         
-                    //     lbNo.classList.add('check__label');
-                    //     lbNo.textContent='No';   
-        
-                    //     const inputHiddenId = document.createElement('INPUT'); 
-                    //     inputHiddenId.setAttribute('type', 'hidden');
-                    //     inputHiddenId.setAttribute('value', id);
-        
-                    //     const inputHiddenStatus = document.createElement('INPUT'); 
-                    //     inputHiddenStatus.setAttribute('type', 'hidden');
-        
-                    //     if(registro[llave] === 'E'){
-        
-                    //         if (lbSi.className.includes('ocultar')){
-                    //             lbSi.classList.remove('ocultar');
-                    //         }
-                    //         if (!lbNo.className.includes('ocultar')){
-                    //             lbNo.classList.add('ocultar');
-                    //         }
-                    //         inputHiddenStatus.setAttribute('value', 'E');
-                            
-                    //     }else{
-                            
-                    //         if (!lbSi.className.includes('ocultar')){
-                    //             lbSi.classList.add('ocultar');
-                    //         }
-                    //         if (lbNo.className.includes('ocultar')){
-                    //             lbNo.classList.remove('ocultar');
-                    //         }
-                            
-                    //         inputHiddenStatus.setAttribute('value', 'D');
-        
-                    //         divCheck.classList.add('inactivo');
-                    //         divContent.classList.add('inactivo');
-                    //     }
-        
-                    //     divContent.appendChild(divCheck);
-                    //     divContent.appendChild(lbSi);
-                    //     divContent.appendChild(lbNo);
-                    //     divContent.appendChild(inputHiddenId);
-                    //     divContent.appendChild(inputHiddenStatus);
-                        
-                    //     divCampoEstado.appendChild(divContent);
-                        
-                    //     formStatus.appendChild(divCampoEstado);
-        
-                    //     td.appendChild(span);
-                    //     td.appendChild(formStatus);
-        
-                    // }else{
                     if(!llave.includes('Status')){
 
                         texto.textContent = registro[llave];
@@ -154,14 +85,9 @@ export class RegistrosItems{
                             });
                         }
                     }
-                        
-                    // }
-        
                     arrayTD[posicion] = td;
-        
                 }
             }    
-            
         });
 
         // Creamos la celda de modificar el registro
@@ -226,7 +152,68 @@ export class RegistrosItems{
     }
 
     listarFiles(){
-        console.log(this.registrosAPI);
+        // si existen registros
+        if (this.registrosAPI){
+
+            let llaves = Object.keys(this.registrosAPI[0]);
+            
+            this.registrosAPI.forEach(registro => {
+                
+                let id = registro[llaves[0]];
+                let archivo = registro[llaves[1]].split('.');
+                let nombre = archivo[0];
+                let extension = archivo[1];
+                
+                let imgMain = document.createElement('IMG');
+
+                if (extension === 'mp4'){
+                    imgMain.setAttribute('src',`/build/img/sistema/iconoVideo-ng.svg`);
+                    imgMain.style.width="150px";
+                    imgMain.style.height="100px";
+                }else{
+                    imgMain.setAttribute('src',`/build/img/productos/${nombre}-opt.${extension}`);    
+                }
+
+                imgMain.setAttribute('alt','Archivo multimedia del producto');
+                imgMain.dataset.idArchivo = id;
+                imgMain.dataset.nombre = nombre;
+                imgMain.dataset.extension = extension;
+                imgMain.onclick=mostrarArchivo;
+                
+                let iconoEye = document.createElement('IMG');
+                iconoEye.setAttribute('src','/build/img/sistema/eye.svg');
+                iconoEye.setAttribute('alt','Icono para ampliar imagen o reproducir video');
+                iconoEye.dataset.idArchivo = id;
+                iconoEye.dataset.nombre = nombre;
+                iconoEye.dataset.extension = extension;
+                iconoEye.onclick=mostrarArchivo;
+
+                let iconoEliminar = document.createElement('IMG');
+                iconoEliminar.setAttribute('src','/build/img/sistema/eliminar-bl.svg');
+                iconoEliminar.setAttribute('alt','Icono para eliminar archivo');
+                iconoEliminar.dataset.idArchivo = id;
+                iconoEliminar.onclick=eliminarArchivo;
+
+                let divContentAcciones = document.createElement('DIV');
+                divContentAcciones.appendChild(iconoEye);
+                divContentAcciones.appendChild(iconoEliminar);
+                divContentAcciones.classList.add('file__content__acciones');
+
+                let divContentItem = document.createElement('DIV');
+                divContentItem.appendChild(imgMain);
+                divContentItem.appendChild(divContentAcciones);
+                
+                if (extension === 'mp4'){
+                    divContentItem.style.border="1px solid #000000";
+                    divContentItem.style.padding='2rem';
+                }
+
+                divContentItem.classList.add('file__content__item');
+
+                let fileContent = document.querySelector('.file__content');
+                fileContent.appendChild(divContentItem);
+            });
+        }
     }
 }
 
@@ -252,5 +239,74 @@ async function getRegistrosAPI(id, entidad){
         });
         return false;
     }
+}
+
+export function cerrarPreview(){
+
+    const contenedorPreview = document.querySelector('.preview');
+    const cerrarVentana = document.querySelector('.cerrar-preview');
+
+    if (cerrarVentana){
+        
+        cerrarVentana.addEventListener('click', () =>{
+            let img = document.querySelector('.preview > img');
+            let video = document.querySelector('.preview > video');
+
+            if (img){
+                img.remove();
+            }else if(video){
+                video.remove();
+            }
+
+            contenedorPreview.classList.add('ocultar');
+
+        });
+    }
+}
+
+function mostrarArchivo(e){
+
+    const idArchivo = e.target.getAttribute('data-id-archivo');
+    const nombre = e.target.getAttribute('data-nombre');
+    const extension = e.target.getAttribute('data-extension');
+   
+    const fondoNotificacion = document.querySelector('.preview');
+
+    let iconoEliminar = fondoNotificacion.querySelector('.eliminar-imagen > img');
+    iconoEliminar.setAttribute('data-id-archivo', idArchivo);
+
+    let elemento;
+
+    if (e.target.getAttribute('data-extension') === 'mp4'){
+
+        elemento = document.createElement('VIDEO');
+        elemento.setAttribute('src', '/build/img/productos/' + nombre + '.' + extension);
+        elemento.setAttribute('controls','');
+
+    }else{
+        
+        elemento = document.createElement('IMG');
+        elemento.setAttribute('src', '/build/img/productos/' + nombre + '.' + extension);
+
+    }
+
+    // Verificamos si existe una imagen o video previo para eliminarlo 
+    const imgPrevio = document.querySelector('.preview > img');
+    const videoPrevio = document.querySelector('.preview > video');
+
+    if(imgPrevio){
+        imgPrevio.remove();
+    }else if (videoPrevio){
+        videoPrevio.remove();
+    }
+
+    // Procedemos a insertar la imagen o video en el contenedor
+    fondoNotificacion.insertBefore(elemento, fondoNotificacion.querySelector('.eliminar-imagen'));
+    fondoNotificacion.classList.remove('ocultar');
+    
+}
+
+function eliminarArchivo(){
+
 }
 
