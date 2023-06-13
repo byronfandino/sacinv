@@ -1,18 +1,15 @@
-import { formatearTexto, mostrarOcultarSugerencias } from './class/Parametros.js';
+import { formatearTexto, mostrarOcultarSugerencias, 
+    ocultarError, limpiarCaja } from './class/Parametros.js';
 import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
 import { Modal } from './class/Modal.js';
 import {
     EntidadMultiCampo,
-    cargaRegistros,
     objetoMultiCampo,
     reglaInput,
     mensajeSugerencia,
     estadoCampo,
-    limpiarCaja,
     borrarFilas,
-    llamarObtenerRegistros,
     mostrarRegistrosAPI,
-    ocultarError,
     btnSubmit
 } from './class/ModelMultiCampo.js';
 import { RegistrosItems, cerrarPreview } from './class/RegistrosItems.js';
@@ -73,8 +70,6 @@ function renombrarObjetos() {
 
     objetoMultiCampo.datosTabla.nombre = "producto";
     objetoMultiCampo.datosTabla.tipo = "";
-    // objetoMultiCampo.datosTabla.posicion = 0;
-
 
     objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion'];
     
@@ -461,48 +456,198 @@ function cargarVentanasModal(){
 function cargarRegistrosCodigos(){
 
     let registrosCodigos = new RegistrosItems(
-        "productocodigos",
-        "tblCodigo",
-        [
-            { id: 'Id', posicion: null, class: [] },
-            { codigoBarras: 'Cod. Barras', posicion: 0, class: [] },
-            { codigoManual: 'Cod. Manual', posicion: 1, class: [] }
-        ],
         {
-            Cod_Manual: [],
-            Cod_Barras: []
-        },
-        {
-            Cod_Manual: '',
-            Cod_Barras: ''
+            entidad: "productocodigos",
+            estadoCampos: {
+                Cod_Manual: false,
+                Cod_Barras: false
+            },
+            nombreTabla: "tblCodigo",
+            camposTabla: [
+                { id: 'Id', posicion: null, class: [] },
+                { codigoBarras: 'Cod. Barras', posicion: 0, class: [] },
+                { codigoManual: 'Cod. Manual', posicion: 1, class: [] }
+            ],
+            arrayAPI: {
+                Cod_Manual: [],
+                Cod_Barras: []
+            },
+            stringAPI:{
+                Cod_Manual: '',
+                Cod_Barras: ''
+            },
+            boton:document.querySelector('[data-tipo="boton-codigo"]')
         }
     );
-
+    
     const params = new URLSearchParams(window.location.search);
     // Obtiene el valor de la variable "variable"
     const valorId = params.get('id');
     
     registrosCodigos.obtenerRegistros(valorId);
+    // pasamos por parámentro los nombres de los campos a cambiar en false
+    //y luego obtener su caja de texto para limpiarla
+    registrosCodigos.botonLimpiar(['Cod_Manual', 'Cod_Barras']);
+    
+    const txtCodigoBarras = document.querySelector('#Cod_Manual');
+    const txtCodigoManual = document.querySelector('#Cod_Barras');
+    const labelSugrCodBarras = txtCodigoBarras.parentElement.querySelector('.form__labelSugerencia');
+    const labelSugrCodManual = txtCodigoManual.parentElement.querySelector('.form__labelSugerencia');
+    const labelErrorCodManual = txtCodigoManual.parentElement.querySelector('.form__labelError');
+    const iconoErrorCodManual = txtCodigoManual.parentElement.querySelector('.form__iconError');
+    const txtId = document.querySelector('[data-id="prod_Id"]');
+    const botonAgregar = document.querySelector('[data-tipo="boton-codigo"]');
+
+    let expresionRegular2;
+    let regla2 = "^[0-9A-Za-z]{4,20}$";
+    let msg2 = "Este campo es alfanumérico, mayor a 5 caracteres y no puede contener espacios ni caracteres especiales";
+    
+    // nueva funcionalidad del campo codigo de barras 
+    txtCodigoBarras.addEventListener('input', e => {
+
+        txtCodigoBarras.value = e.target.value.toUpperCase();
+
+        if (e.target.value.length > 5) {
+            
+            let conteo = parseInt(e.target.value.length) - 6;
+            let stringCortado = e.target.value.substr(conteo, 6);
+
+            //  Convertir a mayusculas el contenido
+            txtCodigoManual.value = stringCortado;
+
+            expresionRegular2 = txtCodigoManual.value.match(regla2);
+
+            // Si cumple con la expresión regular
+            if (expresionRegular2) {
+
+                mostrarOcultarSugerencias(labelSugrCodBarras, '', false);
+                // Si coincide la cadena de forma completa se muestra la alerta que este código ya se encuentra registrado
+                if (registrosCodigos.arrayAPI.Cod_Manual.includes(txtCodigoManual.value)) {
+
+                    mostrarOcultarSugerencias(labelSugrCodManual, 'Este código ya se encuentra registrado', true);
+                    registrosCodigos.onOffBoton('Cod_Manual', false);
+                    registrosCodigos.onOffBoton('Cod_Barras', false);
+
+                } else {
+                    // Si no coincide en su totalidad con algún registro entonces quitamos la alerta
+                    mostrarOcultarSugerencias(labelSugrCodManual, '', false);
+                    registrosCodigos.onOffBoton('Cod_Manual', true);
+                    registrosCodigos.onOffBoton('Cod_Barras', true);
+                }
+
+            } else {
+                mostrarOcultarSugerencias(labelSugrCodBarras, msg2, true);
+                registrosCodigos.onOffBoton('Cod_Manual', false);
+                registrosCodigos.onOffBoton('Cod_Barras', false);
+            }
+            
+            
+        } else {
+            
+            mostrarOcultarSugerencias(labelSugrCodBarras, msg2, true);
+            limpiarCaja(txtCodigoManual.parentElement, false);
+            registrosCodigos.onOffBoton('Cod_Manual', false);
+            registrosCodigos.onOffBoton('Cod_Barras', false);
+
+        }
+    });
+
+    // nueva funcionalidad del campo codigo manual para buscar registros 
+    let expresionRegular;
+    let regla = "^[0-9A-Za-z]{4,20}$";
+    let msg = "Este campo es alfanumérico, mayor a 3 caracteres y no puede contener espacios ni caracteres especiales";
+
+    txtCodigoManual.addEventListener('input', e => {
+
+        txtCodigoManual.value = e.target.value.toUpperCase();
+
+        expresionRegular = txtCodigoManual.value.match(regla);
+
+        if (expresionRegular) {
+            
+            if (registrosCodigos.arrayAPI.Cod_Manual.includes(e.target.value)) {
+                
+                mostrarOcultarSugerencias(labelSugrCodManual, 'Este código ya se encuentra registrado', true);
+                registrosCodigos.onOffBoton('Cod_Manual', false);
+                
+            } else {
+                // Si no coincide en su totalidad con algún registro entonces quitamos la alerta
+                mostrarOcultarSugerencias(labelSugrCodManual, '', false);
+                registrosCodigos.onOffBoton('Cod_Manual', true);
+            }
+            
+        } else {
+            
+            // Si no cumple con la expresión regular se muestra la sugerencia
+            mostrarOcultarSugerencias(labelSugrCodManual, msg, true);
+            registrosCodigos.onOffBoton('Cod_Manual', false);
+        }
+
+        // Ocultar los errores de la base de datos en caso de que se muestren en pantalla
+        if (labelErrorCodManual && labelErrorCodManual.textContent != '') {
+            ocultarError(labelErrorCodManual, iconoErrorCodManual);
+        }
+
+    });
+
+    botonAgregar.addEventListener('click', () => {
+        
+        // Se contempla la opción que ninguna oferta exista por lo tanto se crea el objeto desde 0
+        const objetoDatos = {};
+        
+        objetoDatos.Cod_Manual = txtCodigoManual.value;
+        objetoDatos.Cod_Barras = txtCodigoBarras.value;
+        objetoDatos.Cod_FkProd_Id = txtId.value;
+
+        registrosCodigos.guardarRegistro(objetoDatos, valorId);
+
+        // Limpiar cajas de texto tanto el contenido como los mensajes
+        limpiarCaja(txtCodigoManual.parentElement, false);
+        limpiarCaja(txtCodigoBarras.parentElement, true);
+
+        // Estado de campos y deshabilitar el boton
+        registrosCodigos.onOffBoton('Cod_Manual', false);
+        registrosCodigos.onOffBoton('Cod_Barras', false);
+
+    });
 
 }
 
 function cargarRegistrosOfertas(){
-    
+
     let registrosOfertas = new RegistrosItems(
-        "productoofertas",
-        "tblOferta",
-        [
-            { id: 'Id', posicion: null, class: [] },
-            { cant: 'Cantidad', posicion: 0, class: [] },
-            { valorOferta: 'Valor Oferta', posicion: 1, class: [] }
-        ],
         {
-            Cant: [],
-            Valor_Oferta: []
-        },
-        {
-            Cant: '',
-            Valor_Oferta: ''
+            entidad:"productoofertas",
+            estadoCampos: {
+                PO_Cant: false,
+                PO_ValorOferta: false
+            },
+            nombreTabla:"tblOferta",
+            camposTabla:[
+                { id: 'Id', posicion: null, class: [] },
+                { cant: 'Cantidad', posicion: 0, class: [] },
+                { valorOferta: 'Valor Oferta', posicion: 1, class: [] }
+            ],
+            arrayAPI:{
+                Cant: [],
+                Valor_Oferta: []
+            },
+            stringAPI:{
+                Cant: '',
+                Valor_Oferta: ''
+            },
+            reglas:{
+                // Se colocan estos nombres de llaves porque así se encuentran en el id del formulario
+                PO_Cant:"^[0-9]{1,3}$",
+                PO_ValorOferta:"^[0-9]{2,6}$"
+            },
+            sugerencias:{
+                // Mensajes de error
+                PO_Cant : "Este campo solo puede contener números, no mayor a 3 digitos",
+                PO_ValorOferta : "Este campo solo puede contener números, no mayor a 6 dígitos"
+            },
+            // Se envia el boton solamente para activarlo o desactivarlo de acuerdo a lo digitado por el usuario
+            boton : document.querySelector('[data-tipo="boton-oferta"]')
         }
     );
 
@@ -511,16 +656,51 @@ function cargarRegistrosOfertas(){
     const valorId = params.get('id');
     
     registrosOfertas.obtenerRegistros(valorId);
+    
+    // pasamos por parámetro los id de los elementos HTML 
+    registrosOfertas.asignarValidacion(['PO_Cant', 'PO_ValorOferta']);
+    // pasamos por parámentro los nombres de los campos a cambiar en false
+    //y luego obtener su caja de texto para limpiarla
+    registrosOfertas.botonLimpiar(['PO_Cant', 'PO_ValorOferta']);
+    
+    // Obtenemos las cajas del formulario
+    const botonAgregar = document.querySelector('[data-tipo="boton-oferta"]');
+    const txtCantidad = document.querySelector('#PO_Cant');
+    const txtValor = document.querySelector('#PO_ValorOferta');
+    const txtId = document.querySelector('[data-id="prod_Id"]');
+
+    botonAgregar.addEventListener('click', () => {
+        
+        // Se contempla la opción que ninguna oferta exista por lo tanto se crea el objeto desde 0
+        const objetoDatos = {};
+        
+        objetoDatos.PO_Cant = txtCantidad.value;
+        objetoDatos.PO_ValorOferta = txtValor.value;
+        objetoDatos.PO_FkProducto_Id = txtId.value;
+
+        registrosOfertas.guardarRegistro(objetoDatos, valorId);
+
+        // Limpiar cajas de texto tanto el contenido como los mensajes
+        limpiarCaja(txtValor.parentElement, false);
+        limpiarCaja(txtCantidad.parentElement, true);
+
+        // Estado de campos y deshabilitar el boton
+        registrosOfertas.onOffBoton('PO_Cant', false);
+        registrosOfertas.onOffBoton('PO_ValorOferta', false);
+
+    });
 }
 
 function cargarArchivos(){
     
     let registrosArchivos = new RegistrosItems(
-        'productoimgvideo',
-        '',
-        '',
-        '',
-        ''
+        {
+            entidad:'productoimgvideo',
+            nombreTabla:'',
+            camposTabla:'',
+            arrayAPI:'',
+            stringAPI:''
+        }
     );
 
     const params = new URLSearchParams(window.location.search);
@@ -538,10 +718,24 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarVentanasModal();
     
     if (window.location.pathname.includes('editar')){
-        cargarRegistrosCodigos();
-        cargarRegistrosOfertas();
-        cargarArchivos();
-        
+
+        Swal.fire({
+            title: 'Cargando registros...',
+            showConfirmButton: false,
+            didOpen: () => {
+
+                Swal.showLoading();
+                cargarRegistrosCodigos();
+                cargarRegistrosOfertas();
+                cargarArchivos();
+
+                setTimeout(() => {
+                    Swal.close();
+                }, 500);
+
+            }
+        });
+
         campoDescripcionEditar();
 
     }else{
@@ -554,13 +748,13 @@ document.addEventListener('DOMContentLoaded', () => {
         producto.botonAdjuntarArchivo();
         producto.campoFile();
         botonesSubmit();
+        botonesLimpiar();
         botonLimpiar();
         campoCodigoBarras();
         campoCodigoManual();
         campoDescripcion();
         producto.estadoRegistro();
     }
-
 
 });
 

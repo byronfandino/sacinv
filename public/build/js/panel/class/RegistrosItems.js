@@ -1,21 +1,85 @@
-import { rutaServidor} from "./Parametros.js";
+import { mostrarOcultarSugerencias, rutaServidor, estadoBoton} from "./Parametros.js";
 
 export class RegistrosItems{
 
-    constructor(entidad, nombreTabla, camposTabla, arrayAPI, stringAPI){
-
-        this.entidad = entidad;
-        this.nombreTabla = nombreTabla;
-        this.camposTabla = camposTabla;
-        this.arrayAPI = arrayAPI;
-        this.stringAPI = stringAPI;
+    constructor(objeto){
+        // entidad, nombreTabla, camposTabla, arrayAPI, stringAPI
+        this.entidad = objeto.entidad;
+        this.nombreTabla = objeto.nombreTabla;
+        this.camposTabla = objeto.camposTabla;
+        this.arrayAPI = objeto.arrayAPI;
+        this.stringAPI = objeto.stringAPI;
+        this.estadoCampos = objeto.estadoCampos;
         this.registrosAPI = '';
+        this.reglas='';
+        this.sugerencias='';
+        
+        if(objeto.reglas){
+            this.reglas = objeto.reglas;
+            this.sugerencias = objeto.sugerencias;
+        }
+        
+        if(objeto.boton){
+            this.boton=objeto.boton;
+        }
+    }
+
+    asignarValidacion(inputs){
+
+        inputs.forEach(idInput => {
+            // Creamos los input
+            const inputCampo = document.getElementById(`${idInput}`);
+            const labelSugerencia = inputCampo.parentElement.querySelector('.form__labelSugerencia');
+            let expresionRegular='';
+            
+            inputCampo.addEventListener('input', () => {
+
+                let keysReglas = Object.keys(this.reglas);
+                
+                keysReglas.forEach( key => {
+                    
+                    if (key == idInput){
+                        expresionRegular = inputCampo.value.match(this.reglas[key]);
+
+                        if(expresionRegular){
+
+                            mostrarOcultarSugerencias(labelSugerencia, '', false);
+
+                            if(this.boton){
+                                this.onOffBoton(idInput, true, this.boton );
+                            }
+
+                        }else{
+
+                            mostrarOcultarSugerencias(labelSugerencia, this.sugerencias[key], true);
+                            
+                            if(this.boton){
+                                this.onOffBoton(idInput, '', this.boton );
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    eliminarFilasTabla(){
+        let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
+        let filas = tabla.querySelectorAll(".tbody > tr");
+        
+        if(filas){
+            // Eliminando todas las filas
+            filas.forEach( fila => {
+                fila.remove();
+            });
+        }
     }
 
     // Metodo para obtener los registros y mostrarlo en las tablas del HTML
     obtenerRegistros(id){
         let resultado = getRegistrosAPI(id, this.entidad);
         resultado.then(result => {
+            console.log(result);
             // Devuelve el arreglo de la api
             this.registrosAPI = result;
             this.cargarDatos();
@@ -23,19 +87,21 @@ export class RegistrosItems{
     }
 
     cargarDatos(){
+
         let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
-        
+
         let llavesArray = Object.keys(this.arrayAPI);
         
+        // this.arrayAPI=[];
         if(this.registrosAPI){
             // Limpiamos los registros almacenados en cada array
             llavesArray.forEach( key => {
                 this.arrayAPI[key]='';
             });
         }
-
+        
         this.registrosAPI.forEach( registro => {
-               
+            
             llavesArray.forEach( key => {
                 this.arrayAPI[key] = [...this.arrayAPI[key], registro[key]];
             });
@@ -44,6 +110,7 @@ export class RegistrosItems{
                 this.crearFilaTabla(registro);
             }
         });
+
     }
 
     crearFilaTabla(registro){
@@ -90,23 +157,6 @@ export class RegistrosItems{
             }    
         });
 
-        // Creamos la celda de modificar el registro
-        const spanModificar = document.createElement('SPAN');
-        spanModificar.textContent="Editar";
-
-        const imgModificar = document.createElement('IMG');
-        imgModificar.setAttribute('src','/build/img/sistema/editar-ng.svg');
-        imgModificar.setAttribute('alt','Imagen Editar');
-
-        const linkModificar = document.createElement('A');
-        linkModificar.setAttribute('href', `${rutaServidor}${this.entidad}/editar?id=${id}`);
-        linkModificar.appendChild(imgModificar);
-        linkModificar.appendChild(spanModificar);
-
-        const tdModificar = document.createElement('TD');
-        tdModificar.classList.add('tbody__td--icon');
-        tdModificar.appendChild(linkModificar);
-
         // Eliminar-----------------------------------------------
         const spanEliminar = document.createElement('SPAN');
         spanEliminar.textContent="Eliminar";
@@ -135,7 +185,7 @@ export class RegistrosItems{
             tr.appendChild(td);
         });
 
-        tr.appendChild(tdModificar);
+        // tr.appendChild(tdModificar);
         tr.appendChild(tdEliminar);
 
         document.querySelector(`table[data-tipo="${this.nombreTabla}"] .tbody`).appendChild(tr);
@@ -152,6 +202,7 @@ export class RegistrosItems{
     }
 
     listarFiles(){
+
         // si existen registros
         if (this.registrosAPI){
 
@@ -214,6 +265,81 @@ export class RegistrosItems{
                 fileContent.appendChild(divContentItem);
             });
         }
+    }
+
+    onOffBoton(tipo, estado){
+        
+        let cntEstado = 0;
+        if (Object.keys(this.estadoCampos).includes(tipo)){
+            this.estadoCampos[tipo]=estado;
+        }
+    
+        for (let llave in this.estadoCampos){
+            if(this.estadoCampos[llave] == false){
+                cntEstado=0;
+            }else{
+                cntEstado++;
+            }
+        }
+        
+        if(cntEstado == 2){
+
+            estadoBoton(this.boton, true);
+        }else{
+            estadoBoton(this.boton, false);
+        }
+    
+        cntEstado=0;
+    }
+
+    guardarRegistro(objeto, fkKey){
+        
+        Swal.fire({
+            title: 'Guardando registro...',
+            showConfirmButton: false,
+            didOpen: () => {
+              Swal.showLoading();
+              let resultado = guardar( objeto, this.entidad);
+
+              resultado.then((result) => {
+
+                if (result){
+
+                    this.eliminarFilasTabla();
+                    this.obtenerRegistros(fkKey);
+
+                    // Cerramos esta ventana emergente
+                    setTimeout(() => {
+                        Swal.close();
+                    }, 500);
+
+                }else{
+                    // Mantenemos esta ventana emergente
+                    Swal.fire(
+                        'Error!',
+                        'No fue posible guardar este registro, posiblemente ya se encuentre registrado',
+                        'error'
+                    )
+                }
+
+
+              }); 
+            }
+        });
+    }
+
+    botonLimpiar(campos){
+        campos.forEach( campo => {
+            const txtCampo = document.querySelector(`#${campo}`);
+            const btnLimpiar = txtCampo.parentElement.querySelector('.form__limpiar');
+            btnLimpiar.addEventListener('click', () => {
+                // Vaciamos el campo
+                txtCampo.value = '';
+
+                // Cambiamos el estado del campo a false
+                this.onOffBoton(campo, false);
+            });
+        });
     }
 }
 
@@ -310,3 +436,41 @@ function eliminarArchivo(){
 
 }
 
+// Se define como POST Elemento, porque es lo que ocurre en el POST
+async function guardar(objeto, entidad){
+
+    //FormData es como el submit de los datos de un formulario HTML pero en JavaScript
+    const formulario = new FormData();
+    
+    for (const clave in objeto){
+        formulario.append(clave, objeto[clave]);
+    }
+
+    try {
+        let direccion = rutaServidor + entidad + '/api';
+        // Petición hacia la API
+        const respuesta = await fetch(direccion, {
+            method: 'POST', //método por el que se envia la información al servidor
+            body: formulario //enviamos datos al servidor definidos anteriormente, solo se hace en el cuerpo de la petición
+        });
+
+        const resultado = await respuesta.json();
+        if (resultado){
+
+            console.log(resultado);
+            return resultado;
+        }else{
+            console.log(resultado);
+            return false;
+        }
+
+    } catch (error) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al momento de guardar el registro',
+            button: 'OK' 
+        });
+    }
+}

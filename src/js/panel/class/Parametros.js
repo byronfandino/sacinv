@@ -19,6 +19,13 @@ export function estadoBoton(boton, estado = false){
     }
 }
 
+export function ocultarError(labelError, iconoError){
+    labelError.textContent='';
+    labelError.classList.add('ocultar');
+    iconoError.classList.add('ocultar');
+    iconoError.previousElementSibling.style.right = "0.5rem";
+}
+
 export function formatearTexto(cadena){
     
     cadena=cadena.toLowerCase().trim();
@@ -51,3 +58,35 @@ export function alertaErrorCampo(labelError, iconError, iconLimpiar, estado){
     }
 }
    
+// limpia el campo y los mensajes de error
+export function limpiarCaja(campoSelec, foco = true){
+    const input = campoSelec.querySelector('.form__input');
+    const labelSugerencia = campoSelec.querySelector('.form__labelSugerencia');
+    const labelError = campoSelec.querySelector('.form__labelError');
+    const iconoError = campoSelec.querySelector('.form__iconError');
+    const iconoLimpiar = campoSelec.querySelector('.form__limpiar');
+    // const tipo = input.getAttribute('data-tipo');
+
+    // Ocultamos y vaciamos los errores
+    if (!labelSugerencia.className.includes('ocultar')){
+        labelSugerencia.classList.add('ocultar');
+        labelSugerencia.textContent = '';
+    }
+
+    if(!labelError.className.includes('ocultar')){
+        labelError.classList.add('ocultar');
+        labelError.textContent = '';
+    }
+    
+    if(!iconoError.className.includes('ocultar')){
+        iconoError.classList.add('ocultar');
+    }
+    
+    iconoLimpiar.style.right = "0.5rem";
+    input.value='';
+
+    if (foco){
+        input.focus();
+    }
+}
+

@@ -153,7 +153,8 @@ class ActiveRecord {
 
     //Consulta plata de SQL (Utilizar cuando los métodos del modelo no son suficientes)
     public static function SQL($query) {
-        // debuguear($query);
+        // echo json_encode($query);
+        // exit;
         $resultado = self::consultarSQL($query);
         // debuguear($resultado);
         return $resultado;

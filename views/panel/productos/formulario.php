@@ -188,5 +188,5 @@
             data-tipo="boton-adjuntar"
             data-cy="botonAdjuntar"
             value="Adjuntar Adchivo"
-            class="form__btn btn-adjuntar">
+            class="form__btn btn-cuaternario">
 </div>

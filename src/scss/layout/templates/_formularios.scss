@@ -722,7 +722,7 @@ legend{
     }
 }
 
-.btn-adjuntar{
+.btn-cuaternario{
     margin: 0;
     background-color: v.$negro;
     border: 1px solid v.$negro;
@@ -731,7 +731,15 @@ legend{
     width:19rem;
     
     &:hover {
-        background-color: lighten(v.$negro, 10%);
+        background-color: lighten(v.$negro, 15%);
+    }
+    
+    &.disabled{
+        background-color: lighten(v.$negro, 50%);
+        border: none;
+        &:hover{
+            cursor: not-allowed;
+        }
     }
 }
 

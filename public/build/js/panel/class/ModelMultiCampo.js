@@ -1,7 +1,7 @@
 // import { objeto } from "../backup/ModelMultiCampo.js";
 import { rutaServidor, 
     formatearTexto, 
-    mostrarOcultarSugerencias } from "./Parametros.js";
+    mostrarOcultarSugerencias, ocultarError} from "./Parametros.js";
 
 // Guarda los registros de la tabla y de los combobox
 export let objetoMultiCampo = {
@@ -360,9 +360,9 @@ export function estadoCampo(tipo, estado = false){
     }
     
     if(objetoMultiCampo.cntEstado == 6){
-        estadoBoton(true);
+        estadoBotonPrincipal(true);
     }else{
-        estadoBoton(false);
+        estadoBotonPrincipal(false);
     }
 
     objetoMultiCampo.cntEstado=0;
@@ -381,15 +381,8 @@ export function mensajeSugerencia(tipo){
     }
 }
 
-export function ocultarError(labelError, iconoError){
-    labelError.textContent='';
-    labelError.classList.add('ocultar');
-    iconoError.classList.add('ocultar');
-    iconoError.previousElementSibling.style.right = "0.5rem";
-}
-
 // activa o desactiva el botón de Guardar
-export function estadoBoton(estado){
+export function estadoBotonPrincipal(estado){
     const boton = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"] [data-btn="btn-enviar"]`);
 
     if (estado){
@@ -487,8 +480,8 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
             }
 
             let numTabla = objetoMultiCampo.datosTabla.posicion;
-            console.log(objetoMultiCampo.registrosAPI);
-            console.log(objetoMultiCampo.registrosAPI[numTabla]);
+            // console.log(objetoMultiCampo.registrosAPI);
+            // console.log(objetoMultiCampo.registrosAPI[numTabla]);
 
             objetoMultiCampo.registrosAPI[numTabla].forEach( registro => {
                 if(evento === 'DOM' && valor === ''){
@@ -856,7 +849,6 @@ export function confirmarEliminacion(id){
 
             let respuesta = postElemento('eliminar', id );
             
-            // console.log(respuesta);
             respuesta.then(result => {
                 if (result === true) {
 
@@ -866,8 +858,6 @@ export function confirmarEliminacion(id){
                         'success'
                     )
 
-                    // limpiarVariables();
-                    // limpiarCaja();
                     borrarFilas();
                     obtenerRegistrosAPI();
                     
@@ -889,38 +879,6 @@ export function borrarFilas(){
     filas.forEach( fila => {
         fila.remove();
     });
-}
-
-// limpia el campo y los mensajes de error
-export function limpiarCaja(campoSelec, foco = true){
-    const input = campoSelec.querySelector('.form__input');
-    const labelSugerencia = campoSelec.querySelector('.form__labelSugerencia');
-    const labelError = campoSelec.querySelector('.form__labelError');
-    const iconoError = campoSelec.querySelector('.form__iconError');
-    const iconoLimpiar = campoSelec.querySelector('.form__limpiar');
-    // const tipo = input.getAttribute('data-tipo');
-
-    // Ocultamos y vaciamos los errores
-    if (!labelSugerencia.className.includes('ocultar')){
-        labelSugerencia.classList.add('ocultar');
-        labelSugerencia.textContent = '';
-    }
-
-    if(!labelError.className.includes('ocultar')){
-        labelError.classList.add('ocultar');
-        labelError.textContent = '';
-    }
-    
-    if(!iconoError.className.includes('ocultar')){
-        iconoError.classList.add('ocultar');
-    }
-    
-    iconoLimpiar.style.right = "0.5rem";
-    input.value='';
-
-    if (foco){
-        input.focus();
-    }
 }
 
 function eliminarFile(e){

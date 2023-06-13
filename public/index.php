@@ -9,8 +9,9 @@ use Controllers\MetodoPagoController;
 use Controllers\PanelAdminController;
 use Controllers\PanelUsuarioController;
 use Controllers\ParametroController;
+use Controllers\ProductoCodigoController;
 use Controllers\ProductoController;
-use Controllers\ProductoImgVideoController;
+use Controllers\ProductoOfertaController;
 use Controllers\TablaController;
 use Controllers\UbicacionController;
 use Controllers\UsuarioController;
@@ -109,12 +110,15 @@ $router->post('/producto/estado', [ProductoController::class,'estado']);
 $router->get('/producto/editar', [ProductoController::class,'editar']);
 $router->get('/producto/eliminar', [ProductoController::class,'eliminar']);
 $router->post('/producto/eliminar', [ProductoController::class,'eliminar']);
-$router->get('/productocodigos/api', [ProductoController::class,'listarCodigos']);
-$router->get('/productoofertas/api', [ProductoController::class,'listarOfertas']);
 $router->get('/productoimgvideo/api', [ProductoController::class,'listarArchivos']);
 
-// Producto Imagen Video
+// Producto Codigos
+$router->get('/productocodigos/api', [ProductoCodigoController::class,'listarCodigos']);
+$router->post('/productocodigos/api', [ProductoCodigoController::class,'guardarAPI']);
 
+// Producto Ofertas
+$router->get('/productoofertas/api', [ProductoOfertaController::class,'listarOfertas']);
+$router->post('/productoofertas/api', [ProductoOfertaController::class,'guardarAPI']);
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

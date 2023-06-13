@@ -33,44 +33,6 @@ class ProductoController{
 
     }
 
-    public static function listarCodigos(){
-        
-        if(!isset($_SESSION['nombre'])){
-            header('Location: /');
-        }
-
-        $id = $_GET['id'];
-
-        //2. Verificar si hay un elemento get y es un número
-        if(!is_numeric($id)) return;
-
-        //3. 
-        $consultaCodigos = "SELECT Cod_Id, Cod_Barras, Cod_Manual FROM tblproducto_codigo WHERE Cod_FkProd_Id = " . $id;
-        $resultadoCodigos = ProductoCodigo::SQL($consultaCodigos);
-
-        echo json_encode($resultadoCodigos);
-        
-    }
-
-    public static function listarOfertas(){
-        
-        if(!isset($_SESSION['nombre'])){
-            header('Location: /');
-        }
-
-        $id = $_GET['id'];
-
-        //2. Verificar si hay un elemento get y es un número
-        if(!is_numeric($id)) return;
-
-        //3. 
-        $consultaOfertas = "SELECT PO_Id, PO_Cant, PO_ValorOferta FROM tblproducto_oferta WHERE PO_FkProducto_Id = " . $id;
-        $resultadoOfertas = ProductoOferta::SQL($consultaOfertas);
-
-        echo json_encode($resultadoOfertas);
-        
-    }
-
     // API para mostrar el listado de categorias en formato JSON
     public static function listarProductos (){    
         

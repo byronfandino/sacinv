@@ -181,7 +181,7 @@
             <div class="form__campo t-md">
                 <label for="codigoBarras" class="form__label--campo">Código de barras</label>
                 <input type="text" 
-                        id="codigoBarras"
+                        id="Cod_Manual"
                         name="Cod_Barras" 
                         data-tipo="codigoBarras"
                         data-cy="codigoBarras" 
@@ -198,7 +198,7 @@
             <div class="form__campo t-sm">
                 <label for="codigoManual" class="form__label--campo">Código Manual</label>
                 <input type="text" 
-                        id="codigoManual"
+                        id="Cod_Barras"
                         name="Cod_Manual" 
                         data-tipo="codigoManual" 
                         data-cy="codigoManual" 
@@ -214,11 +214,12 @@
 
             <div class="form__campo form__button">
                 <input type="button" 
-                        data-tipo="boton-adjuntar"
-                        data-cy="botonAdjuntar"
+                        data-tipo="boton-codigo"
+                        data-cy="botonCodigo"
                         value="Agregar código"
-                        class="form__btn btn-adjuntar">
+                        class="form__btn btn-cuaternario disabled" disabled>
             </div>
+
         </div>
 
         <h3>Listado de codigos</h3>
@@ -228,7 +229,6 @@
                     <tr>
                         <th>COD. BARRAS</th>
                         <th>COD. MANUAL</th>
-                        <th class="thead__th--icon">Modificar</th>
                         <th class="thead__th--icon">Eliminar</th>
                     </tr>
                 </thead>
@@ -244,9 +244,9 @@
         <div class="form__contenedor__multirregistros">
                 
             <div class="form__campo t-sm item-azul">
-                <label for="cantOferta" class="form__label--campo">Cant. x Oferta</label>
+                <label for="PO_Cant" class="form__label--campo">Cant. x Oferta</label>
                 <input type="number" 
-                        id="cantOferta"
+                        id="PO_Cant"
                         name="PO_Cant" 
                         data-tipo="cantOferta"
                         data-cy="cantOferta"
@@ -261,9 +261,9 @@
             </div>
 
             <div class="form__campo t-sm item-azul">
-                <label for="valorOferta" class="form__label--campo">Valor x Oferta</label>
+                <label for="PO_ValorOferta" class="form__label--campo">Valor x Oferta</label>
                 <input type="number" 
-                        id="valorOferta"
+                        id="PO_ValorOferta"
                         name="PO_ValorOferta" 
                         data-tipo="valorOferta"
                         data-cy="valorOferta"
@@ -279,10 +279,10 @@
 
             <div class="form__campo form__button">
                 <input type="button" 
-                        data-tipo="boton-adjuntar"
-                        data-cy="botonAdjuntar"
+                        data-tipo="boton-oferta"
+                        data-cy="botonOferta"
                         value="Agregar oferta"
-                        class="form__btn btn-adjuntar">
+                        class="form__btn btn-cuaternario disabled" disabled>
             </div>
         </div>
 
@@ -294,7 +294,6 @@
                     <tr>
                         <th>Cant. Oferta</th>
                         <th>Valor Oferta</th>
-                        <th class="thead__th--icon">Modificar</th>
                         <th class="thead__th--icon">Eliminar</th>
                     </tr>
                 </thead>
@@ -314,7 +313,7 @@
                 data-tipo="boton-adjuntar"
                 data-cy="botonAdjuntar"
                 value="Adjuntar Adchivo"
-                class="form__btn btn-adjuntar">
+                class="form__btn btn-cuaternario">
         </div>
 
         <!-- Archivos multimedia -->
