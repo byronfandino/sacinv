@@ -1,1 +1,5 @@
-<svg width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="40" fill="red"/><path stroke="#fff" stroke-width="5" d="M59.768 21.768L20.877 60.659m36.793 1.275L22.04 20.035"/></svg>
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="40" cy="40" r="40" fill="#FF0000"/>
+<line x1="59.7678" y1="21.7678" x2="20.8769" y2="60.6586" stroke="white" stroke-width="5"/>
+<line x1="57.6697" y1="61.934" x2="22.0404" y2="20.0346" stroke="white" stroke-width="5"/>
+</svg>

@@ -1,4 +1,4 @@
-import { formatearTexto, mostrarOcultarSugerencias, 
+import { rutaServidor, formatearTexto, mostrarOcultarSugerencias, 
     ocultarError, limpiarCaja } from './class/Parametros.js';
 import { EntidadUniCampo, objetoUniCampo } from './class/ModelUniCampo.js';
 import { Modal } from './class/Modal.js';
@@ -18,13 +18,17 @@ import { RegistrosItems, cerrarPreview } from './class/RegistrosItems.js';
 let producto = new EntidadMultiCampo();
 
 function botonesSubmit() {
+
     const submitFormularioProducto = document.querySelector(`form[action="/producto"] input[type="submit"]`);
+
     const submitformularioMarca = document.querySelector(`form[action="/marca"] input[type="submit"]`);
+
     const submitformularioCategoria = document.querySelector(`form[action="/categoria"] input[type="submit"]`);
 
     if (submitFormularioProducto) {
         submitFormularioProducto.addEventListener('click', btnSubmit);
     }
+
     if (submitformularioMarca) {
         submitformularioMarca.addEventListener('click', btnSubmit);
     }
@@ -72,7 +76,7 @@ function renombrarObjetos() {
     objetoMultiCampo.datosTabla.tipo = "";
 
     objetoMultiCampo.camposIndividuales = ['codigoBarras', 'codigoManual', 'prodDescripcion'];
-    
+
     if (!window.location.pathname.includes('editar')){
 
         objetoMultiCampo.tabla = [
@@ -454,31 +458,34 @@ function cargarVentanasModal(){
 }
 
 function cargarRegistrosCodigos(){
+    // Obtenemos el id del producto que nos sirve como llave foránea
+    const txtId = document.querySelector('[data-id="prod_Id"]');
 
-    let registrosCodigos = new RegistrosItems(
-        {
-            entidad: "productocodigos",
-            estadoCampos: {
-                Cod_Manual: false,
-                Cod_Barras: false
-            },
-            nombreTabla: "tblCodigo",
-            camposTabla: [
-                { id: 'Id', posicion: null, class: [] },
-                { codigoBarras: 'Cod. Barras', posicion: 0, class: [] },
-                { codigoManual: 'Cod. Manual', posicion: 1, class: [] }
-            ],
-            arrayAPI: {
-                Cod_Manual: [],
-                Cod_Barras: []
-            },
-            stringAPI:{
-                Cod_Manual: '',
-                Cod_Barras: ''
-            },
-            boton:document.querySelector('[data-tipo="boton-codigo"]')
-        }
-    );
+    let objetoCodigos = {
+        fkId: txtId.value,
+        entidad: "productocodigos",
+        estadoCampos: {
+            Cod_Manual: false,
+            Cod_Barras: false
+        },
+        nombreTabla: "tblCodigo",
+        camposTabla: [
+            { id: 'Id', posicion: null, class: [] },
+            { codigoBarras: 'Cod. Barras', posicion: 0, class: [] },
+            { codigoManual: 'Cod. Manual', posicion: 1, class: [] }
+        ],
+        arrayAPI: {
+            Cod_Manual: [],
+            Cod_Barras: []
+        },
+        stringAPI:{
+            Cod_Manual: '',
+            Cod_Barras: ''
+        },
+        boton:document.querySelector('[data-tipo="boton-codigo"]')
+    }
+
+    let registrosCodigos = new RegistrosItems(objetoCodigos);
     
     const params = new URLSearchParams(window.location.search);
     // Obtiene el valor de la variable "variable"
@@ -489,13 +496,12 @@ function cargarRegistrosCodigos(){
     //y luego obtener su caja de texto para limpiarla
     registrosCodigos.botonLimpiar(['Cod_Manual', 'Cod_Barras']);
     
-    const txtCodigoBarras = document.querySelector('#Cod_Manual');
-    const txtCodigoManual = document.querySelector('#Cod_Barras');
+    const txtCodigoBarras = document.querySelector('#Cod_Barras');
+    const txtCodigoManual = document.querySelector('#Cod_Manual');
     const labelSugrCodBarras = txtCodigoBarras.parentElement.querySelector('.form__labelSugerencia');
     const labelSugrCodManual = txtCodigoManual.parentElement.querySelector('.form__labelSugerencia');
     const labelErrorCodManual = txtCodigoManual.parentElement.querySelector('.form__labelError');
     const iconoErrorCodManual = txtCodigoManual.parentElement.querySelector('.form__iconError');
-    const txtId = document.querySelector('[data-id="prod_Id"]');
     const botonAgregar = document.querySelector('[data-tipo="boton-codigo"]');
 
     let expresionRegular2;
@@ -614,9 +620,11 @@ function cargarRegistrosCodigos(){
 }
 
 function cargarRegistrosOfertas(){
+    const txtId = document.querySelector('[data-id="prod_Id"]');
 
     let registrosOfertas = new RegistrosItems(
         {
+            fkId: txtId.value,
             entidad:"productoofertas",
             estadoCampos: {
                 PO_Cant: false,
@@ -667,7 +675,6 @@ function cargarRegistrosOfertas(){
     const botonAgregar = document.querySelector('[data-tipo="boton-oferta"]');
     const txtCantidad = document.querySelector('#PO_Cant');
     const txtValor = document.querySelector('#PO_ValorOferta');
-    const txtId = document.querySelector('[data-id="prod_Id"]');
 
     botonAgregar.addEventListener('click', () => {
         
@@ -689,6 +696,8 @@ function cargarRegistrosOfertas(){
         registrosOfertas.onOffBoton('PO_ValorOferta', false);
 
     });
+
+
 }
 
 function cargarArchivos(){
@@ -718,7 +727,20 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarVentanasModal();
     
     if (window.location.pathname.includes('editar')){
+        // objetoMultiCampo.camposIndividuales = [];
+        
+        // Mensaje de verificación de archivo guardado
+        const alerta = document.querySelector('.alerta');
+        if (alerta){
+            setTimeout(()=>{
+                producto.verificarMensajeGeneral();
+                setTimeout(()=>{
+                    window.location.assign(rutaServidor + 'producto');
+                },1000);
+            },1000);
+        }
 
+        // Cargar las tablas y los archivos del servidor
         Swal.fire({
             title: 'Cargando registros...',
             showConfirmButton: false,
@@ -732,11 +754,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     Swal.close();
                 }, 500);
-
             }
         });
 
+        objetoMultiCampo.entidad = "producto";
+
+        // Configuramos el boton Adjuntar archivo
+        producto.botonAdjuntarArchivo();
+
+        // Configuramos el botón actualizar para enviar los datos al servidor
+        const formulario = document.querySelector('[data-form="producto"]');
+        const botonActualizar = formulario.querySelector('input[type="submit"]');
+
+        botonActualizar.addEventListener('click', e => {
+    
+            e.preventDefault();
+            Swal.fire({
+                title: 'Actualizando registro...',
+                showConfirmButton: false,
+                didOpen: () => {
+
+                    Swal.showLoading();
+                    formulario.submit();
+                    
+                }
+            });
+        });
+        
+        renombrarObjetos();
+        objetoMultiCampo.campos.codigoManual = true;
+        objetoMultiCampo.campos.prodDescripcion = true;
+        objetoMultiCampo.campos.categoria = true;
+        objetoMultiCampo.campos.marca = true;
+        objetoMultiCampo.campos.cantStock = true;
+        objetoMultiCampo.campos.valorVenta = true;
+
+        producto.asignarValidacion();
         campoDescripcionEditar();
+
+        // programar boton limpiar en todos los inputs 
+        const botonesLimpiar = document.querySelectorAll('.form__limpiar');
+        botonesLimpiar.forEach(boton => {
+            boton.addEventListener('click', () => {
+                const campo = boton.parentElement;
+                limpiarCaja(campo);
+            });
+
+        });
 
     }else{
 
@@ -748,7 +812,6 @@ document.addEventListener('DOMContentLoaded', () => {
         producto.botonAdjuntarArchivo();
         producto.campoFile();
         botonesSubmit();
-        botonesLimpiar();
         botonLimpiar();
         campoCodigoBarras();
         campoCodigoManual();

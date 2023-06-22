@@ -46,11 +46,6 @@ class ProductoOfertaController{
             if(empty($alertas)){
                 
                 // Verificamos que no exista 
-                // $consulta = "SELECT PO_Id, PO_Cant, PO_ValorOferta, PO_FkProducto_Id 
-                // FROM tblproducto_oferta 
-                // WHERE PO_Cant = 11
-                // AND PO_ValorOferta = 244
-                // AND PO_FkProducto_Id = 124";
                 $consulta = "SELECT * FROM tblproducto_oferta WHERE PO_Cant = " . $oferta->PO_Cant . " AND PO_ValorOferta = " . $oferta->PO_ValorOferta . " AND PO_FkProducto_Id = " . $oferta->PO_FkProducto_Id;
                                 
                 $resultado = ProductoOferta::SQL($consulta);
@@ -68,6 +63,18 @@ class ProductoOfertaController{
                 echo json_encode(false);
             }
         }
+    }
+
+    public static function eliminar(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+        
+        $id=$_POST['id'];
+        $productoOferta = ProductoOferta::find($id);
+        $resultado = $productoOferta->eliminar($productoOferta->PO_Id);
+        echo json_encode($resultado);
     }
 }
 

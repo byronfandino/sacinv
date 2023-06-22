@@ -235,12 +235,12 @@ function botonStatus(){
 }
 
 function rutaEditar(e){
-
+    const label = e.target.parentElement.querySelector('.form__labelSugerencia'); 
     if(e.target.value.match(objetoUniCampo.expresion)){
-        mostrarOcultarSugerencias('', false);
+        mostrarOcultarSugerencias(label, '', false);
         estadoBoton(btnSubmitCampo, true);
     }else{
-        mostrarOcultarSugerencias(objetoUniCampo.msg, true);
+        mostrarOcultarSugerencias(label, objetoUniCampo.msg, true);
         estadoBoton(btnSubmitCampo, false);
     }
 

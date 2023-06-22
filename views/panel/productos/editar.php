@@ -2,14 +2,7 @@
     <img class="title__img" src="/build/img/sistema/panelproductos-ng.svg" width="30px" height="30px"/>
     <h1 class="title__h1">Productos</h1>
 </div>
-<?php
 
-    // echo '<pre>';
-    // echo var_dump($producto);
-    // echo '</pre>';
-    // exit;
-    
-?>
 <!-- Verificación de errores generales -->
 <?php if(isset($alertas['error-producto']['general'])){ ?>
         <p class="alerta error ocultar"><?php echo $alertas['error-producto']['general']; ?></p>
@@ -48,6 +41,7 @@
 <form method="POST" data-form="producto" class="form" enctype="multipart/form-data" data-cy="form-producto">
 
     <input type="hidden" 
+            name="Prod_Id"
             data-id="prod_Id"
             data-cy="prodid"
             value="<?php echo isset($producto->Prod_Id) ? s($producto->Prod_Id) : ''; ?>"
@@ -181,7 +175,7 @@
             <div class="form__campo t-md">
                 <label for="codigoBarras" class="form__label--campo">Código de barras</label>
                 <input type="text" 
-                        id="Cod_Manual"
+                        id="Cod_Barras"
                         name="Cod_Barras" 
                         data-tipo="codigoBarras"
                         data-cy="codigoBarras" 
@@ -198,7 +192,7 @@
             <div class="form__campo t-sm">
                 <label for="codigoManual" class="form__label--campo">Código Manual</label>
                 <input type="text" 
-                        id="Cod_Barras"
+                        id="Cod_Manual"
                         name="Cod_Manual" 
                         data-tipo="codigoManual" 
                         data-cy="codigoManual" 
@@ -212,7 +206,7 @@
                 <label class="form__labelError  ocultar"><?php //echo tipoAlerta($alertas, 'error-producto', 'codigo-manual');?></label>
             </div>
 
-            <div class="form__campo form__button">
+            <div class="form__campo">
                 <input type="button" 
                         data-tipo="boton-codigo"
                         data-cy="botonCodigo"
@@ -277,7 +271,7 @@
                 <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'oferta-valor');?></label>
             </div>
 
-            <div class="form__campo form__button">
+            <div class="form__campo ">
                 <input type="button" 
                         data-tipo="boton-oferta"
                         data-cy="botonOferta"
@@ -325,9 +319,9 @@
     <div class="form__campo campo--button t-xxl">
         
         <input type="submit" 
-        data-btn="btn-enviar"
-        value="Actualizar" 
-        class="form__btn btn-primario " 
+                data-btn="btn-enviar"
+                value="Actualizar" 
+                class="form__btn btn-primario " 
         >
         
         <a href="/producto" class="form__btn btn-secundario">Cancelar</a>

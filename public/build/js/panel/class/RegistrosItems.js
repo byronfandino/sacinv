@@ -1,9 +1,11 @@
 import { mostrarOcultarSugerencias, rutaServidor, estadoBoton} from "./Parametros.js";
 
+export let objetoRegistroGeneral;
+
 export class RegistrosItems{
 
     constructor(objeto){
-        // entidad, nombreTabla, camposTabla, arrayAPI, stringAPI
+        this.fkId = objeto.fkId;
         this.entidad = objeto.entidad;
         this.nombreTabla = objeto.nombreTabla;
         this.camposTabla = objeto.camposTabla;
@@ -79,7 +81,6 @@ export class RegistrosItems{
     obtenerRegistros(id){
         let resultado = getRegistrosAPI(id, this.entidad);
         resultado.then(result => {
-            console.log(result);
             // Devuelve el arreglo de la api
             this.registrosAPI = result;
             this.cargarDatos();
@@ -110,7 +111,6 @@ export class RegistrosItems{
                 this.crearFilaTabla(registro);
             }
         });
-
     }
 
     crearFilaTabla(registro){
@@ -161,13 +161,15 @@ export class RegistrosItems{
         const spanEliminar = document.createElement('SPAN');
         spanEliminar.textContent="Eliminar";
         spanEliminar.dataset.idRegistro = id;
-        // spanEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
+        spanEliminar.dataset.entidad = this.entidad;
+        spanEliminar.onclick=confirmarEliminacion;
     
         const imgEliminar = document.createElement('IMG');
         imgEliminar.setAttribute('src','/build/img/sistema/eliminar.svg');
         imgEliminar.setAttribute('alt','Imagen Eliminar');
         imgEliminar.dataset.idRegistro = id;
-        // imgEliminar.onclick = eliminarItem;//Asignamos la función eliminarItem
+        imgEliminar.dataset.entidad = this.entidad;
+        imgEliminar.onclick=confirmarEliminacion;
         
         const linkEliminar = document.createElement('A');
         linkEliminar.setAttribute('href', '#');
@@ -204,10 +206,12 @@ export class RegistrosItems{
     listarFiles(){
 
         // si existen registros
-        if (this.registrosAPI){
+        if (this.registrosAPI != ''){
 
-            let llaves = Object.keys(this.registrosAPI[0]);
+            let llaves = '';
             
+            llaves = Object.keys(this.registrosAPI[0]);
+
             this.registrosAPI.forEach(registro => {
                 
                 let id = registro[llaves[0]];
@@ -234,7 +238,7 @@ export class RegistrosItems{
                 let iconoEye = document.createElement('IMG');
                 iconoEye.setAttribute('src','/build/img/sistema/eye.svg');
                 iconoEye.setAttribute('alt','Icono para ampliar imagen o reproducir video');
-                iconoEye.dataset.idArchivo = id;
+                iconoEye.dataset.idRegistro = id;
                 iconoEye.dataset.nombre = nombre;
                 iconoEye.dataset.extension = extension;
                 iconoEye.onclick=mostrarArchivo;
@@ -242,8 +246,10 @@ export class RegistrosItems{
                 let iconoEliminar = document.createElement('IMG');
                 iconoEliminar.setAttribute('src','/build/img/sistema/eliminar-bl.svg');
                 iconoEliminar.setAttribute('alt','Icono para eliminar archivo');
-                iconoEliminar.dataset.idArchivo = id;
-                iconoEliminar.onclick=eliminarArchivo;
+                iconoEliminar.dataset.idRegistro = id;
+                iconoEliminar.dataset.tipo = 'archivo';
+                iconoEliminar.dataset.entidad = this.entidad;
+                iconoEliminar.onclick=confirmarEliminacion;
 
                 let divContentAcciones = document.createElement('DIV');
                 divContentAcciones.appendChild(iconoEye);
@@ -341,6 +347,96 @@ export class RegistrosItems{
             });
         });
     }
+
+}
+
+// Se coloca como una función aparte, ya que NO tiene acceso a las propiedades del objeto
+function confirmarEliminacion(e){
+
+    Swal.fire({
+        title: '¿Confirma que desea eliminar este registro?',
+        text: "Después de eliminado no se puede recuperar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '##3085d6',
+        confirmButtonText: 'Si, eliminar'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            let respuesta = eliminarAPI(e.target.dataset.idRegistro, e.target.dataset.entidad);
+            respuesta.then(result => {
+                
+                if (result === true) {
+
+                    Swal.fire(
+                        'Registro eliminado!',
+                        'El registro ha sido eliminado satisfactoriamente',
+                        'success'
+                    )
+
+                    // Si es un archivo procedemos a eliminar el item del archivo
+                    if (e.target.dataset.tipo === 'archivo'){
+                        // Eliminamos el archivo
+                        e.target.parentElement.parentElement.remove();
+
+                    }else{
+                        // Si no.... quiere decir que corresponde al icono eliminar de un registro de una tabla
+                        let tr = e.target.parentElement.parentElement.parentElement;
+                        if (tr){
+                            tr.remove();
+                        }
+                    }
+                    
+                }else{
+                    Swal.fire(
+                        'Error de eliminación!',
+                        'No fue posible eliminar este registro, posiblemente porque ya se encuentra indexada con otros registros',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+
+async function eliminarAPI(id, entidad ){
+
+    //FormData es como el submit de los datos de un formulario HTML pero en JavaScript 
+    const datos = new FormData();
+    datos.append('id', id);
+
+    try {
+        let direccion;
+        direccion = rutaServidor + entidad + '/eliminar';
+        
+        // Petición hacia la API
+        const respuesta = await fetch(direccion, {
+            
+            method: 'POST', //método por el que se envia la información al servidor
+            body: datos //enviamos datos al servidor definidos anteriormente, solo se hace en el cuerpo de la petición
+            
+        });
+        
+        const resultado = await respuesta.json();
+
+        if(resultado === true){
+            return true;
+        }else{
+            return false;
+        }
+        
+    } catch (error) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al momento de eliminar el registro',
+            button: 'OK' 
+        });
+    }
 }
 
 async function getRegistrosAPI(id, entidad){
@@ -430,10 +526,6 @@ function mostrarArchivo(e){
     fondoNotificacion.insertBefore(elemento, fondoNotificacion.querySelector('.eliminar-imagen'));
     fondoNotificacion.classList.remove('ocultar');
     
-}
-
-function eliminarArchivo(){
-
 }
 
 // Se define como POST Elemento, porque es lo que ocurre en el POST

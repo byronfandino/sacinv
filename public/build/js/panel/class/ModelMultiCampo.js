@@ -25,7 +25,8 @@ export let objetoMultiCampo = {
         nombre:'',
         tipo:'',
         posicion:''
-    }
+    },
+    campoUnicoNombre:''
 }
 
 export class EntidadMultiCampo{
@@ -266,10 +267,10 @@ export class EntidadMultiCampo{
                 divContenedor.appendChild(labelSugerencia);
                 divContenedor.appendChild(labelError);
                 
-                const formulario = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"]`);
-
+                // const formulario = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"]`);
                 const boton = document.querySelector('.form__button');
-                formulario.insertBefore(divContenedor, boton);
+                const contenedorPrincipal = boton.parentElement; 
+                contenedorPrincipal.insertBefore(divContenedor, boton);
                 
                 this.campoFile();
             }
@@ -318,7 +319,7 @@ export class EntidadMultiCampo{
                         //     labelSugerencia.classList.remove('ocultar');
                         // }
         
-                        // let tipoArchivo = inputFile.files[0].type;
+                        let tipoArchivo = inputFile.files[0].type;
                         if(!(tipoArchivo === "image/jpeg" || tipoArchivo === "image/jpg" || tipoArchivo === "image/png" || tipoArchivo === "video/mp4")){
                             labelSugerencia.textContent = `Seleccionó un archivo que NO es permitido`;
                             labelSugerencia.classList.remove('ocultar');
@@ -328,11 +329,11 @@ export class EntidadMultiCampo{
             }
         });
     }
-
 }
 
 export function btnSubmit(e){
     const formulario = e.target.parentElement.parentElement;
+    
     e.preventDefault();
     Swal.fire({
         title: 'Guardando registro...',
@@ -419,7 +420,6 @@ export function llamarObtenerRegistros(){
     resultado.then(result =>{
         console.log(result);
         return result;
-
     });
 }
 
@@ -442,7 +442,6 @@ async function obtenerRegistrosAPI(){
         }
 
         objetoMultiCampo.registrosAPI = await resultado.json();
-
         mostrarRegistrosAPI();
 
         return true;
@@ -468,7 +467,6 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
     if (objetoMultiCampo.datosTabla.tipo === 'multiple'){
         
         let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
-        console.log(llavesArray);
 
         if (objetoMultiCampo.registrosAPI){
             
@@ -480,8 +478,6 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
             }
 
             let numTabla = objetoMultiCampo.datosTabla.posicion;
-            // console.log(objetoMultiCampo.registrosAPI);
-            // console.log(objetoMultiCampo.registrosAPI[numTabla]);
 
             objetoMultiCampo.registrosAPI[numTabla].forEach( registro => {
                 if(evento === 'DOM' && valor === ''){
@@ -505,19 +501,13 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
     }else{
 
        let llavesArray = Object.keys(objetoMultiCampo.arrayAPI);
-       console.log(objetoMultiCampo.arrayAPI);
-       console.log(llavesArray);
-    
+        
        if (objetoMultiCampo.registrosAPI){
            
            if (evento === 'DOM'){
-               // limpiar el arreglo 
-            //    objetoMultiCampo.arrayAPI=[];
-
                llavesArray.forEach( key => {
                    objetoMultiCampo.arrayAPI[key]='';
                });
-
            }
            
            objetoMultiCampo.registrosAPI.forEach( registro => {
@@ -539,14 +529,14 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
    
                        if (formatearTexto(registro[campo]).includes(valor)){
                            if(tabla){
-                               crearRegistro(registro);
+                               crearRegistro(registro, 'input');
                            }                            
                        }
                        
                    }else if(registro[campo].includes(valor)){
    
                        if(tabla){
-                           crearRegistro(registro);
+                           crearRegistro(registro, 'input');
                        }      
                    }
                }
@@ -581,10 +571,11 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
     botonStatus();
 }
 
-export function crearRegistro(registro){
+export function crearRegistro(registro, filtro = 'DOM'){
 
     // Obtenemos las llaves del objeto
     let llaves = Object.keys(registro);
+
     let id = registro[llaves[0]];
     
     let arrayTD = [];
@@ -687,11 +678,9 @@ export function crearRegistro(registro){
                             td.classList.add(clase);
                         });
                     }
-                    
+
                 }
-    
                 arrayTD[posicion] = td;
-    
             }
         }
     });
@@ -763,7 +752,17 @@ export function crearRegistro(registro){
     tr.appendChild(tdHistorial);
     tr.appendChild(tdEliminar);
 
-    document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"] .tbody`).appendChild(tr);
+    let descripcionProducto = tr.querySelector('td span').nextElementSibling.textContent;
+
+    if(filtro == 'input'){
+        document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"] .tbody`).appendChild(tr);
+    }else{
+        if (objetoMultiCampo.campoUnicoNombre != descripcionProducto){
+            objetoMultiCampo.campoUnicoNombre = descripcionProducto;
+            document.querySelector(`table[data-tipo="${objetoMultiCampo.datosTabla.nombre}"] .tbody`).appendChild(tr);
+        };
+    }
+
 }
 
 function botonStatus(){

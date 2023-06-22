@@ -134,6 +134,7 @@ class ActiveRecord {
     public static function find($id) {
         $query = "SELECT * FROM " . static::$tabla  ." WHERE " . static::$columnasDB[0] . "=" . $id;
         $resultado = self::consultarSQL($query);
+        // echo json_encode($query);
         return array_shift( $resultado ) ;
     }
 

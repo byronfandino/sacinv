@@ -63,6 +63,18 @@ class ProductoCodigoController{
             }
         }
     }
+
+    public static function eliminar(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+        
+        $id=$_POST['id'];
+        $productoCodigo = ProductoCodigo::find($id);
+        $resultado = $productoCodigo->eliminar($productoCodigo->Cod_Id);
+        echo json_encode($resultado);
+    }
 }
 
 
