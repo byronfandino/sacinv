@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../includes/app.php';
 
 use Controllers\CategoriaController;
+use Controllers\CiudadController;
+use Controllers\ClienteController;
 use Controllers\LoginController;
 use Controllers\MarcaController;
 use Controllers\MetodoPagoController;
@@ -127,8 +129,14 @@ $router->post('/productoofertas/eliminar', [ProductoOfertaController::class,'eli
 $router->get('/productoimgvideo/api', [ProductoImgVideoController::class,'listarArchivos']);
 $router->post('/productoimgvideo/eliminar', [ProductoImgVideoController::class,'eliminar']);
 
-//
-$router->get('/cliente', [ProductoImgVideoController::class,'index']);
+// Ciudad
+$router->get('/ciudad/api', [CiudadController::class,'listarCiudades']);
+
+
+// Cliente
+$router->get('/cliente', [ClienteController::class,'index']);
+$router->post('/cliente', [ClienteController::class,'index']);
+$router->get('/cliente/api', [ClienteController::class,'listar']);
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

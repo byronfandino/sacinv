@@ -44,7 +44,7 @@
         </a>
     </div>
 
-    <a class="nav__a" data-id="5" data-estado="" href="/cliente"><img src="/build/img/sistema/panelclientes-bl.svg" width="30px" height="30px"/><span>Clientes</span></a>
+    <a class="nav__a" data-id="5" data-estado="" href="/cliente"><img src="/build/img/sistema/panelclientes-bl.svg" width="30px" height="30px" data-cy="cliente"/><span>Clientes</span></a>
     <a class="nav__a" data-id="6" data-estado="" href="/proveedor"><img src="/build/img/sistema/panelproveedores-bl.svg" width="30px" height="30px"/><span>Proveedores</span></a>
     <a class="nav__a" data-id="7" data-estado="" href="/notificacion"><img src="/build/img/sistema/panelnotificaciones-bl.svg" width="30px" height="30px"/><span>Notificaciones</span></a>
     <a class="nav__a" data-id="8" data-estado="" href="#"><img src="/build/img/sistema/panelconfiguracion-bl.svg" width="30px" height="30px"/><span>Configuración</span><span class="hat ">&#710</span></a>

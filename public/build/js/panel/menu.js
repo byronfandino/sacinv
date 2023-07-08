@@ -176,7 +176,6 @@ function clickItem(idItem, tipoItem){
     }
     
     items.forEach(item => {
-    
        let imagen = item.firstElementChild;
        let texto = item.firstElementChild.nextElementSibling;
        let ruta = imagen.getAttribute('src');

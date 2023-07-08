@@ -42,7 +42,7 @@
 
     <input type="hidden" 
             name="Prod_Id"
-            data-id="prod_Id"
+            data-fk="prod_Id"
             data-cy="prodid"
             value="<?php echo isset($producto->Prod_Id) ? s($producto->Prod_Id) : ''; ?>"
     >
@@ -61,8 +61,8 @@
                     >
             <a href="#" class="form__limpiar">x</a>        
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'descripcion');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'descripcion');?></p>
         </div>
 
         <div class="form__campo t-md">
@@ -78,8 +78,8 @@
                 <option value="" class="optionCustom" data-option="nuevo">Nueva Categoría</option>
             </select>
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'categoria');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'categoria');?></p>
         </div>
 
         <div class="form__campo t-md">
@@ -96,8 +96,8 @@
 
             </select>
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'marca');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'marca');?></p>
         </div>
 
         <div class="form__campo t-sm">
@@ -113,8 +113,8 @@
                     >
             <a href="#" class="form__limpiar">x</a> 
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'cantidad-stock');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'cantidad-stock');?></p>
         </div>
 
         <div class="form__campo t-sm item-verde">
@@ -130,8 +130,8 @@
                     >
             <a href="#" class="form__limpiar">x</a> 
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'valor-venta');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'valor-venta');?></p>
         </div>
 
         <div class="form__campo t-sm item-rojo">
@@ -147,8 +147,8 @@
                     >
             <a href="#" class="form__limpiar">x</a> 
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'valor-descuento');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'valor-descuento');?></p>
         </div>
 
         <div class="form__campo t-xxl">
@@ -163,8 +163,8 @@
                     class="form__input input--bl">
             <a href="#" class="form__limpiar">x</a> 
             <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-            <label class="form__labelSugerencia ocultar"></label>
-            <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'observaciones');?></label>
+            <p class="form__labelSugerencia ocultar"></p>
+            <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'observaciones');?></p>
         </div>
     </fieldset>
     
@@ -185,8 +185,8 @@
                 >
                 <a href="#" class="form__limpiar">x</a>
                 <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-                <label class="form__labelSugerencia ocultar"></label>
-                <label class="form__labelError  ocultar"><?php //echo tipoAlerta($alertas, 'error-producto', 'codigo-barras');?></label>
+                <p class="form__labelSugerencia ocultar"></p>
+                <p class="form__labelError  ocultar"><?php //echo tipoAlerta($alertas, 'error-producto', 'codigo-barras');?></p>
             </div>
         
             <div class="form__campo t-sm">
@@ -202,8 +202,8 @@
                         >
                 <a href="#" class="form__limpiar">x</a>
                 <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-                <label class="form__labelSugerencia ocultar"></label>
-                <label class="form__labelError  ocultar"><?php //echo tipoAlerta($alertas, 'error-producto', 'codigo-manual');?></label>
+                <p class="form__labelSugerencia ocultar"></p>
+                <p class="form__labelError  ocultar"><?php //echo tipoAlerta($alertas, 'error-producto', 'codigo-manual');?></p>
             </div>
 
             <div class="form__campo">
@@ -250,8 +250,8 @@
                         >
                 <a href="#" class="form__limpiar">x</a> 
                 <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-                <label class="form__labelSugerencia ocultar"></label>
-                <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'oferta-cantidad');?></label>
+                <p class="form__labelSugerencia ocultar"></p>
+                <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'oferta-cantidad');?></p>
             </div>
 
             <div class="form__campo t-sm item-azul">
@@ -267,8 +267,8 @@
                         >
                 <a href="#" class="form__limpiar">x</a> 
                 <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-                <label class="form__labelSugerencia ocultar"></label>
-                <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'oferta-valor');?></label>
+                <p class="form__labelSugerencia ocultar"></p>
+                <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-producto', 'oferta-valor');?></p>
             </div>
 
             <div class="form__campo ">

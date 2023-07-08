@@ -23,8 +23,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'nit'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'nit'); ?></p>
     </div>
 
     <div class="form__campo t-xl">
@@ -39,8 +39,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'razonsocial'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'razonsocial'); ?></p>
     </div>
 
     <div class="form__campo t-md">
@@ -55,8 +55,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'direccion'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'direccion'); ?></p>
     </div>
 
     <div class="form__campo t-sm">
@@ -71,8 +71,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'telefono'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'telefono'); ?></p>
     </div>
 
     <div class="form__campo t-sm">
@@ -87,8 +87,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'whatsapp'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'whatsapp'); ?></p>
     </div>
 
     <div class="form__campo t-xl">
@@ -103,8 +103,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'email'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'email'); ?></p>
     </div>
 
     <div class="form__campo t-md">
@@ -120,8 +120,8 @@
             <option value="P" <?php echo isset($parametro->Pm_TipoInv) && $parametro->Pm_TipoInv == 'P' ? 'selected' : ''; ?> >Promedio Ponderado</option>
         </select>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'tipo-inventario');?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'tipo-inventario');?></p>
     </div>
 
     <div class="form__campo t-xxl">
@@ -137,8 +137,8 @@
                 required>
         <a href="#" class="form__limpiar">x</a>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'slogan'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'slogan'); ?></p>
     </div>
 
     <div class="form__campo campo--file t-xxl">
@@ -155,8 +155,8 @@
 
         <span class="textFileSelect"></span>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-        <label class="form__labelSugerencia ocultar"></label>
-        <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'imagen'); ?></label>
+        <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-parametro', 'imagen'); ?></p>
         <div class="contenedor-imagenes">
             <?php if (isset($parametro->Pm_Logo) && $parametro->Pm_Logo!==''){?>
                 <figure class="contenedor-logo">

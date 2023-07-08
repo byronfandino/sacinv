@@ -90,3 +90,70 @@ export function limpiarCaja(campoSelec, foco = true){
     }
 }
 
+export function verificarMensajeGeneral(){
+    setTimeout(() => {
+        
+        const alerta = document.querySelector('.alerta');
+    
+        if (alerta){
+            let textoAlerta = alerta.textContent;
+    
+            if(alerta.className.includes('error')){
+                Swal.fire({
+                    icon: 'error',
+                    title: textoAlerta,
+                    showConfirmButton: true
+                });
+            }
+            
+            if(alerta.className.includes('exito')){              
+                Swal.fire({
+                    icon: 'success',
+                    title: textoAlerta,
+                    timer:1500
+                }); 
+            }
+        }
+    }, 800);
+}
+
+export function limpiarFormulario(nombreForm){
+    const inputs = nombreForm.querySelectorAll('input:not([type="submit"])');
+    inputs.forEach( input => {
+        input.value="";
+    });
+    inputs[0].focus();
+}
+
+export function verificarMensajesError(){
+    
+    // Verificamos el error local del campo
+    let labelsError = document.querySelectorAll('.form__labelError');
+    
+    // Mostrar los mensajes de error que aparecen en el label cuando provienen del servidor
+    labelsError.forEach( label => {
+        const campo = label.parentElement;
+        const iconoError = campo.querySelector('.form__iconError');
+        const iconoLimpiar = campo.querySelector('.form__limpiar');
+        
+        if(label.textContent != ''){
+    
+            label.classList.remove('ocultar');
+            iconoError.classList.remove('ocultar');
+    
+            if (iconoLimpiar){
+                iconoLimpiar.style.right = "3rem";
+            }
+    
+        }else{
+    
+            label.classList.add('ocultar');
+            iconoError.classList.add('ocultar');
+    
+            if(iconoLimpiar){
+                iconoLimpiar.style.right = "0.5rem";
+            }
+        }
+    });
+
+}

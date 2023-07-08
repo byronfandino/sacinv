@@ -10,6 +10,6 @@
             required>
     <a href="#" class="form__limpiar">x</a>
     <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
-    <label class="form__labelSugerencia label_marca ocultar"></label>
-    <label class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-marca', 'nombre'); ?></label>
+    <p class="form__labelSugerencia label_marca ocultar"></p>
+    <p class="form__labelError ocultar"><?php echo tipoAlerta($alertas, 'error-marca', 'nombre'); ?></p>
 </div>

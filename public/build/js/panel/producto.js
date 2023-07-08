@@ -459,7 +459,7 @@ function cargarVentanasModal(){
 
 function cargarRegistrosCodigos(){
     // Obtenemos el id del producto que nos sirve como llave foránea
-    const txtId = document.querySelector('[data-id="prod_Id"]');
+    const txtId = document.querySelector('[data-fk="prod_Id"]');
 
     let objetoCodigos = {
         fkId: txtId.value,
@@ -620,7 +620,7 @@ function cargarRegistrosCodigos(){
 }
 
 function cargarRegistrosOfertas(){
-    const txtId = document.querySelector('[data-id="prod_Id"]');
+    const txtId = document.querySelector('[data-fk="prod_Id"]');
 
     let registrosOfertas = new RegistrosItems(
         {
