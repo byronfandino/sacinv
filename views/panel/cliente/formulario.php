@@ -5,8 +5,9 @@
                 data-cy="Cli_TipoCliente"
                 class="form__input input--bl"
                 >
-            <option value="N" selected>Persona Natural</option>
-            <option value="C" >Corporativo</option>
+            <option value="" selected disabled>-- Selecione una opción --</option>
+            <option value="N" <?php echo $cliente->Cli_TipoCliente=="N" ? 'selected' : '' ?>>Persona Natural</option>
+            <option value="C" <?php echo $cliente->Cli_TipoCliente=="C" ? 'selected' : '' ?>>Corporativo</option>
         </select>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
         <p class="form__labelSugerencia ocultar"></p>
@@ -93,11 +94,11 @@
     </div>
 
     <div class="form__campo t-xl">
-        <label for="Cli_Departamento" class="form__label--campo">Departamento</label>
-        <select id="Cli_Departamento"
-                name="Cli_Departamento"
+        <label for="Ciud_CodDepart" class="form__label--campo">Departamento</label>
+        <select id="Ciud_CodDepart"
+                name="Ciud_CodDepart"
                 data-select ="departamento" 
-                data-cy="Cli_Departamento"
+                data-cy="departamento"
                 class="form__input input--bl"
                 >
             <option value="" selected disabled>-- Seleccione una opción --</option>   
@@ -109,17 +110,27 @@
         </select>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">
         <p class="form__labelSugerencia ocultar"></p>
+        <p class="form__labelError  ocultar"></p>
     </div>
     
     <div class="form__campo t-xl">
-        <label for="Cli_Ciudad" class="form__label--campo">Ciudad</label>
-        <select id="Cli_Ciudad" 
+        <label for="Cli_FkCiud_Id" class="form__label--campo">Ciudad</label>
+        <select id="Cli_FkCiud_Id" 
                 name="Cli_FkCiud_Id"
                 data-select ="ciudad"
-                data-cy="Cli_Ciudad"
+                data-cy="ciudad"
                 class="form__input input--bl">
 
-                <option value="" selected>-- Seleccione una opción --</option>                   
+                <option value="" selected>-- Seleccione una opción --</option>     
+                <?php 
+                    if(!empty($ciudades)){
+                        foreach ($ciudades as $ciudad){
+                ?>
+                    <option value="<?php echo $ciudad->Ciud_Id; ?>"><?php echo $ciudad->Ciud_Nombre; ?></option>
+                <?php 
+                        }
+                    }
+                ?>              
 
         </select>
         <img src="/build/img/sistema/error.svg" alt="icono de error" class="form__iconError ocultar">

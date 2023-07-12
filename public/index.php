@@ -15,6 +15,7 @@ use Controllers\ProductoCodigoController;
 use Controllers\ProductoController;
 use Controllers\ProductoImgVideoController;
 use Controllers\ProductoOfertaController;
+use Controllers\ProveedorController;
 use Controllers\TablaController;
 use Controllers\UbicacionController;
 use Controllers\UsuarioController;
@@ -134,9 +135,22 @@ $router->get('/ciudad/api', [CiudadController::class,'listarCiudades']);
 
 
 // Cliente
+$router->get('/cliente/api', [ClienteController::class,'listar']);
 $router->get('/cliente', [ClienteController::class,'index']);
 $router->post('/cliente', [ClienteController::class,'index']);
-$router->get('/cliente/api', [ClienteController::class,'listar']);
+$router->get('/cliente/editar', [ClienteController::class,'editar']);
+$router->post('/cliente/editar', [ClienteController::class,'editar']);
+$router->post('/cliente/estado', [ClienteController::class,'estado']);
+$router->post('/cliente/eliminar', [ClienteController::class,'eliminar']);
+
+// Proveedor
+$router->get('/proveedor/api', [ProveedorController::class,'listar']);
+$router->get('/proveedor', [ProveedorController::class,'index']);
+$router->post('/proveedor', [ProveedorController::class,'index']);
+$router->get('/proveedor/editar', [ProveedorController::class,'editar']);
+$router->post('/proveedor/editar', [ProveedorController::class,'editar']);
+$router->post('/proveedor/estado', [ProveedorController::class,'estado']);
+$router->post('/proveedor/eliminar', [ProveedorController::class,'eliminar']);
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

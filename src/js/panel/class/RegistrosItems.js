@@ -231,6 +231,7 @@ export class RegistrosItems{
 
                 imgMain.setAttribute('alt','Archivo multimedia del producto');
                 imgMain.dataset.idArchivo = id;
+                imgMain.dataset.idRegistro = id;
                 imgMain.dataset.nombre = nombre;
                 imgMain.dataset.extension = extension;
                 imgMain.onclick=mostrarArchivo;
@@ -238,8 +239,11 @@ export class RegistrosItems{
                 let iconoEye = document.createElement('IMG');
                 iconoEye.setAttribute('src','/build/img/sistema/eye.svg');
                 iconoEye.setAttribute('alt','Icono para ampliar imagen o reproducir video');
+                iconoEye.dataset.idArchivo = id;
                 iconoEye.dataset.idRegistro = id;
                 iconoEye.dataset.nombre = nombre;
+                iconoEye.dataset.entidad = this.entidad;
+                iconoEye.dataset.tipo = 'archivo';
                 iconoEye.dataset.extension = extension;
                 iconoEye.onclick=mostrarArchivo;
 
@@ -488,14 +492,18 @@ export function cerrarPreview(){
 
 function mostrarArchivo(e){
 
-    const idArchivo = e.target.getAttribute('data-id-archivo');
+    const idArchivo = e.target.getAttribute('data-id-registro');
     const nombre = e.target.getAttribute('data-nombre');
     const extension = e.target.getAttribute('data-extension');
+    const entidad = e.target.getAttribute('data-entidad');
+    const tipo = e.target.getAttribute('data-tipo');
    
     const fondoNotificacion = document.querySelector('.preview');
-
-    let iconoEliminar = fondoNotificacion.querySelector('.eliminar-imagen > img');
-    iconoEliminar.setAttribute('data-id-archivo', idArchivo);
+    let iconoEliminar = fondoNotificacion.querySelector('.eliminar-imagen img');
+    iconoEliminar.setAttribute('data-id-registro', idArchivo);
+    iconoEliminar.setAttribute('data-entidad', entidad);
+    iconoEliminar.setAttribute('data-tipo', tipo);
+    iconoEliminar.onclick=confirmarEliminacion;
 
     let elemento;
 

@@ -10,7 +10,7 @@
         <p class="alerta exito ocultar"><?php echo $alertas['exito-cliente']['general']; ?></p>
 <?php } ?>
 
-<form method="POST" action="/cliente" data-form="cliente" data-cy="form-cliente" class="form" data-cy="form-cliente">
+<form method="POST" action="/cliente" data-form="cliente" data-cy="form-cliente" class="form">
     
     <?php include_once 'formulario.php'; ?>
     
@@ -21,11 +21,12 @@
                 class="form__btn btn-primario disabled"
                 disabled 
         >
+        <a href="#" class="form__btn btn-reset">Reset</a>
     </div>
 </form>
 
 <h2 class="panel__h2">Listado de registros</h2>
-<p class="panel__p"><span>Resultados encontrados: </span></p>
+<!-- <p class="panel__p"><span>Total registros: </span></p> -->
 <div class="contenedor-table">
     <!-- La propiedad data-tipo solo la tienen las tablas complejas, ya que pueden contener más tablas de entidades sencillas-->
     <table class="table" data-tipo="cliente">

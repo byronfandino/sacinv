@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use MVC\Router;
+use Model\Ciudad;
 use Model\Cliente;
 use Model\ClienteAPI;
 use Model\Departamento;
@@ -16,7 +17,7 @@ class ClienteController{
             header('Location: /');
         }
 
-        $sqlClientes = "SELECT Cli_Id, IF(Cli_TipoCliente = 'C', 'Corporativo', 'Persona Natural') AS Cli_TipoCliente, Cli_RazonSocial, Cli_Ced_Nit, Cli_Tel, Cli_Email, Cli_Direccion, Ciud_Nombre, Depart_Nombre, Cli_Status 
+        $sqlClientes = "SELECT Cli_Id, Cli_TipoCliente, IF(Cli_TipoCliente = 'C', 'Corporativo', 'Persona Natural') AS Nombre_TipoCliente, Cli_RazonSocial, Cli_Ced_Nit, Cli_Tel, Cli_Email, Cli_Direccion, Cli_FkCiud_Id, Ciud_Nombre, Ciud_CodDepart, Depart_Nombre, Cli_Status 
         FROM tblcliente, tblciudad, tbldepartamento 
         WHERE tblcliente.Cli_FkCiud_Id=tblciudad.Ciud_Id 
         AND tblciudad.Ciud_CodDepart = tbldepartamento.Depart_Codigo  
@@ -62,7 +63,7 @@ class ClienteController{
                     $resultado = $cliente->guardar(); 
                     if($resultado){
                         Cliente::setAlerta('exito-cliente', 'general', 'El registro ha sido guardado satisfactoriamente');
-
+                        $cliente = new Cliente();
                     }else{
                         
                         Cliente::setAlerta('error-cliente', 'general', 'No fue posible guardar el registro');
@@ -84,72 +85,83 @@ class ClienteController{
         ]);
     }
     
-    // public static function editar(Router $router){
+    public static function editar(Router $router){
 
-    //     // 1. Verificar que el usuario haya iniciado sesión y que por el método get haya recibido 
-    //     if(!isset($_SESSION['nombre']) || ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id']))){
-    //         header('Location: /');
-    //     }
+        // 1. Verificar que el usuario haya iniciado sesión y que por el método get haya recibido 
+        if(!isset($_SESSION['nombre']) || ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id']))){
+            header('Location: /');
+        }
 
-    //     //2. Verificar si hay un elemento get y es un número
-    //     if(!is_numeric($_GET['id'])) return;
+        //2. Verificar si hay un elemento get y es un número
+        if(!is_numeric($_GET['id']) || !is_numeric($_GET['Ciud_CodDepart'])) return;
         
-    //     //3. Buscar el id de la Categoria y cargar el objeto en memoria
-    //     $categoria = Categoria::find($_GET['id']);
+        //3. Buscar el id de la Categoria y cargar el objeto en memoria
+        $cliente = Cliente::find($_GET['id']);
+        $departamentos = Departamento::all('Depart_Nombre');
 
-    //     $alertas=[];
+        $fkDepart = $_GET['Ciud_CodDepart'];
+        $sqlCiudades = "SELECT * FROM tblciudad WHERE Ciud_CodDepart = '" . $fkDepart . "' ORDER BY Ciud_Nombre";
+        $ciudades = Ciudad::SQL($sqlCiudades);
 
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+        $alertas=[];
 
-    //         // 1. Sincronizar lo que digito el usuario en el objeto en memoria
-    //         $categoria->sincronizar($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-    //         // 2. Validamos lo digitado por el usuario
-    //         $alertas = $categoria->validar();
+            // 1. Sincronizar lo que digito el usuario en el objeto en memoria
+            $cliente->sincronizar($_POST);
 
-    //         if(empty($alertas)){
+            // 2. Validamos lo digitado por el usuario
+            $alertas = $cliente->validar();
+
+            if(empty($alertas)){
                 
-    //             // Si el nombre de la descripción no existe en la base de datos se procede a guardar
-    //             $resultado = $categoria->guardar();
+                // Si el nombre de la descripción no existe en la base de datos se procede a guardar
+                $resultado = $cliente->guardar();
 
-    //             if($resultado){
-    //                 Categoria::setAlerta('exito-categoria', 'general', 'El registro ha sido guardado satisfactoriamente');
-    //             }else{
-    //                 Categoria::setAlerta('error-categoria', 'general', 'No fue posible guardar el registro. Posiblemente ya exista un registro con la misma descripción o no hay conexión con la base de datos');
-    //             }
-    //         }
-    //         $alertas=Categoria::getAlertas();
-    //     }
+                if($resultado){
+                    Cliente::setAlerta('exito-cliente', 'general', 'El registro ha sido guardado satisfactoriamente');
+                }else{
+                    Cliente::setAlerta('error-cliente', 'general', 'No fue posible guardar el registro. Posiblemente ya exista un registro con la misma descripción o no hay conexión con la base de datos');
+                }
+            }
+            $alertas=Cliente::getAlertas();
+        }
 
-    //     //4. Verificamos si realiza algún cambio en el método POST
-    //     $router->renderPanel('panel/categoria/editar',[
-    //         'categoria' => $categoria,
-    //         'alertas' => $alertas
-    //     ]);
-    // }
+        //4. Verificamos si realiza algún cambio en el método POST
+        $router->renderPanel('panel/cliente/editar',[
+            'cliente' => $cliente,
+            'departamentos' => $departamentos,
+            'ciudades' => $ciudades,
+            'alertas' => $alertas
+        ]);
+    }
 
-    // public static function estado(){
+    public static function estado(){
 
-    //     if(!isset($_SESSION['nombre'])){
-    //         header('Location: /');
-    //     }
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
 
-    //     $categoria = new Categoria($_POST);
-    //     $resultado = $categoria->guardar();
+        $cliente = Cliente::find($_POST['id']);
+        $cliente->Cli_Status = $_POST['valor'];
 
-    //     echo json_encode($resultado);
-    // }
+        $resultado = $cliente->guardar();
+        echo json_encode($resultado);
+    }
 
-    // public static function eliminar(Router $router ){
+    public static function eliminar(){
 
-    //     if(!isset($_SESSION['nombre'])){
-    //         header('Location: /');
-    //     }
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
         
-    //     $categoria = new Categoria($_POST);
-    //     $resultado = $categoria->eliminar($categoria->Ctg_Id);
-    //     echo json_encode($resultado);
-    // }
+        $id = (int)$_POST['id'];
+        $cliente = Cliente::find($id);
+        if($cliente){
+            $resultado = $cliente->eliminar($cliente->Cli_Id);
+        }
+        echo json_encode($resultado);
+    }
 }
 
 ?>

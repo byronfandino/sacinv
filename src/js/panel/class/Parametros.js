@@ -90,7 +90,7 @@ export function limpiarCaja(campoSelec, foco = true){
     }
 }
 
-export function verificarMensajeGeneral(){
+export function showHideMensajeGeneral(){
     setTimeout(() => {
         
         const alerta = document.querySelector('.alerta');
@@ -118,14 +118,27 @@ export function verificarMensajeGeneral(){
 }
 
 export function limpiarFormulario(nombreForm){
-    const inputs = nombreForm.querySelectorAll('input:not([type="submit"])');
-    inputs.forEach( input => {
-        input.value="";
+
+    let errorCampo = false;
+    // Verificamos si existen mensajes de error
+    const labelsError = nombreForm.querySelectorAll('.form__labelError');
+    labelsError.forEach(error => {
+        if (error.textContent != ''){
+            errorCampo = true;
+        }
     });
-    inputs[0].focus();
+
+    if (!errorCampo){
+        const inputs = nombreForm.querySelectorAll('input:not([type="submit"])');
+        inputs.forEach( input => {
+            input.value="";
+        });
+
+        inputs[0].focus();
+    }
 }
 
-export function verificarMensajesError(){
+export function showHideMensajesError(){
     
     // Verificamos el error local del campo
     let labelsError = document.querySelectorAll('.form__labelError');
@@ -156,4 +169,55 @@ export function verificarMensajesError(){
         }
     });
 
+}
+
+export function resetFormulario(){
+
+    // Resetear los combosBox
+    const selects = document.querySelectorAll('select');
+    if (selects){
+        selects.forEach( select => {
+            select.value = "";
+        });
+    }    
+
+    // Resetear los inputs de texto
+    const inputs = document.querySelectorAll('input:not([type="submit"])');
+    inputs.forEach( input => {
+        input.value="";
+    });
+
+    // Verificamos el error local del campo
+    const labelsError = document.querySelectorAll('.form__labelError');
+    
+    // Limpiar mensajes de sugerencias
+    const labelsSugr = document.querySelectorAll('.form__labelSugerencia');
+    labelsSugr.forEach( label => {
+
+        if (!label.classList.add('ocultar')){
+            label.classList.add('ocultar');
+            label.textContent = '';
+        }
+    });
+
+    // Limpiar mensajes de error
+    labelsError.forEach( label => {
+        const campo = label.parentElement;
+        const iconoError = campo.querySelector('.form__iconError');
+        const iconoLimpiar = campo.querySelector('.form__limpiar');
+
+        if (!label.classList.add('ocultar')){
+            label.classList.add('ocultar');
+            iconoError.classList.add('ocultar');
+            label.textContent = '';
+    
+        }
+        
+        if(iconoLimpiar){
+            iconoLimpiar.style.right = "0.5rem";
+        }
+
+    });
+
+    inputs[0].focus();
 }

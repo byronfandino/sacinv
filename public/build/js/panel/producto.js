@@ -362,15 +362,13 @@ function campoDescripcion() {
                 // Se mostrarán los registros que coinciden de forma parcial o completa los registros
                 borrarFilas();
                 mostrarRegistrosAPI('input', 'Prod_Descripcion', texto);
-
-
+                
             } else {
 
                 //Si no coincide la busqueda se muestran todos los registros de la base de datos
                 estadoCampo('prodDescripcion', true);
                 borrarFilas();
                 mostrarRegistrosAPI();
-
             }
 
         } else {

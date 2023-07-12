@@ -324,7 +324,7 @@
                 class="form__btn btn-primario " 
         >
         
-        <a href="/producto" class="form__btn btn-secundario">Cancelar</a>
+        <a href="/cliente" class="form__btn btn-secundario">Cancelar</a>
     </div>
 </form>
 

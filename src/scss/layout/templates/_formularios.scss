@@ -743,6 +743,24 @@ legend{
     }
 }
 
+.btn-reset{
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: v.$rojo;
+    color: v.$blanco;
+    border: 1px solid v.$rojo;
+    font-size:1.8rem;
+    padding:1.8rem 0 1.8rem 0;
+
+    //Resolución tablet
+    @include m.tablet{
+        font-size:2rem;
+    }
+}
+
 .contenedor-imagenes{    
     display: flex;
     align-items: center;

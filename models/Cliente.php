@@ -37,7 +37,7 @@ class Cliente extends ActiveRecord{
 
             self::$alertas['error-cliente']['razonsocial'][]="El campo Nombre - Razon Social es obligatorio";
 
-        }else if (!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{3,40}$/', $this->Cli_RazonSocial)){
+        }else if (!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ. ]{3,40}$/', $this->Cli_RazonSocial)){
 
             self::$alertas['error-cliente']['razonsocial'][]="Solo debe contener letras y números, mayor a 3 caracteres";
 

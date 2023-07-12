@@ -1,4 +1,4 @@
-import { mostrarOcultarSugerencias, rutaServidor, estadoBoton} from "./Parametros.js";
+import { mostrarOcultarSugerencias, ocultarError, rutaServidor, estadoBoton, limpiarCaja} from "./Parametros.js";
 
 export let objetoRegistroGeneral;
 
@@ -10,8 +10,14 @@ export class Persona{
         this.registrosAPI = '';
         this.arrayAPI = objeto.arrayAPI;
         this.camposTabla = objeto.camposTabla;
-        // this.fkId = objeto.fkId;
-        // this.stringAPI = objeto.stringAPI;
+        this.stringAPI = objeto.stringAPI;
+        this.convertirMayuscula = objeto.convertirMayuscula;
+        this.convertirMinuscula = objeto.convertirMinuscula;
+        this.existe = objeto.existe;
+
+        // Id adicionales en la ruta GET para pasarlo por parámetro para MODIFICAR el registro
+        this.idAdd = objeto.idAdd;
+        this.adicionesId = '';
 
         this.reglas='';
         this.sugerencias='';
@@ -29,41 +35,89 @@ export class Persona{
     }
 
     asignarValidacion(){
-        
+
         this.validarCampos.forEach( idInput => {
             const inputForm = document.querySelector(`#${idInput}`); //Necesitamos obtener el tagname
             const campoCompleto = inputForm.parentElement;
             
-
             const labelSugerencia = campoCompleto.querySelector('.form__labelSugerencia');
+            const labelError = campoCompleto.querySelector('.form__labelError');
+            const iconoError = campoCompleto.querySelector('.form__iconError');
+
             let expresionRegular='';
             
             let keysReglas = Object.keys(this.reglas);
 
             if (inputForm.tagName === 'INPUT'){
 
-                inputForm.addEventListener('input', () => {
-            
+                inputForm.addEventListener('input', e => {3
+
+                    // Convertir a mayusculas
+                    if(this.convertirMayuscula){
+                        this.convertirMayuscula.forEach(inputField => {
+                            if (inputField == idInput){
+                                inputForm.value = e.target.value.toUpperCase();
+                            }
+                        });
+                    }
+                    // Convertir a mayusculas
+                    if(this.convertirMinuscula){
+                        this.convertirMinuscula.forEach(inputField => {
+                            if (inputField == idInput){
+                                inputForm.value = e.target.value.toLowerCase();
+                            }
+                        });
+                    }
+                    
                     keysReglas.forEach( key => {
                         
                         if (key == idInput){
                             expresionRegular = inputForm.value.match(this.reglas[key]);
     
                             if(expresionRegular){
-    
+                                // Se coloca este codigo en la parte superior porque no se está evaluando cuando el campo no se encuentra como un campo de filtro
                                 mostrarOcultarSugerencias(labelSugerencia, '', false);
+                                this.estadoCampo(idInput, true);
     
-                                if(this.boton){
-                                    this.onOffBoton(idInput, true);
+                                if (this.stringAPI[key]){
+
+                                    // Filtrar en la tabla de datos
+                                    if(this.stringAPI[key].includes(e.target.value)){
+
+                                        // Verificamos si conincide de forma total con el registro de la base de datos
+                                        if(this.arrayAPI[key].includes(e.target.value) && this.existe.includes(key)){
+                                            mostrarOcultarSugerencias(labelSugerencia, 'Este registro ya existe', true);
+                                            this.estadoCampo(idInput, false);
+        
+                                        }else{
+                                            mostrarOcultarSugerencias(labelSugerencia, '', false);
+                                            this.estadoCampo(idInput, true);
+                                        }
+    
+                                        // Reseteamos los datos de la tabla
+                                        this.eliminarFilasTabla();
+                                        this.cargarDatos(key, e.target.value);
+    
+                                    }else{
+                                        mostrarOcultarSugerencias(labelSugerencia, '', false);
+                                        this.eliminarFilasTabla();
+                                    }
                                 }
-    
+                                                                
                             }else{
     
                                 mostrarOcultarSugerencias(labelSugerencia, this.sugerencias[key], true);
+                                this.estadoCampo(idInput, false);
                                 
-                                if(this.boton){
-                                    this.onOffBoton(idInput, false);
-                                }
+                            }
+
+                            if (e.target.value == ''){
+                                this.eliminarFilasTabla();
+                                this.cargarDatos();
+                            }
+
+                            if(labelError && labelError.textContent != ''){
+                                ocultarError(labelError, iconoError);
                             }
                         }
                     });
@@ -77,42 +131,60 @@ export class Persona{
                     keysReglas.forEach( key => {
                         
                         if (key == idInput){
-
+                            
                             expresionRegular = inputForm.value.match(this.reglas[key]);
-    
+                            
                             if(expresionRegular){
     
                                 mostrarOcultarSugerencias(labelSugerencia, '', false);
-    
-                                if(this.boton){
-                                    this.onOffBoton(idInput, true);
+                                this.estadoCampo(idInput, true);
+
+                                if(this.arrayAPI[key].includes(inputForm.value)){
+                                        // Reseteamos los datos de la tabla
+                                        this.eliminarFilasTabla();
+                                        this.cargarDatos(key, inputForm.value);
+                                }else{
+                                        this.eliminarFilasTabla();
                                 }
-    
                             }else{
-    
                                 mostrarOcultarSugerencias(labelSugerencia, this.sugerencias[key], true);
-                                
-                                if(this.boton){
-                                    this.onOffBoton(idInput, false);
-                                }
+                                this.estadoCampo(idInput, false);
+                            }
+
+                            if(labelError && labelError.textContent != ''){
+                                ocultarError(labelError, iconoError);
                             }
                         }
                     });
+
+                    if (inputForm.value == ''){
+                        this.eliminarFilasTabla();
+                        this.cargarDatos();
+                    }
+
                 });
             }
+
+
         });
     }
 
     eliminarFilasTabla(){
         let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
-        let filas = tabla.querySelectorAll(".tbody > tr");
-        
-        if(filas){
-            // Eliminando todas las filas
-            filas.forEach( fila => {
-                fila.remove();
-            });
+        let filas = '';
+
+        if(tabla){
+
+            filas = tabla.querySelectorAll(".tbody > tr");
+
+            if(filas){
+                // Eliminando todas las filas
+                filas.forEach( fila => {
+                    fila.remove();
+                });
+            }
         }
+        
     }
 
     // Metodo para obtener los registros y mostrarlo en las tablas del HTML
@@ -127,7 +199,9 @@ export class Persona{
               resultado.then((result) => {
                   if (result){
                     this.registrosAPI = result;
+                    // console.log(this.registrosAPI);
                     this.cargarDatos();
+                    this.estadoRegistro();
                       setTimeout(() => {
                           Swal.close();
                       }, 500);
@@ -137,29 +211,48 @@ export class Persona{
         });
     }
 
-    cargarDatos(){
+    cargarDatos( campo = '', valor = ''){
 
         let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
         let llavesArray = Object.keys(this.arrayAPI);
         
-        // Limpiamos los registros almacenados en cada array
-        if(this.registrosAPI){
-            llavesArray.forEach( key => {
-                this.arrayAPI[key]='';
-            });
-        }
-        
-        // 
-        this.registrosAPI.forEach( registro => {
-            
-            llavesArray.forEach( key => {
-                this.arrayAPI[key] = [...this.arrayAPI[key], registro[key]];
-            });
+        if(campo == ''){
 
-            if (tabla){
-                this.crearFilaTabla(registro);
+            // Limpiamos los registros almacenados en cada array
+            if(this.registrosAPI){
+                llavesArray.forEach( key => {
+                    this.arrayAPI[key]='';
+                });
             }
-        });
+            
+            // 
+            this.registrosAPI.forEach( registro => {
+                
+                llavesArray.forEach( key => {
+                    this.arrayAPI[key] = [...this.arrayAPI[key], registro[key]];
+                });
+    
+                if (tabla){
+                    this.crearFilaTabla(registro);
+                }
+            });
+            
+            // pasamos el array a una cadena string
+            llavesArray.forEach(key => {
+                this.stringAPI[key] = this.arrayAPI[key].toString();
+            });    
+        }else{
+            if (valor != ''){
+                this.registrosAPI.forEach( registro => {
+                    if(registro[campo].includes(valor)){
+                        if (tabla){
+                            this.crearFilaTabla(registro);
+                        }
+                    }
+                });
+            } 
+        }
+
     }
 
     crearFilaTabla(registro){
@@ -167,7 +260,7 @@ export class Persona{
         // Obtenemos las llaves del objeto
         let llaves = Object.keys(registro);
         let id = registro[llaves[0]];
-                        
+
         let arrayTD = [];
 
         llaves.forEach( (llave, index) => {
@@ -179,6 +272,12 @@ export class Persona{
                 const posicion = Object.values(this.camposTabla[index])[1];
                 const clases = Object.values(this.camposTabla[index])[2];
                 const td = document.createElement('TD');
+
+                this.idAdd.forEach( idCampo => {
+                    if (idCampo == llave){
+                        this.adicionesId = this.adicionesId + '&' + idCampo + "=" + registro[idCampo]; 
+                    }
+                });
                 
                 // Solo se crean los elementos que se van a mostrar en la tabla
                 if (posicion !== null){
@@ -284,9 +383,14 @@ export class Persona{
         imgModificar.setAttribute('alt','Imagen Editar');
 
         const linkModificar = document.createElement('A');
-        linkModificar.setAttribute('href', `${rutaServidor}${this.entidad}/editar?id=${id}`);
+        linkModificar.setAttribute('href', `${rutaServidor}${this.entidad}/editar?id=${id}${this.adicionesId}`);
         linkModificar.appendChild(imgModificar);
         linkModificar.appendChild(spanModificar);
+
+        let ultimo = this.idAdd.length - 1;
+        if (this.adicionesId.includes(this.idAdd[ultimo])){
+            this.adicionesId='';
+        }
 
         const tdModificar = document.createElement('TD');
         tdModificar.classList.add('tbody__td--icon');
@@ -346,87 +450,7 @@ export class Persona{
         document.querySelector(`table[data-tipo="${this.nombreTabla}"] .tbody`).appendChild(tr);
     }
 
-    // Método para 
-    getFiles(id){
-        let resultado = getRegistrosAPI(id, this.entidad);
-        resultado.then(result => {
-            // Devuelve el arreglo de la api
-            this.registrosAPI = result;
-            this.listarFiles();
-        });
-    }
-
-    listarFiles(){
-
-        // si existen registros
-        if (this.registrosAPI != ''){
-
-            let llaves = '';
-            
-            llaves = Object.keys(this.registrosAPI[0]);
-
-            this.registrosAPI.forEach(registro => {
-                
-                let id = registro[llaves[0]];
-                let archivo = registro[llaves[1]].split('.');
-                let nombre = archivo[0];
-                let extension = archivo[1];
-                
-                let imgMain = document.createElement('IMG');
-
-                if (extension === 'mp4'){
-                    imgMain.setAttribute('src',`/build/img/sistema/iconoVideo-ng.svg`);
-                    imgMain.style.width="150px";
-                    imgMain.style.height="100px";
-                }else{
-                    imgMain.setAttribute('src',`/build/img/productos/${nombre}-opt.${extension}`);    
-                }
-
-                imgMain.setAttribute('alt','Archivo multimedia del producto');
-                imgMain.dataset.idArchivo = id;
-                imgMain.dataset.nombre = nombre;
-                imgMain.dataset.extension = extension;
-                imgMain.onclick=mostrarArchivo;
-                
-                let iconoEye = document.createElement('IMG');
-                iconoEye.setAttribute('src','/build/img/sistema/eye.svg');
-                iconoEye.setAttribute('alt','Icono para ampliar imagen o reproducir video');
-                iconoEye.dataset.idRegistro = id;
-                iconoEye.dataset.nombre = nombre;
-                iconoEye.dataset.extension = extension;
-                iconoEye.onclick=mostrarArchivo;
-
-                let iconoEliminar = document.createElement('IMG');
-                iconoEliminar.setAttribute('src','/build/img/sistema/eliminar-bl.svg');
-                iconoEliminar.setAttribute('alt','Icono para eliminar archivo');
-                iconoEliminar.dataset.idRegistro = id;
-                iconoEliminar.dataset.tipo = 'archivo';
-                iconoEliminar.dataset.entidad = this.entidad;
-                iconoEliminar.onclick=confirmarEliminacion;
-
-                let divContentAcciones = document.createElement('DIV');
-                divContentAcciones.appendChild(iconoEye);
-                divContentAcciones.appendChild(iconoEliminar);
-                divContentAcciones.classList.add('file__content__acciones');
-
-                let divContentItem = document.createElement('DIV');
-                divContentItem.appendChild(imgMain);
-                divContentItem.appendChild(divContentAcciones);
-                
-                if (extension === 'mp4'){
-                    divContentItem.style.border="1px solid #000000";
-                    divContentItem.style.padding='2rem';
-                }
-
-                divContentItem.classList.add('file__content__item');
-
-                let fileContent = document.querySelector('.file__content');
-                fileContent.appendChild(divContentItem);
-            });
-        }
-    }
-
-    onOffBoton(tipo, estado){
+    estadoCampo(tipo, estado){
         
         let cntEstado = 0;
         if (Object.keys(this.estadoCampos).includes(tipo)){
@@ -441,7 +465,7 @@ export class Persona{
             }
         }
         
-        if(cntEstado == 8){
+        if(cntEstado == this.validarCampos.length){
 
             estadoBoton(this.boton, true);
         }else{
@@ -451,56 +475,129 @@ export class Persona{
         cntEstado=0;
     }
 
-    guardarRegistro(objeto, fkKey){
+    estadoAllCampos(){
+        // console.log(this.estadoCampos);
         
-        Swal.fire({
-            title: 'Guardando registro...',
-            showConfirmButton: false,
-            didOpen: () => {
-              Swal.showLoading();
-              let resultado = guardar( objeto, this.entidad);
+        for (let llave in this.estadoCampos){
+            
+            const input = document.querySelector(`#${llave}`);
+            const campo = input.parentElement;
+            const lbsugr = campo.querySelector('.form__labelSugerencia');
+            const lberror = campo.querySelector('.form__labelError');
 
-              resultado.then((result) => {
-
-                if (result){
-
-                    this.eliminarFilasTabla();
-                    this.obtenerRegistros(fkKey);
-
-                    // Cerramos esta ventana emergente
-                    setTimeout(() => {
-                        Swal.close();
-                    }, 500);
-
-                }else{
-                    // Mantenemos esta ventana emergente
-                    Swal.fire(
-                        'Error!',
-                        'No fue posible guardar este registro, posiblemente ya se encuentre registrado',
-                        'error'
-                    )
-                }
-
-
-              }); 
+            if (input.value != '' && lbsugr.textContent == '' && lberror.textContent == '' ){
+                this.estadoCampos[llave]=true;
             }
-        });
+        }
     }
 
-    botonLimpiar(campos){
-        campos.forEach( campo => {
-            const txtCampo = document.querySelector(`#${campo}`);
-            const btnLimpiar = txtCampo.parentElement.querySelector('.form__limpiar');
-            btnLimpiar.addEventListener('click', () => {
-                // Vaciamos el campo
-                txtCampo.value = '';
+    botonLimpiar() {
 
-                // Cambiamos el estado del campo a false
-                this.onOffBoton(campo, false);
+        const btnLimpiar = document.querySelectorAll('.form__limpiar');
+    
+        btnLimpiar.forEach(boton => {
+    
+            boton.addEventListener('click', (e) => {
+                
+                let campo = boton.parentElement;
+    
+                e.preventDefault();
+                // limpiarmos la caja del texto y los mensajes
+                limpiarCaja(campo);
+                
+                // cambiamos el estado a false del campo borrado
+                let cajaInput = campo.querySelector('input');
+
+                this.estadoCampo(cajaInput.id, false)
+
+                // Obtenemos los campos por los cualse se hace el filtro
+                let arrayKeys = Object.keys(this.arrayAPI);
+                // validamos si los campos del filtro están vacios
+                
+                let cnt = false;
+                arrayKeys.forEach( campo => {
+                    const inputText = document.querySelector(`#${campo}`);
+                    
+                    if (inputText.value != '' ){
+                        
+                        cnt = true;
+
+                        if(this.stringAPI[campo].includes(inputText.value)){
+                            this.eliminarFilasTabla();
+                            this.cargarDatos(campo, inputText.value);
+                        }else{
+                            this.eliminarFilasTabla();
+                        }
+                    }
+
+                });
+
+                if (!cnt){
+                    this.eliminarFilasTabla();
+                    this.cargarDatos();
+                }
             });
         });
     }
 
+    estadoRegistro(){
+        const checks = document.querySelectorAll('.check');
+        if (checks){
+        
+            checks.forEach( check => {
+                // Evento click
+                check.addEventListener('click', () => {
+    
+                    // Obtenemos el botón que se encuentra dentro del contenedor
+                    let fondoBtn = check.lastElementChild;
+                    let boton = check.lastElementChild.firstElementChild;
+                    let labelSi = check.lastElementChild.firstElementChild.nextElementSibling;
+                    let labelNo = check.lastElementChild.firstElementChild.nextElementSibling.nextElementSibling;
+                    let inputId = labelNo.nextElementSibling;
+                    let inputStatus = inputId.nextElementSibling;
+
+                    if(boton.className.includes('inactivo')){
+
+                        boton.classList.remove('inactivo');
+                        labelSi.classList.remove('ocultar');
+                        fondoBtn.classList.remove('inactivo');
+                        labelNo.classList.add('ocultar');
+                        inputStatus.setAttribute('value','E');
+
+                    }else{
+
+                        boton.classList.add('inactivo');
+                        labelSi.classList.add('ocultar');
+                        fondoBtn.classList.add('inactivo');
+                        labelNo.classList.remove('ocultar');
+                        inputStatus.setAttribute('value','D');
+
+                    }
+
+                    // Una vez asignado el inputStatus se envia por el POST
+                    let resultado = cambiarEstado(this.entidad, inputId.value, inputStatus.value );
+
+                    resultado.then(result => {
+                        // console.log(result);
+                        if (result){
+                            // como el resultado fue satisfactorio, procedemos a cambiar el estado en el arreglo de objetos cargado en memoria
+                            this.registrosAPI.forEach( registro => {
+
+                                if(Object.values(registro)[0] == inputId.value){
+
+                                    // Accedemos a la última posicion del arreglo donde se encuentra almacenado el status
+                                    let posicion = Object.keys(registro).length - 1;
+                                    let campos = Object.keys(registro);
+                                    registro[campos[posicion]]=inputStatus.value;
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        }
+    }
+    
 }
 
 // Se coloca como una función aparte, ya que NO tiene acceso a las propiedades del objeto
@@ -562,8 +659,7 @@ async function eliminarAPI(id, entidad ){
     datos.append('id', id);
 
     try {
-        let direccion;
-        direccion = rutaServidor + entidad + '/eliminar';
+        let direccion = rutaServidor + entidad + '/eliminar';
         
         // Petición hacia la API
         const respuesta = await fetch(direccion, {
@@ -611,106 +707,44 @@ async function getRegistrosAPI(entidad){
     }
 }
 
-export function cerrarPreview(){
-
-    const contenedorPreview = document.querySelector('.preview');
-    const cerrarVentana = document.querySelector('.cerrar-preview');
-
-    if (cerrarVentana){
-        
-        cerrarVentana.addEventListener('click', () =>{
-            let img = document.querySelector('.preview > img');
-            let video = document.querySelector('.preview > video');
-
-            if (img){
-                img.remove();
-            }else if(video){
-                video.remove();
-            }
-
-            contenedorPreview.classList.add('ocultar');
-
-        });
-    }
-}
-
-function mostrarArchivo(e){
-
-    const idArchivo = e.target.getAttribute('data-id-archivo');
-    const nombre = e.target.getAttribute('data-nombre');
-    const extension = e.target.getAttribute('data-extension');
-   
-    const fondoNotificacion = document.querySelector('.preview');
-
-    let iconoEliminar = fondoNotificacion.querySelector('.eliminar-imagen > img');
-    iconoEliminar.setAttribute('data-id-archivo', idArchivo);
-
-    let elemento;
-
-    if (e.target.getAttribute('data-extension') === 'mp4'){
-
-        elemento = document.createElement('VIDEO');
-        elemento.setAttribute('src', '/build/img/productos/' + nombre + '.' + extension);
-        elemento.setAttribute('controls','');
-
-    }else{
-        
-        elemento = document.createElement('IMG');
-        elemento.setAttribute('src', '/build/img/productos/' + nombre + '.' + extension);
-
-    }
-
-    // Verificamos si existe una imagen o video previo para eliminarlo 
-    const imgPrevio = document.querySelector('.preview > img');
-    const videoPrevio = document.querySelector('.preview > video');
-
-    if(imgPrevio){
-        imgPrevio.remove();
-    }else if (videoPrevio){
-        videoPrevio.remove();
-    }
-
-    // Procedemos a insertar la imagen o video en el contenedor
-    fondoNotificacion.insertBefore(elemento, fondoNotificacion.querySelector('.eliminar-imagen'));
-    fondoNotificacion.classList.remove('ocultar');
-    
-}
-
 // Se define como POST Elemento, porque es lo que ocurre en el POST
-async function guardar(objeto, entidad){
+export async function cambiarEstado(entidad, id, valor){
 
-    //FormData es como el submit de los datos de un formulario HTML pero en JavaScript
-    const formulario = new FormData();
-    
-    for (const clave in objeto){
-        formulario.append(clave, objeto[clave]);
-    }
+    //FormData es como el submit de los datos de un formulario HTML pero en JavaScript 
+    const datos = new FormData();
+    datos.append('id', id);//Se agregan todos los datos con append
+    datos.append('valor', valor);
 
     try {
-        let direccion = rutaServidor + entidad + '/api';
+        let direccion = rutaServidor + entidad + '/estado';
+        console.log(direccion);
         // Petición hacia la API
         const respuesta = await fetch(direccion, {
             method: 'POST', //método por el que se envia la información al servidor
-            body: formulario //enviamos datos al servidor definidos anteriormente, solo se hace en el cuerpo de la petición
+            body: datos //enviamos datos al servidor definidos anteriormente, solo se hace en el cuerpo de la petición
         });
 
         const resultado = await respuesta.json();
-        if (resultado){
-
-            console.log(resultado);
-            return resultado;
-        }else{
-            console.log(resultado);
-            return false;
-        }
+        return resultado;
 
     } catch (error) {
 
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un error al momento de guardar el registro',
-            button: 'OK' 
-        });
+        if (proceso === 'estado'){
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al momento de cambiar el estado del registro',
+                button: 'OK' 
+            });
+
+        }else if (proceso == 'eliminar'){
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al momento de eliminar el registro',
+                button: 'OK' 
+            });
+        }
     }
 }
+

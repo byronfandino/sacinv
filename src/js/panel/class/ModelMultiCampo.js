@@ -558,7 +558,7 @@ export function mostrarRegistrosAPI(evento = 'DOM', campo = '', valor = ''){
                });
    
                objetoMultiCampo.arrayAPI[arrayCampo] = nuevoArregloCampo;
-   
+               
            });
        }
    
@@ -767,7 +767,7 @@ export function crearRegistro(registro, filtro = 'DOM'){
 
 function botonStatus(){
 
-    const checks = document.querySelectorAll('.check');
+    let checks = document.querySelectorAll('.check');
 
     if (checks){
         
