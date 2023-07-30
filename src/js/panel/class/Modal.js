@@ -8,7 +8,7 @@ import { validarCombo } from "./ModelMultiCampo.js";
 
 export class Modal{
 
-    constructor(entidad, expresion, msg, campo){
+    constructor(entidad, expresion, msg, campo, valorDefault = ''){
 
         this.entidad = entidad;
         this.expresion = expresion;
@@ -19,6 +19,7 @@ export class Modal{
         this.arrayCampo = [];
         this.stringCampo = '';
         this.campo = campo;
+        this.valorDefault = valorDefault;
         
     }
 
@@ -49,7 +50,7 @@ export class Modal{
                 estadoBoton(botonGuardar, false);
                 
             }else if((!expresionRegular && existeRegistro)||(expresionRegular && existeRegistro)){
-                mostrarOcultarSugerencias(labelSugerencia, 'Esta categoría ya se encuentra registrada', true);
+                mostrarOcultarSugerencias(labelSugerencia, 'Este registro ya existe', true);
                 estadoBoton(botonGuardar, false);
             }
     
@@ -74,7 +75,7 @@ export class Modal{
                     arrayValores = [obj];
                 }
                 
-                if (llave.includes('Descripcion')){
+                if (llave.includes('Descripcion') || llave.includes('Nombre')){
                     obj[llave] = input.value; 
                     arrayValores = [...arrayValores, obj];
                 }
@@ -220,15 +221,31 @@ export class Modal{
                             optionEntidad.setAttribute('value', registro[keysObject[0]]);
                             optionEntidad.textContent=registro[keysObject[1]];
 
-                            if (optionEntidad.textContent == input.value){
+                            if (optionEntidad.textContent.toLowerCase() == input.value){
                                 optionEntidad.selected = true ;
                             }
 
                             comboBox.appendChild(optionEntidad);
                         }
                     });
+
+                    // Si el comboBox no se le asignó ningún valor entonces se asigna el que se encuentra en el default
+                    if (comboBox.value == '' && this.valorDefault != ''){
+
+                        const optionCombobox = document.querySelectorAll(`#${this.entidad} option`);
+                        optionCombobox.forEach( option => {
+                            
+                            if (option.textContent == this.valorDefault){
+                                option.selected = true;
+                            }
+    
+                        });
+                    }
+
                 }
+
             }
+
         });
     }
 
@@ -265,9 +282,7 @@ async function guardar(objeto, entidad){
     const formulario = new FormData();
     
     for (const clave in objeto){
-
         formulario.append(clave, objeto[clave]);
-
     }
 
     try {

@@ -386,12 +386,14 @@ export function mensajeSugerencia(tipo){
 export function estadoBotonPrincipal(estado){
     const boton = document.querySelector(`[data-form="${objetoMultiCampo.entidad}"] [data-btn="btn-enviar"]`);
 
-    if (estado){
-        boton.classList.remove('disabled');
-        boton.removeAttribute('disabled');                                
-    }else{
-        boton.classList.add('disabled');
-        boton.setAttribute('disabled', '');                                
+    if(boton){
+        if (estado){
+            boton.classList.remove('disabled');
+            boton.removeAttribute('disabled');                                
+        }else{
+            boton.classList.add('disabled');
+            boton.setAttribute('disabled', '');                                
+        }
     }
 }
 

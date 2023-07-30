@@ -1,5 +1,5 @@
 <div class="form__campo t-xxl">
-    <label for="metodoDePago" class="form__label--campo">Nombre de la Ubicación</label>
+    <label for="metodoDePago" class="form__label--campo">Método de pago</label>
     <input type="text"
             id="metodoDePago"
             name="MP_Nombre"

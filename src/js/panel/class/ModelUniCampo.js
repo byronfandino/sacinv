@@ -254,19 +254,20 @@ function rutaPrincipal(e){
 
     let expresionRegular;
     expresionRegular = e.target.value.match(objetoUniCampo.expresion);
+    const label = e.target.parentElement.querySelector('.form__labelSugerencia'); 
     let texto = formatearTexto(e.target.value);
     let existeRegistro = objetoUniCampo.arrayDescripcion.includes(texto);
 
     if(expresionRegular && !existeRegistro){
-        mostrarOcultarSugerencias('', false);
+        mostrarOcultarSugerencias(label, '', false);
         estadoBoton(btnSubmitCampo, true);
         
     }else if(!expresionRegular && !existeRegistro){
-        mostrarOcultarSugerencias(objetoUniCampo.msg, true);
+        mostrarOcultarSugerencias(label, objetoUniCampo.msg, true);
         estadoBoton(btnSubmitCampo, false);
         
     }else if((!expresionRegular && existeRegistro)||(expresionRegular && existeRegistro)){
-        mostrarOcultarSugerencias('Esta categoría ya se encuentra registrada', true);
+        mostrarOcultarSugerencias(label, 'Esta categoría ya se encuentra registrada', true);
         estadoBoton(btnSubmitCampo, false);
     }
 

@@ -229,7 +229,7 @@ textarea{
 
 //Utilizado en los formularios del panel principal
 .form{
-    // border:1px solid red;
+    
     margin-top: 1rem;
     padding:0 0.2rem 0 1rem;
     display:flex;
@@ -239,6 +239,7 @@ textarea{
     @include m.tablet{
         flex-flow:row wrap;
     }
+
     // Contenedor del input
     &__campo {
         // border:1px solid blue;
@@ -247,6 +248,9 @@ textarea{
         margin: 1rem 0;
         line-height: 0;
 
+        &.ocultar{
+            display:none;
+        }
         //Resolución tablet
         @include m.tablet{
             margin-left:1rem;
@@ -271,7 +275,7 @@ textarea{
         }
         
         &.t-xxl{
-            width: 90%;
+            // width: 90%;
             
             //Resolución tablet
             @include m.tablet{
@@ -294,13 +298,13 @@ textarea{
         left:1rem;
         padding:1rem 0.5rem;
         color: v.$gris-oscuro;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         background-color: v.$blanco;
         // z-index: 50;
         
         //Resolución tablet
         @include m.tablet{
-            font-size: 1.6rem;
+            font-size: 1.3rem;
         }
 
         & > .obligatorio{
@@ -311,7 +315,7 @@ textarea{
     //input para el panel
     &__input{
         
-        font-size: 1.6rem;
+        font-size: 1.3rem;
         padding: 1.3rem 2.8rem 0.8rem 0.8rem;
         outline: none;
         transition-duration: 0.3s;
@@ -321,6 +325,10 @@ textarea{
 
         &:focus{
             box-shadow: 0px 0px 8px v.$gris-oscuro;
+        }
+        
+        &.disabled{
+            cursor:not-allowed;
         }
     }
     
@@ -423,21 +431,54 @@ textarea{
         width: 19rem;
     }
 
+    &__busqueda{
+        position: relative;
+        
+        padding: 0;
+        margin:0;
+        border: 1px solid v.$gris;
+        box-shadow: 3px 3px 5px v.$gris;
+        top:-1rem;
+        max-height: 20rem;
+        overflow-y: scroll;
 
+        & li{
+            list-style: none;
+            padding: 0.5rem 0 0.5rem 0.5rem;
+            line-height: 140%;
+            font-size: 1.3rem;
+
+            a{
+                font-size: 1.4rem;
+                text-decoration: none; 
+                font-weight:bold;
+                color:v.$gris-oscuro;
+            }
+
+            &:hover{
+                background-color: lighten(v.$gris, 15%);
+                cursor: pointer;
+            }
+        }
+
+        &.ocultar{
+            display: none;
+        }
+    }
 }
 
 .form__multirregistros__tabla{
     width: 100%;
     display: flex;
     flex-direction: column;
-    margin-top: 3rem;
+    margin-top: 1rem;
 }
 
 .fieldset__campos{
     width: 100%;
     display:flex;
     flex-flow:column wrap;
-    
+    margin-bottom:1rem;
     //Resolución tablet
     @include m.tablet{
         flex-flow:row wrap;
@@ -445,7 +486,7 @@ textarea{
 }
 
 .fieldset__archivos{
-    margin: 3rem 0;
+    margin: 1rem 0;
     width: 100%;
 
 }
@@ -640,9 +681,10 @@ legend{
         font-size: 2rem;
     }
 
-    &:hover{
+    &.disabled:hover{
         cursor: pointer;
     }
+
 }
 
 // Agregamos una clase adicional controlar la alineación del botón
@@ -650,7 +692,9 @@ legend{
     display:flex;
     flex-flow:column wrap;
     row-gap: 1.5rem;
+    align-items: center;
     margin: 0 auto;
+    width: 100%;
     
     //Resolución tablet
     @include m.tablet{
@@ -663,6 +707,8 @@ legend{
 
 //reescribimos algunas propiedades general del botón para el panel
 .form__btn{
+    margin-top:0.5rem;
+    width:90%;
     //Resolución tablet
     @include m.tablet{
         width:19rem;

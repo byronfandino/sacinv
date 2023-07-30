@@ -5,7 +5,7 @@ namespace Model;
 class Parametro extends ActiveRecord{
     protected static $tabla = 'tblparametros';
     protected static $columnasDB = ['Pm_Id','Pm_Nit','Pm_RazonSocial','Pm_Direccion',
-    'Pm_Tel','Pm_Whatsapp','Pm_Email','Pm_Slogan','Pm_Logo','Pm_TipoInv'];
+    'Pm_Tel','Pm_Whatsapp','Pm_Email','Pm_Slogan','Pm_Logo','Pm_TipoInv','Pm_XjeVenta', 'Pm_XjeIVA'];
 
     public $Pm_Id;
     public $Pm_Nit;
@@ -17,6 +17,8 @@ class Parametro extends ActiveRecord{
     public $Pm_Slogan;
     public $Pm_Logo;
     public $Pm_TipoInv;
+    public $Pm_XjeVenta;
+    public $Pm_XjeIVA;
 
     public function __construct($args = [])
     {
@@ -30,6 +32,8 @@ class Parametro extends ActiveRecord{
         $this->Pm_Slogan=$args['Pm_Slogan'] ?? '';
         $this->Pm_Logo=$args['Pm_Logo'] ?? null;
         $this->Pm_TipoInv=$args['Pm_TipoInv'] ?? '';
+        $this->Pm_XjeVenta=$args['Pm_XjeVenta'] ?? '';
+        $this->Pm_XjeIVA=$args['Pm_XjeIVA'] ?? '';
     }
 
     public function validar(){
@@ -112,6 +116,27 @@ class Parametro extends ActiveRecord{
             $this->Pm_Slogan = trim($this->Pm_Slogan);
         }
 
+
+        if(!$this->Pm_XjeVenta){
+            self::$alertas['error-parametro']['Pm_XjeVenta'][] = "El campo % de Venta es obligatorio";            
+        }
+
+        if (!preg_match('/^[0-9]{1,3}$/', $this->Pm_XjeVenta)){
+            self::$alertas['error-parametro']['Pm_XjeVenta'][]="Solo debe contener números entre 1 y 100";
+        }else{
+            $this->Pm_XjeVenta = trim($this->Pm_XjeVenta);
+        }
+
+        if(!$this->Pm_XjeIVA){
+            self::$alertas['error-parametro']['Pm_XjeIVA'][] = "El campo % de Venta es obligatorio";            
+        }
+
+        if (!preg_match('/^[0-9]{1,3}$/', $this->Pm_XjeIVA)){
+            self::$alertas['error-parametro']['Pm_XjeIVA'][]="Solo debe contener números entre 1 y 100";
+        }else{
+            $this->Pm_XjeIVA = trim($this->Pm_XjeIVA);
+        }
+        
         return self::$alertas;
     }
 

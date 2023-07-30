@@ -2,21 +2,23 @@
 
 namespace Controllers;
 
-use Intervention\Image\ImageManagerStatic as Image;
 use MVC\Router;
 use Model\Producto;
+use Model\Parametro;
+use Model\MetodoPago;
+use Model\ProductoAPI;
+use Model\VentaDetalle;
 use Model\CompraDetalle;
 use Model\InventarioFifo;
 use Model\ProductoCodigo;
 use Model\ProductoOferta;
 use Model\ProductoImgVideo;
-use Model\ProductoAPI;
-use Model\VentaDetalle;
+use Intervention\Image\ImageManagerStatic as Image;
 
-class ProductoController{
+class CompraMasterController{
 
     // API para mostrar el listado de categorias en formato JSON
-    public static function listarProductos (){    
+    public static function listarCompras (){    
         
         if(!isset($_SESSION['nombre'])){
             header('Location: /');
@@ -53,10 +55,14 @@ class ProductoController{
             header('Location: /');
         }
 
+        $sql = "SELECT * FROM tblmetodo_pago WHERE MP_Status = 'E'";
+        $metodoPagos = MetodoPago::SQL($sql);
+
         $producto = new Producto();
         $codigoProducto = new ProductoCodigo();
         $ofertasProducto = new ProductoOferta();
         $archivoProducto = new ProductoImgVideo();
+        $parametro = Parametro::find(1);
         
         $alertas = [];
         
@@ -180,7 +186,9 @@ class ProductoController{
 
         $alertas=Producto::getAlertas();
 
-        $router->renderPanel('/panel/productos/index', [
+        $router->renderPanel('/panel/compras/index', [
+            'metodoPagos' => $metodoPagos,
+            'parametro' => $parametro,
             'alertas' => $alertas
         ]);
     }

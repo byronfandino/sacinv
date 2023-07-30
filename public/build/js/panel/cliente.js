@@ -112,7 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         convertirMayuscula : ['Cli_RazonSocial', 'Cli_Direccion'],
         convertirMinuscula : ['Cli_Email'],
 
-        idAdd : ['Cli_FkCiud_Id', 'Ciud_CodDepart']
+        idAdd : ['Cli_FkCiud_Id', 'Ciud_CodDepart'],
+
+        datosSugerencia : false
 
     };
     

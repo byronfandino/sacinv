@@ -1,3 +1,5 @@
+import { rutaServidor } from "./class/Parametros.js";
+
 let registros;
 let arrayNombres=new Array();
 let stringNombres='';
@@ -9,7 +11,8 @@ let objeto = {
     whatsapp:true,
     email:false,
     inventario:false,
-    slogan:true
+    slogan:true,
+    xjeventa:false
 }
 let cnt = 0;
 
@@ -19,7 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
     asignarValidacion();
     botonLimpiar();
     campoFile();
+    verificarCampos();
 });
+
+function verificarCampos(){
+    const inputs = document.querySelectorAll('input:not([type="submit"], [type="button"], [type="button"])');
+    const selects = document.querySelectorAll('select');
+    const boton = document.querySelector('input[type="submit"]');
+
+    inputs.forEach(input => {
+        if(input.getAttribute('id') != 'slogan' && input.getAttribute('id') !== null && input.value !== '0'){
+           estadoCampo(input.getAttribute('id'), true, boton); 
+        }
+    });
+
+    selects.forEach(select => {
+        if(select.value != ''){
+           estadoCampo(select.getAttribute('datatipo'), true, boton); 
+        }
+    });
+
+    console.log(selects);
+}
 
 // Valida las sugerencias y los errores
 function asignarValidacion(){
@@ -51,7 +75,6 @@ function asignarValidacion(){
             expresionRegular = input.value.match(regla);
 
             if(expresionRegular){
-
                 estadoCampo(tipo, true, btnSubmit);
             }else{
                 estadoCampo(tipo, false, btnSubmit);
@@ -155,6 +178,10 @@ function reglaInput(tipo){
     if (tipo == 'slogan'){
         regla="^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ/ ]{3,200}$";
     }
+
+    if (tipo == 'xjeventa'){
+        regla="^[0-9]{1,3}$";
+    }
     return regla;
 }
 
@@ -190,6 +217,10 @@ function mensajeSugerencia(tipo){
 
     if (tipo == 'slogan'){
         msg="Solo debe contener letras y números, mayor a 8 caracteres";
+    }
+
+    if (tipo == 'xjeventa'){
+        msg="Solo debe contener números entre 1 y 100";
     }
 
     return msg;
@@ -230,6 +261,10 @@ function estadoCampo(tipo, estado, boton){
         objeto['slogan']=estado;
     }
 
+    if (tipo == 'xjeventa'){
+        objeto['xjeventa']=estado;
+    }
+
     for (let llave in objeto){
         if(objeto[llave] == false){
             cnt=0;
@@ -238,7 +273,7 @@ function estadoCampo(tipo, estado, boton){
         }
     }
     
-    if(cnt == 8){
+    if(cnt == 9){
         estadoBoton(boton, true);
     }else{
         estadoBoton(boton, false);
@@ -432,13 +467,13 @@ function campoFile(){
 async function eliminarLogo(){
 
     try{
-        const url = 'http://192.168.18.120:3000/parametro/eliminar-logo';
+        const url = rutaServidor + '/parametro/eliminar-logo';
         const respuesta = await fetch(url, {
             method:'POST'
         });
 
         const resultado = await respuesta.json();
-        console.log(resultado.resultado);
+
         if (resultado.resultado) {   
             
             Swal.fire({
@@ -450,6 +485,7 @@ async function eliminarLogo(){
                 window.location.href = "/parametro";
             }); 
         }
+
     } catch (error){
         Swal.fire({
             icon: 'error',

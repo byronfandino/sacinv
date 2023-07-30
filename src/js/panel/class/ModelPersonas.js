@@ -1,4 +1,4 @@
-import { mostrarOcultarSugerencias, ocultarError, rutaServidor, estadoBoton, limpiarCaja} from "./Parametros.js";
+import { mostrarOcultarSugerencias, ocultarError, rutaServidor, estadoBoton, limpiarCaja, formatearTexto} from "./Parametros.js";
 
 export let objetoRegistroGeneral;
 
@@ -23,7 +23,7 @@ export class Persona{
         this.sugerencias='';
         this.validarCampos = objeto.validarCampos;
         this.estadoCampos = objeto.estadoCampos;
-
+ 
         if(objeto.reglas){
             this.reglas = objeto.reglas;
             this.sugerencias = objeto.sugerencias;
@@ -31,6 +31,16 @@ export class Persona{
         
         if(objeto.boton){
             this.boton=objeto.boton;
+        }
+
+        // Caja de sugerencias
+        this.datosSugerencia = [];
+        this.autollenado = [];
+        if(objeto.datosSugerencia){
+            this.datosSugerencia = objeto.datosSugerencia;
+        }
+        if(objeto.autollenado){
+            this.autollenado = objeto.autollenado;
         }
     }
 
@@ -51,6 +61,8 @@ export class Persona{
             if (inputForm.tagName === 'INPUT'){
 
                 inputForm.addEventListener('input', e => {3
+                    let texto = formatearTexto(e.target.value.toLowerCase());
+                    // console.log(texto);
 
                     // Convertir a mayusculas
                     if(this.convertirMayuscula){
@@ -60,7 +72,8 @@ export class Persona{
                             }
                         });
                     }
-                    // Convertir a mayusculas
+
+                    // Convertir a minúsculas
                     if(this.convertirMinuscula){
                         this.convertirMinuscula.forEach(inputField => {
                             if (inputField == idInput){
@@ -68,10 +81,14 @@ export class Persona{
                             }
                         });
                     }
+
                     
                     keysReglas.forEach( key => {
                         
                         if (key == idInput){
+                            // obtenemos el contenedor de la caja de sugerencias
+                            const contenedorSugr = document.querySelector(`ul[data-sugerencia="${idInput}"]`);
+
                             expresionRegular = inputForm.value.match(this.reglas[key]);
     
                             if(expresionRegular){
@@ -80,35 +97,61 @@ export class Persona{
                                 this.estadoCampo(idInput, true);
     
                                 if (this.stringAPI[key]){
-
+                                    
                                     // Filtrar en la tabla de datos
-                                    if(this.stringAPI[key].includes(e.target.value)){
+                                    if(this.stringAPI[key].includes(texto)){
 
                                         // Verificamos si conincide de forma total con el registro de la base de datos
-                                        if(this.arrayAPI[key].includes(e.target.value) && this.existe.includes(key)){
+                                        if(this.arrayAPI[key].includes(texto) && this.existe.includes(key)){
                                             mostrarOcultarSugerencias(labelSugerencia, 'Este registro ya existe', true);
                                             this.estadoCampo(idInput, false);
-        
                                         }else{
                                             mostrarOcultarSugerencias(labelSugerencia, '', false);
                                             this.estadoCampo(idInput, true);
                                         }
-    
+                                        
                                         // Reseteamos los datos de la tabla
-                                        this.eliminarFilasTabla();
-                                        this.cargarDatos(key, e.target.value);
-    
+                                        this.eliminarFilasTabla(key);
+                                        this.cargarDatos(key, texto);
+
+                                        // Si existe sugerencia 
+                                        if(this.datosSugerencia.length > 0 && contenedorSugr){
+
+                                            this.eliminarDatosSugerencia(idInput);
+                                            this.crearDatosSugerencia(idInput, texto);
+                                            
+                                            if(contenedorSugr.className.includes('ocultar')){
+                                                contenedorSugr.classList.remove('ocultar');
+                                            }
+                                        }
+
                                     }else{
+
                                         mostrarOcultarSugerencias(labelSugerencia, '', false);
                                         this.eliminarFilasTabla();
+
+                                        // Si existe sugerencia 
+                                        if(this.datosSugerencia.length > 0 && contenedorSugr){
+                                            this.eliminarDatosSugerencia(idInput);
+                                            if(contenedorSugr.className.includes('ocultar')){
+                                                contenedorSugr.classList.remove('ocultar');
+                                            }
+                                        }
                                     }
-                                }
-                                                                
+                                }  
+
                             }else{
-    
+
                                 mostrarOcultarSugerencias(labelSugerencia, this.sugerencias[key], true);
                                 this.estadoCampo(idInput, false);
-                                
+
+                                // Si existe sugerencia 
+                                if(this.datosSugerencia.length > 0 && contenedorSugr){
+                                    this.eliminarDatosSugerencia(idInput);
+                                    if(!contenedorSugr.className.includes('ocultar')){
+                                        contenedorSugr.classList.add('ocultar');
+                                    }
+                                }
                             }
 
                             if (e.target.value == ''){
@@ -125,9 +168,8 @@ export class Persona{
             }
 
             if (inputForm.tagName === 'SELECT'){
-
+                /* OJO SOLO SE ENVIA EL ID*/
                 inputForm.addEventListener('change', () => {
-
                     keysReglas.forEach( key => {
                         
                         if (key == idInput){
@@ -164,8 +206,6 @@ export class Persona{
 
                 });
             }
-
-
         });
     }
 
@@ -199,7 +239,6 @@ export class Persona{
               resultado.then((result) => {
                   if (result){
                     this.registrosAPI = result;
-                    // console.log(this.registrosAPI);
                     this.cargarDatos();
                     this.estadoRegistro();
                       setTimeout(() => {
@@ -215,7 +254,6 @@ export class Persona{
 
         let tabla = document.querySelector(`table[data-tipo="${this.nombreTabla}"]`);
         let llavesArray = Object.keys(this.arrayAPI);
-        
         if(campo == ''){
 
             // Limpiamos los registros almacenados en cada array
@@ -229,7 +267,7 @@ export class Persona{
             this.registrosAPI.forEach( registro => {
                 
                 llavesArray.forEach( key => {
-                    this.arrayAPI[key] = [...this.arrayAPI[key], registro[key]];
+                    this.arrayAPI[key] = [...this.arrayAPI[key], formatearTexto(registro[key])];
                 });
     
                 if (tabla){
@@ -240,11 +278,12 @@ export class Persona{
             // pasamos el array a una cadena string
             llavesArray.forEach(key => {
                 this.stringAPI[key] = this.arrayAPI[key].toString();
-            });    
+            });
+
         }else{
             if (valor != ''){
                 this.registrosAPI.forEach( registro => {
-                    if(registro[campo].includes(valor)){
+                    if(formatearTexto(registro[campo].toLowerCase()).includes(valor)){
                         if (tabla){
                             this.crearFilaTabla(registro);
                         }
@@ -465,18 +504,18 @@ export class Persona{
             }
         }
         
-        if(cntEstado == this.validarCampos.length){
-
-            estadoBoton(this.boton, true);
-        }else{
-            estadoBoton(this.boton, false);
+        if(this.boton){
+            if(cntEstado == this.validarCampos.length){
+                estadoBoton(this.boton, true);
+            }else{
+                estadoBoton(this.boton, false);
+            }
         }
     
         cntEstado=0;
     }
 
     estadoAllCampos(){
-        // console.log(this.estadoCampos);
         
         for (let llave in this.estadoCampos){
             
@@ -500,8 +539,27 @@ export class Persona{
             boton.addEventListener('click', (e) => {
                 
                 let campo = boton.parentElement;
-    
+
                 e.preventDefault();
+
+                //---------------------------------------------------------------------
+                // Verificamos si la caja que se oprimio para limpiar es una de las de autollenado si es así se limpian las cajas que correspondan
+
+                const inputCampo = campo.querySelector('input');
+                const idInput = inputCampo.getAttribute('id');
+                
+                if (this.autollenado.includes(idInput)){
+
+                    // Pasamos el arreglo de los id para limpiar cada una de las cajas
+                    limpiarCajasRegistro(this.autollenado);
+                    
+                    // Accedemos a la primera posición del id del arreglo de autollenado para cambiar el estado
+                    this.estadoCampo(this.autollenado[0], false);
+                    console.log(this.estadoCampos);
+                }
+
+                //-----------------------------------------------------------------------
+
                 // limpiarmos la caja del texto y los mensajes
                 limpiarCaja(campo);
                 
@@ -512,10 +570,11 @@ export class Persona{
 
                 // Obtenemos los campos por los cualse se hace el filtro
                 let arrayKeys = Object.keys(this.arrayAPI);
+
                 // validamos si los campos del filtro están vacios
-                
                 let cnt = false;
                 arrayKeys.forEach( campo => {
+
                     const inputText = document.querySelector(`#${campo}`);
                     
                     if (inputText.value != '' ){
@@ -529,12 +588,13 @@ export class Persona{
                             this.eliminarFilasTabla();
                         }
                     }
-
                 });
 
                 if (!cnt){
+
                     this.eliminarFilasTabla();
                     this.cargarDatos();
+
                 }
             });
         });
@@ -578,7 +638,6 @@ export class Persona{
                     let resultado = cambiarEstado(this.entidad, inputId.value, inputStatus.value );
 
                     resultado.then(result => {
-                        // console.log(result);
                         if (result){
                             // como el resultado fue satisfactorio, procedemos a cambiar el estado en el arreglo de objetos cargado en memoria
                             this.registrosAPI.forEach( registro => {
@@ -597,7 +656,69 @@ export class Persona{
             });
         }
     }
+
+    // sugerencias de autocompletado
+    eliminarDatosSugerencia(nombreCaja){
+        const items = document.querySelectorAll(`ul[data-sugerencia="${nombreCaja}"] li`);
+        if(items){
+            items.forEach( item => {
+                if (!(item.getAttribute('data-busqueda') && item.getAttribute('data-busqueda') == 'nuevo')){
+                    item.remove();
+                }
+            });
+        }
+    }
+
+    crearDatosSugerencia(campo, valor){
+
+        const contenedor = document.querySelector(`[data-sugerencia="${campo}"]`);
+        const liReferencia = contenedor.querySelector('[data-busqueda="nuevo"]')
+
+        this.registrosAPI.forEach( registro => {
+            
+                if (formatearTexto(registro[campo].toLowerCase()).includes(valor)){
+
+                    const li = document.createElement('LI');
+                    
+                    // asignamos todos los atributos al li
+                    if(this.autollenado.length > 0){
+                        this.autollenado.forEach( item => {
+                            li.setAttribute(`data-${item}`, registro[item]);
+                        });
+                    }
     
+                    li.textContent = registro[campo];
+                    li.addEventListener('click', e => {
+                        this.seleccionAutocompletado(e, campo);
+                    });
+                    contenedor.insertBefore(li, liReferencia);
+                }
+        });
+    }
+
+    seleccionAutocompletado(e, campoPrincipal){
+        let llenado = false;
+        this.autollenado.forEach( campo => { 
+            let nomMinusc = campo.toLowerCase();
+            const input = document.querySelector(`#${campo}`);
+            // como la propiedad queda por defecto en minuscula se convierta el nombre del data a minscula para acceder al valor de la propiedad
+            input.value = e.target.getAttribute(`data-${nomMinusc}`);
+            if (input.value != ''){
+                llenado = true;
+                this.estadoCampo(this.autollenado[0], true);
+                console.log(this.estadoCampos);
+            }
+        });
+    
+        // si ya se llenaron  los campos entonces procedemos a ocultar el contenedor
+        if(llenado){
+            const contenedor = document.querySelector(`[data-sugerencia="${campoPrincipal}"]`);
+            if (!contenedor.className.includes('ocultar')){
+                contenedor.classList.add('ocultar');
+            }
+        }
+    }
+
 }
 
 // Se coloca como una función aparte, ya que NO tiene acceso a las propiedades del objeto
@@ -717,7 +838,6 @@ export async function cambiarEstado(entidad, id, valor){
 
     try {
         let direccion = rutaServidor + entidad + '/estado';
-        console.log(direccion);
         // Petición hacia la API
         const respuesta = await fetch(direccion, {
             method: 'POST', //método por el que se envia la información al servidor
@@ -748,3 +868,9 @@ export async function cambiarEstado(entidad, id, valor){
     }
 }
 
+function limpiarCajasRegistro(campos){
+    campos.forEach( campo => {
+        const inputCampo = document.querySelector(`#${campo}`);
+        inputCampo.value='';
+    });
+}

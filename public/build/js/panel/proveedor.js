@@ -99,13 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
             Prov_FkCiud_Id:'',
             Ciud_CodDepart:''
         },
-    
-        existe:['Prov_Nit'],
+        
+        existe:['Prov_Nit', 'Prov_RazonSocial'],
     
         convertirMayuscula : ['Prov_RazonSocial', 'Prov_Direccion'],
         convertirMinuscula : ['Prov_Email'],
 
-        idAdd : ['Prov_FkCiud_Id', 'Ciud_CodDepart']
+        idAdd : ['Prov_FkCiud_Id', 'Ciud_CodDepart'],
+
+        datosSugerencia : false
 
     };
     
@@ -131,4 +133,5 @@ document.addEventListener('DOMContentLoaded', () => {
     selectDepart.addEventListener('change', ()=>{
         proveedor.estadoCampo('Prov_FkCiud_Id', false);
     });
+
 });

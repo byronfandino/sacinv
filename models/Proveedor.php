@@ -34,7 +34,7 @@ class Proveedor extends ActiveRecord{
 
             self::$alertas['error-proveedor']['razonsocial'][]="El campo Nombre - Razon Social es obligatorio";
 
-        }else if (!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ. ]{3,40}$/', $this->Prov_RazonSocial)){
+        }else if (!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ. ]{2,40}$/', $this->Prov_RazonSocial)){
 
             self::$alertas['error-proveedor']['razonsocial'][]="Solo debe contener letras y números, mayor a 3 caracteres";
             

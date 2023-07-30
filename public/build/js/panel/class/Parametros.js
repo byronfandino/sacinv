@@ -129,7 +129,7 @@ export function limpiarFormulario(nombreForm){
     });
 
     if (!errorCampo){
-        const inputs = nombreForm.querySelectorAll('input:not([type="submit"])');
+        const inputs = nombreForm.querySelectorAll('input:not([type="submit"],[type="button"])');
         inputs.forEach( input => {
             input.value="";
         });

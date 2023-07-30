@@ -63,6 +63,41 @@ class MetodoPagoController{
         ]);
     }
 
+    public static function guardarAPI(){
+
+        if(!isset($_SESSION['nombre'])){
+            header('Location: /');
+        }
+
+        $metodoPago = new MetodoPago();
+        $alertas = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            
+            //1. Primero sincronizamos los datos
+            $metodoPago->sincronizar($_POST);
+
+            //2.Validamos si no hay errores en la digitación del usuario
+            $alertas = $metodoPago->validar();
+
+            //3. Si hay alertas se termina la ejecución del código
+            if(empty($alertas)){
+                
+                //4. Procedemos a verificar que no exista en la base de datos
+                $existe = MetodoPago::where('MP_Nombre', trim($metodoPago->MP_Nombre));
+
+                if(!$existe){
+
+                    // Si el registro no existe en la base de datos se procede a guardar
+                    $resultado = $metodoPago->guardar(); 
+                    echo json_encode($resultado);
+                    
+                }
+            }
+        }
+    }
+
+
     public static function editar(Router $router){
 
         // 1. Verificar que el usuario haya iniciado sesión y que por el método get haya recibido 

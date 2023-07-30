@@ -5,6 +5,7 @@ require_once __DIR__ . '/../includes/app.php';
 use Controllers\CategoriaController;
 use Controllers\CiudadController;
 use Controllers\ClienteController;
+use Controllers\CompraMasterController;
 use Controllers\LoginController;
 use Controllers\MarcaController;
 use Controllers\MetodoPagoController;
@@ -85,6 +86,7 @@ $router->post('/ubicacion/eliminar', [UbicacionController::class,'eliminar']);
 
 // Método de pago
 $router->get('/metodo-pago/api', [MetodoPagoController::class,'listarMetodosPagos']);
+$router->post('/metodo-pago/api', [MetodoPagoController::class,'guardarAPI']);
 $router->get('/metodo-pago', [MetodoPagoController::class,'index']);
 $router->post('/metodo-pago', [MetodoPagoController::class,'index']);
 $router->get('/metodo-pago/editar', [MetodoPagoController::class,'editar']);
@@ -151,6 +153,15 @@ $router->get('/proveedor/editar', [ProveedorController::class,'editar']);
 $router->post('/proveedor/editar', [ProveedorController::class,'editar']);
 $router->post('/proveedor/estado', [ProveedorController::class,'estado']);
 $router->post('/proveedor/eliminar', [ProveedorController::class,'eliminar']);
+
+// Compras
+$router->get('/compra/api', [CompraMasterController::class,'listar']);
+$router->get('/compra', [CompraMasterController::class,'index']);
+$router->post('/compra', [CompraMasterController::class,'index']);
+$router->get('/compra/editar', [CompraMasterController::class,'editar']);
+$router->post('/compra/editar', [CompraMasterController::class,'editar']);
+$router->post('/compra/estado', [CompraMasterController::class,'estado']);
+$router->post('/compra/eliminar', [CompraMasterController::class,'eliminar']);
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();
