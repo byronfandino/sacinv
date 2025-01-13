@@ -1,0 +1,31 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+
+//notificaiones login
+.fondo-notificacion{
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+
+    background-color: rgba($color: v.$negro, $alpha: 0.8);
+    height: 100vh;
+    width: 100vw;
+
+    //fila o columna, wrap, align-h, aling-v, esp-h, esp-v
+    @include m.flex(row, wrap, center, center, 0, 0);
+
+    &.ocultar{
+        display: none;
+    }
+
+    .contenedor-notificacion{
+        width:90%;
+        // max-width: 50rem;
+        background-color: v.$blanco;
+        padding:2rem;
+        // text-align: center;
+    }
+}

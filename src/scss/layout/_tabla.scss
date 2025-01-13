@@ -1,0 +1,206 @@
+@use '../base/variables' as v;
+@use '../base/mixins' as m;
+@use 'sass:color' as c;
+
+.contenedor-tabla{
+
+    overflow-x: scroll;
+    width: 95vw;
+    @include m.tablet{
+        width: 97%;
+        margin:0 2rem 0;
+    }
+}
+
+.tabla{
+    width: 100%;
+    margin: 0 auto;
+    border-spacing: 0;
+}
+
+.thead{
+
+    display: none;
+
+    //Resolución tablet
+    @include m.tablet{
+        display: table-header-group;
+        // Seleccionamos todos los títulos
+        & th{
+            padding:1rem 0;
+            background-color: c.adjust($color: v.$azul, $lightness:10%);
+            color: v.$blanco;
+        }
+    
+        // titulo de Eliminar
+        &__th--icon{
+            width: 8rem;
+        }
+    }
+}
+
+.tbody{
+
+    // Seleccionamos las filas pares para agregar a sus celdas el fondo
+    //Resolución tablet
+    & > tr:nth-of-type(odd) > td{
+        //Resolución tablet
+        @include m.tablet{
+            // background-color: lighten(v.$gris, 20%);
+            background-color: c.adjust($color: v.$azul, $lightness:50%);
+            // background-color: adjust-color($color: v.$gris, $lightness: 20%);
+        }
+    }
+
+    //Aplicar a todas las celdas del tbody    
+    & td{
+        vertical-align: middle;
+        display: flex;
+        padding: 0.5rem 0.7rem;
+
+        //Resolución tablet
+        @include m.tablet{
+            padding: 0.1rem 0.7rem;
+            border: 1px solid v.$gris;
+        }
+        // Seleccionamos el primer td para agregar más padding superior para la resolución de teléfono
+        &:first-of-type{
+            padding-top: 2rem;
+
+            //Resolución tablet
+            @include m.tablet{
+                padding-top:0.7rem;
+            }
+        }
+        
+        // Seleccionamos el último td para agregar más padding inferior para la resolución de teléfono
+        &:last-of-type{
+            padding-bottom:2rem;
+            border-bottom: 1px solid v.$gris;
+
+            //Resolución tablet
+            @include m.tablet{
+                padding-bottom:0rem;
+            }
+        }
+
+        //Resolución tablet
+        @include m.tablet{
+            display:revert;
+        }
+    }
+
+    &__td--titulo{
+
+        font-weight: 600;
+        margin-right:1rem;
+
+        display: flex;
+        align-items: center;
+
+        //Resolución tablet
+        @include m.tablet{
+            display:none;
+        }
+    }
+
+    &__td--estado{
+
+        font-size: 1.5rem;
+        //Resolución tablet
+        @include m.tablet{
+            padding: 0;
+            margin: 0;
+            width:3rem;
+            font-size:1.6rem;
+        }
+
+        span{
+            display: flex;
+            align-items: center;
+            margin-right:1rem;
+            //Resolución tablet
+            @include m.tablet{
+                display:none;
+            }
+        }
+    }
+
+    &__td--nombre{
+        font-weight: 700;
+        //Resolución tablet
+        @include m.tablet{
+            font-weight:400;
+        }
+    }
+
+    &__td--center{
+        text-align: left;
+
+        //Resolución tablet
+        @include m.tablet{
+            text-align: center;
+        }
+    }
+
+    &__td--right{
+        text-align: left;
+
+        //Resolución tablet
+        @include m.tablet{
+            text-align: right;
+        }
+    }
+
+    // & tr > td.tbody__td--verde{
+    //     background-color: lighten(v.$verde-claro, 30%);
+    // }
+    
+    // & tr > td.tbody__td--azul{
+    //     background-color: lighten(v.$azul-claro, 20%) ;
+    // }
+    
+    // & tr > td.tbody__td--rojo{
+    //     background-color: v.$rosado;
+    // }
+
+    // Celdas iconos de Modificar e Historial
+    &__td--icon{
+
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        align-items: center;
+
+        //Resolución tablet
+        @include m.tablet{
+            text-align: center;
+        }
+
+        & form{
+            padding: 0;
+            margin: 0;
+            //Resolución tablet
+            @include m.tablet{
+                text-align: center;
+            }
+
+        }
+
+        & a{
+            
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+
+            & > span{
+                margin-left: 0.5rem;
+                color: v.$negro;
+                //Resolución tablet
+                @include m.tablet{
+                    display:none;
+                }
+            }
+        }
+    }
+}

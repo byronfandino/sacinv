@@ -1,0 +1,20 @@
+{
+    "name": "byron/deudores",
+    "description": "Proyecto de deudores",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\": "./",
+            "Model\\": "./models",
+            "Controllers\\": "./controllers",
+            "Classes\\": "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Byron Fandiño",
+            "email": "byronfandino@hotmail.com"
+        }
+    ],
+    "require": {}
+}

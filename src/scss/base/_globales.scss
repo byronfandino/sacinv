@@ -1,0 +1,36 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+    margin:0px;
+    padding:0px;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: v.$gris-claro;
+    color: v.$negro;
+    
+    font-family: v.$fuente_principal;
+    font-size: 1.6rem;
+    line-height: 140%;
+
+    
+    // &.body-scroll-js{
+        
+    //     transition-duration: 0.2s;
+    //     padding-top:7rem;
+    // }
+}

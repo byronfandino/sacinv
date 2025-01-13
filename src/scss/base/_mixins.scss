@@ -1,0 +1,38 @@
+@use 'variables' as v;
+
+/** Media Queries **/
+@mixin telefono {
+    @media (max-width: v.$telefono) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media (min-width: v.$tablet) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: v.$desktop) {
+        @content;
+    }
+}
+
+@mixin grid($columnas, $alineacion-h, $alineacion-v, $espg-h, $espg-v ) {
+    display: grid;
+    grid-template-columns: repeat($columnas, 1fr);
+    justify-items: $alineacion-h;
+    align-items: $alineacion-v;
+    grid-row-gap: $espg-h;
+    grid-column-gap: $espg-v;
+}
+
+@mixin flex($fila-column, $wrap-no, $align-h, $align-v, $esp-h, $esp-v){
+    display:flex;
+    flex-flow:$fila-column $wrap-no;
+    justify-content:$align-h;
+    align-items:$align-v;
+    row-gap: $esp-h;
+    column-gap:$esp-v;
+}
+

@@ -1,0 +1,17 @@
+@use '../base/mixins' as m;
+
+header{
+    height:5rem;
+    padding:0.5rem;
+    background-color:#3353A3;
+    display:flex;
+    flex-flow:row nowrap;
+    gap:0.5rem;
+    align-items:center;
+
+    //Resolución tablet
+    @include m.tablet {
+        padding: 1rem 1.5rem;
+    }
+}
+  
