@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     const cliente = new Cliente(objetoCliente);
-    cliente.listarRegistro();
+    cliente.listarRegistros();
     formularioAgregarRegistro(cliente);
     botonResetFormulario(cliente);
     cliente.asignarValidacionCampos();
@@ -77,7 +77,7 @@ function formularioAgregarRegistro(cliente){
                 //Obtenemos un arreglo de nombres de los campos a partir del array de objetos validacionCampos[];
                 const camposFormulario = cliente.validacionCampos.map(obj => Object.keys(obj)[0]);
                 limpiarFormulario(camposFormulario, 'cedula_nit');
-                cliente.listarRegistro();
+                cliente.listarRegistros();
             }
         }
     });
@@ -86,6 +86,6 @@ function formularioAgregarRegistro(cliente){
 function botonResetFormulario(cliente){
     const botonReset = document.querySelector('#reset');
     botonReset.addEventListener('click', ()=>{
-        cliente.listarRegistro();
+        cliente.listarRegistros();
     })
 }

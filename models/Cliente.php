@@ -27,27 +27,27 @@ class Cliente extends ActiveRecord{
     public function validar(){
         // 1. El usuario no digitó nada
         if (!$this->cedula_nit){
-            self::$alertas['error-cliente']['cedula_nit'][]="El campo Cédula o Nit es Obligatorio";
+            self::$alertas['error']['cedula_nit'][]="El campo Cédula o Nit es Obligatorio";
         }else{
             $this->cedula_nit = trim($this->cedula_nit);
         }
         if (!$this->nombre){
-            self::$alertas['error-cliente']['nombre'][]="El campo Nombre es Obligatorio";
+            self::$alertas['error']['nombre'][]="El campo Nombre es Obligatorio";
         }else{
             $this->nombre = trim($this->nombre);
         }
         if (!$this->telefono){
-            self::$alertas['error-cliente']['telefono'][]="El campo telefono es Obligatorio";
+            self::$alertas['error']['telefono'][]="El campo telefono es Obligatorio";
         }else{
             $this->telefono = trim($this->telefono);
         }
         if (!$this->direccion){
-            self::$alertas['error-cliente']['direccion'][]="El campo direccion es Obligatorio";
+            self::$alertas['error']['direccion'][]="El campo direccion es Obligatorio";
         }else{
             $this->direccion = trim($this->direccion);
         }
         if (!$this->fk_ciudad){
-            self::$alertas['error-cliente']['fk_ciudad'][]="El campo Ciudad es Obligatorio";
+            self::$alertas['error']['fk_ciudad'][]="El campo Ciudad es Obligatorio";
         }else{
             $this->fk_ciudad = trim($this->fk_ciudad);
         }

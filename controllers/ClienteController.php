@@ -89,7 +89,7 @@ class ClienteController{
     public static function eliminar(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            $id = $_POST['id_cliente'];
+            $id = $_POST['id'];
             $cliente = Cliente::find($id);
             $resultado = $cliente->eliminar($id);
 
