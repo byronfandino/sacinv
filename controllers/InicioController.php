@@ -12,7 +12,7 @@ class InicioController{
         //Listar departamentos
         // $departamentos = Departamento::all('nombre_depart');
 
-        $router->renderIndex('deudores', [
+        $router->renderIndex('deudores/index', [
             // 'departamentos' => $departamentos
         ]);
     }

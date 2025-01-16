@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <!-- Ícono de usuario -->
+  <circle cx="24" cy="20" r="12" fill="#fff" />
+  <path d="M24 36c-11.05 0-20 7.163-20 16v4h40v-4c0-8.837-8.95-16-20-16Z" fill="#ffff" />
+  
+  <!-- Símbolo de "+" -->
+  <circle cx="48" cy="20" r="12" fill="#fff" />
+  <path d="M48 14v12M42 20h12" stroke="#00f" stroke-width="2" stroke-linecap="round" />
+</svg>
+

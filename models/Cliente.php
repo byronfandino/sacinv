@@ -28,26 +28,46 @@ class Cliente extends ActiveRecord{
         // 1. El usuario no digitó nada
         if (!$this->cedula_nit){
             self::$alertas['error']['cedula_nit'][]="El campo Cédula o Nit es Obligatorio";
+
+        }else if (!preg_match('/^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$/', $this->cedula_nit)){
+            self::$alertas['error']['cedula_nit'][]="Caracteres aceptados: números (0-9) y un solo guión";
+
         }else{
             $this->cedula_nit = trim($this->cedula_nit);
         }
+
         if (!$this->nombre){
             self::$alertas['error']['nombre'][]="El campo Nombre es Obligatorio";
+
+        }else if (!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/', $this->nombre)){
+            self::$alertas['error']['nombre'][]="Solo acepta números y/o letras. No se permiten caracteres especiales";
+
         }else{
             $this->nombre = trim($this->nombre);
         }
+
         if (!$this->telefono){
             self::$alertas['error']['telefono'][]="El campo telefono es Obligatorio";
+
+        }else if (!preg_match('/^[0-9]{10}$/', $this->telefono)){
+            self::$alertas['error']['telefono'][]="Se permite únicamente 10 números";
+
         }else{
             $this->telefono = trim($this->telefono);
         }
+
         if (!$this->direccion){
             self::$alertas['error']['direccion'][]="El campo direccion es Obligatorio";
+
+        }else if (!preg_match("/^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$/", $this->direccion)){
+            self::$alertas['error']['direccion'][]="Se permiten letras, números, espacios y símbolos como: # -";
+
         }else{
             $this->direccion = trim($this->direccion);
         }
-        if (!$this->fk_ciudad){
-            self::$alertas['error']['fk_ciudad'][]="El campo Ciudad es Obligatorio";
+
+        if (!$this->fk_ciudad || !preg_match('/^[0-9]{1,5}$/', $this->fk_ciudad)){
+            self::$alertas['error']['fk_ciudad'][]="Debe seleccionar una ciudad";
         }else{
             $this->fk_ciudad = trim($this->fk_ciudad);
         }

@@ -440,6 +440,9 @@ header {
   align-items: flex-start;
   column-gap: 0.7rem;
 }
+.contenedor__campos > button {
+  margin-top: auto;
+}
 
 .form__campo {
   display: flex;

@@ -9,11 +9,12 @@ document.addEventListener('DOMContentLoaded', () =>{
 
     const objetoCliente = {
         urlActualizar : '/cliente/actualizar',
+        isModal : true,
         validacionCampos : [
             {cedula_nit_modal: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: true},
             {nombre_modal: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{4,100}$', message: 'Solo acepta números y/o letras', estado: true},
             {telefono_modal: '^[0-9]{10}$', message: 'Se permite 10 números', estado: true},
-            {direccion_modal: '^[a-zA-Z0-9#\-áéíóúÁÉÍÓÚñÑ ]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
+            {direccion_modal: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
             {cod_depart_modal: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: true},
             {fk_ciudad_modal: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: true}
         ]
@@ -65,7 +66,7 @@ function formularioActualizarRegistro(cliente){
             
             const rta = await cliente.actualizarRegistro(nuevoFormData);
             if(rta){
-                
+
                 cerrarModal();
 
                 // Refrescar la página

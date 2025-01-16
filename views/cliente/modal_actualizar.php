@@ -1,5 +1,5 @@
 <header class="header">
-    <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
+    <img src="/build/img/sistema/editar_usuario.svg" alt="Icono de cuentas por cobrar" width="33px" height="30px">
     <h1>Cliente</h1>
 </header>
 

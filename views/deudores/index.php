@@ -9,56 +9,58 @@
 
             <legend>Datos del cliente</legend>
 
-            <div>
+            <div class="contenedor__campos">
                 <input type="hidden" name="id_cliente">
                 <div class="form__campo t-sm">
                     <label for="cedula_nit">Cédula / Nit</label>
-                    <input type="text" name="cedula_nit" id="cedula_nit" class="campo__input">
+                    <input type="text" id="cedula_nit" class="campo__input">
                 </div>
                 <div class="form__campo t-md">
                     <label for="nombre_cliente">Nombre del Cliente</label>
-                    <input type="text" name="nombre_cliente" id="nombre_cliente" class="campo__input">
+                    <input type="text" id="nombre_cliente" class="campo__input">
                 </div>
                 <button class="boton boton--primario" >Buscar</button>                    
             </div>
 
-            <div>
+            <div class="contenedor__campos">
                 <div class="form__campo t-sm">
                     <label for="telefono">Teléfono</label>
-                    <input type="number" name="telefono" id="telefono" class="campo__input disabled">
+                    <input type="number" id="telefono" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
                     <label for="direccion">Dirección</label>
-                    <input type="text" name="direccion" id="direccion" class="campo__input disabled">
+                    <input type="text" id="direccion" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
                     <label for="nombre_ciudad">Ciudad</label>
-                    <input type="text" name="nombre_ciudad" id="nombre_ciudad" class="campo__input disabled">
+                    <input type="text" id="nombre_ciudad" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
                     <label for="nombre_depart">Departamento</label>
-                    <input type="text" name="nombre_depart" id="nombre_depart" class="campo__input disabled">
+                    <input type="text" id="nombre_depart" class="campo__input disabled">
                 </div>
             </div>
         </fieldset>
 
         <fieldset>
             <legend>Movimiento</legend>
-            <div class="form__campo t-xxl">
-                <label for="descripcion">Descripción del producto</label>
-                <input type="text" name="descripcion" id="descripcion" class="campo__input">
-            </div>
-            <div class="form__campo t-md">
-                <label for="tipo_mov">Tipo de movimiento</label>
-                <select name="tipo_mov" id="tipo_mov" class="campo__input">
-                    <option value="" selected disabled>-Seleccione una opción-</option>
-                    <option value="c">Por cobrar</option>
-                    <option value="a">Abonó</option>
-                </select>
-            </div>
-            <div class="form__campo t-sm">
-                <label for="valor_deuda">Valor del producto</label>
-                <input type="number" name="valor_deuda" id="valor_deuda" class="campo__input">
+            <div class="contenedor__campos">
+                <div class="form__campo t-xxl">
+                    <label for="descripcion">Descripción del producto</label>
+                    <input type="text" name="descripcion" id="descripcion" class="campo__input">
+                </div>
+                <div class="form__campo t-md">
+                    <label for="tipo_mov">Tipo de movimiento</label>
+                    <select name="tipo_mov" id="tipo_mov" class="campo__input">
+                        <option value="" selected disabled>-Seleccione una opción-</option>
+                        <option value="c">Por cobrar</option>
+                        <option value="a">Abonó</option>
+                    </select>
+                </div>
+                <div class="form__campo t-sm">
+                    <label for="valor_deuda">Valor del producto</label>
+                    <input type="number" name="valor_deuda" id="valor_deuda" class="campo__input">
+                </div>
             </div>
             <input type="submit" value="Agregar" class="boton boton--secundario" disabled>
         </fieldset>                
@@ -87,9 +89,9 @@
 </main>
 <?php
     if(isset($script) && $script != ''){
-        //$script .= '<script src="/build/js/panel/categoria.js" type="module"></script>';
+        $script .= '<script src="/build/js/cxc/cxc.js" type="module"></script>';
     }else{
-        //$script = '<script src="/build/js/panel/categoria.js" type="module"></script>';
+        $script = '<script src="/build/js/cxc/cxc.js" type="module"></script>';
     }
 ?>
 

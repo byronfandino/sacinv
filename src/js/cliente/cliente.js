@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
         idformularioAgregar : 'form_cliente',
 
+        isModal : false,
+
         urlAgregar : '/cliente/guardar',
         urlEliminar : '/cliente/eliminar',
         urlApiListar: '/cliente/api',
@@ -43,9 +45,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         //Se verifica que los campos diligenciados cumplan con estos registros
         validacionCampos : [
             {cedula_nit: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
-            {nombre: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{4,100}$', message: 'Solo acepta números y/o letras', estado: false},
+            {nombre: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
             {telefono: '^[0-9]{10}$', message: 'Se permite 10 números', estado: false},
-            {direccion: '^[a-zA-Z0-9#\-áéíóúÁÉÍÓÚñÑ ]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
+            {direccion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
             {nombre_depart: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
             {fk_ciudad: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ]
@@ -87,5 +89,6 @@ function botonResetFormulario(cliente){
     const botonReset = document.querySelector('#reset');
     botonReset.addEventListener('click', ()=>{
         cliente.listarRegistros();
+
     })
 }

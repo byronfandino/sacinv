@@ -14,6 +14,8 @@ export class ModeloBase{
         this.validacionCampos = objeto.validacionCampos;
         //Variable global para guardar todos los registros del JSON
         this.registros = '';
+        //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend en el método handleResponse()
+        this.isModal = objeto.isModal;
     }
 
     asignarValidacionCampos(){
@@ -66,6 +68,7 @@ export class ModeloBase{
             quitarErrorCampo(objetoCliente);
         }else{
             this.validacionCampos[posicion].estado = false;
+            mostrarErrorCampo(objetoCliente.nombreCampo, this.validacionCampos[posicion].message);
         }
     }
 
@@ -232,7 +235,7 @@ export class ModeloBase{
             console.error('Codigo de error:', error);
         }
     }
-    
+
     async actualizarRegistro(formulario){
         
         const urlActualizar = url + this.urlActualizar;
@@ -324,7 +327,12 @@ export class ModeloBase{
                 const msg = errores[propiedad][0];
 
                 if (errores.hasOwnProperty(propiedad)) {
-                    mostrarErrorCampo(propiedad, msg);
+
+                    if (this.isModal){
+                        mostrarErrorCampo(propiedad + "_modal", msg);
+                    }else{
+                        mostrarErrorCampo(propiedad, msg);
+                    }
                 }
             }
 

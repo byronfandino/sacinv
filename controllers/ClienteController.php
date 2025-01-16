@@ -101,7 +101,7 @@ class ClienteController{
             }else{
                 echo json_encode([
                     "rta" => "false", 
-                    "message" => "EL registro no pùdo ser eliminado"
+                    "message" => "EL registro No se eliminó"
                 ]);
             }
         }

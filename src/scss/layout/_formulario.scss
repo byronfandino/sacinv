@@ -18,6 +18,11 @@
     flex-flow: row wrap;
     align-items: flex-start;
     column-gap: 0.7rem;
+
+    // Cuando el botòn se encuentra en el mismo contenedor, por ejemplo el boton buscar, este genera un desplazamiento hacia abajo
+    & > button{
+        margin-top: auto;
+    }
 }
 
 .form__campo{
@@ -147,6 +152,7 @@
         flex-flow: row wrap;
         justify-content: flex-end;
     }
+
 }
 
 .boton{
