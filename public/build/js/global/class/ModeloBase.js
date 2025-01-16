@@ -85,7 +85,7 @@ export class ModeloBase{
         this.crearTabla(registrosFiltrados);
     }
 
-    crearTabla(registros){
+    crearTabla(registros = this.registros){
         //Definimos cuales son los campos en los que necesitamos iterar
         const tbody = document.querySelector('.tbody');
         tbody.innerHTML = ''; //Limpiar la tabla antes de llenarla
@@ -194,8 +194,8 @@ export class ModeloBase{
         }
     }
 
-    //Obtiene los registros de la base de datos para agregarlo a la variable principal y crear la tabla
-    async listarRegistros(){
+    // Función únicamente para obtener los registros en memoria y realizar búsquedas
+    async obtenerRegistros(){
         if (!this.urlApiListar) {
             console.error("La URL para listar no está definida.");
             return;
@@ -203,7 +203,21 @@ export class ModeloBase{
         try { 
             const datos = await consultarAPI(this.urlApiListar); 
             this.registros = datos;
-            this.crearTabla(this.registros);
+            return true;
+
+        } catch (error) { 
+            console.error('Error API:', error); 
+            return false;
+        }
+    }
+
+    //Se reutiliza el método para obtener los registros y adicionalmente crear la tabla con los mismos datos
+    async listarRegistros(){
+        try { 
+            const dataOk = await this.obtenerRegistros();
+            if (dataOk){
+                this.crearTabla();
+            }
         } catch (error) { 
             console.error('Error API:', error); 
         }

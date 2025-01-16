@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             {nombre_depart: 'Departamento', posicion:6, class: []}
         ],
 
-        // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos
+        // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos, por lo tanto es necesario saber cual es el equivalente del nombre del campo de la array de datos con el nombre del campo al cual se pasa los datos
         camposModalCliente : [
         //id del campo del fomulario principal : 'id del campo de la ventana modal'
             {id_cliente: 'id_cliente_modal'},

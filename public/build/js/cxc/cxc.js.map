@@ -1,1 +1,1 @@
-{"version":3,"names":[],"mappings":"","sources":["cxc/cxc.js"],"sourcesContent":[""],"file":"cxc.js"}
+{"version":3,"names":[],"mappings":"","sources":["cxc/cxc.js"],"sourcesContent":["document.addEventListener('DOMContentLoaded', () => {\n    \n})"],"file":"cxc.js"}
