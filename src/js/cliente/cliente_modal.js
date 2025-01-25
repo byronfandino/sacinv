@@ -1,5 +1,6 @@
 import { Ciudad } from '../global/class/ciudad.js';
 import { Cliente } from '../global/class/cliente.js';
+import { cierreManualModal } from '../global/parametros.js';
 
 document.addEventListener('DOMContentLoaded', () =>{
     // Cargar ciudades en el comboBox cada vez que se cambie de departamento
@@ -9,7 +10,12 @@ document.addEventListener('DOMContentLoaded', () =>{
 
     const objetoCliente = {
         urlActualizar : '/cliente/actualizar',
-        isModal : true,
+        // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
+        modal:{
+            isModal:true,
+            nombreCampoComplemento: '_modal'
+        },
+
         validacionCampos : [
             {cedula_nit_modal: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: true},
             {nombre_modal: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{4,100}$', message: 'Solo acepta números y/o letras', estado: true},
@@ -24,7 +30,10 @@ document.addEventListener('DOMContentLoaded', () =>{
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
     formularioActualizarRegistro(cliente);
-    botonCerrarModal();
+
+    // Hay varias ventanas modal, y por lo tanto es necesario programar cada botón
+    const btnCerraModal = document.querySelector('.cerrar__modal');
+    btnCerraModal.addEventListener('click', e => cierreManualModal(e));
 
 });
 
@@ -67,7 +76,11 @@ function formularioActualizarRegistro(cliente){
             const rta = await cliente.actualizarRegistro(nuevoFormData);
             if(rta){
 
-                cerrarModal();
+                // Cerramos el modal
+                const modalCliente = document.querySelector('#modal-cliente');
+                if (!modalCliente.className.includes('ocultar')){
+                    modalCliente.classList.add('ocultar');
+                }
 
                 // Refrescar la página
                 setTimeout(()=>{
@@ -76,19 +89,4 @@ function formularioActualizarRegistro(cliente){
             }
         }
     });
-}
-
-function botonCerrarModal(){
-    const btnCancelar = document.querySelector('#cerrar-modal');
-    btnCancelar.addEventListener('click', e =>{
-        e.preventDefault();
-        cerrarModal();
-    });
-}
-
-function cerrarModal(){
-    const modalCliente = document.querySelector('#modal-cliente');
-    if (!modalCliente.className.includes('ocultar')){
-        modalCliente.classList.add('ocultar');
-    }
 }

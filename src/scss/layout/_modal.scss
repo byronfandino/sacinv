@@ -1,0 +1,37 @@
+@use '../base/variables' as v;
+@use '../base/mixins' as m;
+@use 'sass:color' as c;
+
+.contenedor-notificacion{
+    height: 85vh;
+    overflow-y: auto;
+
+    // Esta clase es utilizada para aquellas ventanas modales que solo contienen un formulario, y el espacio que ocupa es mínimo
+    &.auto{
+        height: auto;
+    }
+}
+
+.cerrar__modal{
+    display: inline-block;
+    position: absolute;
+    text-decoration: none;
+    color: v.$negro;
+    font-family: 'Arial';
+    font-weight: bold;
+    background-color: v.$blanco;
+    border-radius: 50%;
+    padding:0.5rem 1rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    
+    // //Resolución desktop
+    @include m.desktop {        
+        right: 2rem;        
+    }
+
+    //Resolución large-desktop
+    @include m.large-desktop {
+        top:2rem;
+    }
+}

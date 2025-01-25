@@ -162,7 +162,7 @@
     text-align:center;
     box-shadow:0px 0px 10px #646464;
     padding:0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
     
     &:hover{
         cursor: pointer;
@@ -171,6 +171,10 @@
     &:focus{
         transform: scale(0.95);
     }
+}
+
+a.boton{
+    display: inline-block;
 }
 
 .boton--primario{
@@ -190,3 +194,4 @@
         background-color: c.adjust($color: v.$gris, $lightness:10%);
     }
 }
+

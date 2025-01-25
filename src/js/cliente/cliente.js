@@ -13,7 +13,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
         idformularioAgregar : 'form_cliente',
 
-        isModal : false,
+        modal:{
+            isModal:false
+        },
 
         urlAgregar : '/cliente/guardar',
         urlEliminar : '/cliente/eliminar',
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         ],
 
         // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos, por lo tanto es necesario saber cual es el equivalente del nombre del campo de la array de datos con el nombre del campo al cual se pasa los datos
-        camposModalCliente : [
+        equivalenciaCamposModal : [
         //id del campo del fomulario principal : 'id del campo de la ventana modal'
             {id_cliente: 'id_cliente_modal'},
             {cedula_nit: 'cedula_nit_modal'},

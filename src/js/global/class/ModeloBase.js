@@ -1,4 +1,4 @@
-import { consultarAPI, mostrarErrorCampo, quitarErrorCampo, url } from "../parametros.js";
+import { cierreAutModal, consultarAPI, habilitarBotonSubmit, mostrarErrorCampo, quitarErrorCampo, url } from "../parametros.js";
 
 export class ModeloBase{
     constructor (objeto){
@@ -14,8 +14,13 @@ export class ModeloBase{
         this.validacionCampos = objeto.validacionCampos;
         //Variable global para guardar todos los registros del JSON
         this.registros = '';
-        //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend en el método handleResponse()
-        this.isModal = objeto.isModal;
+        //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend y del frontend en el método handleResponse()
+        this.modal = objeto.modal;
+        //Abre la ventana modal con el registro cargado en el formulario para actualizar el registro, este está referenciado en la tabla 
+        this.idVentanaModal = objeto.idVentanaModal;
+        // Se utiliza para trasladar el registro de una tabla de una ventana modal al formulario principal
+        this.equivalenciaTablaAForm = objeto.equivalenciaTablaAForm;
+
     }
 
     asignarValidacionCampos(){
@@ -93,41 +98,106 @@ export class ModeloBase{
         const nombresCamposTabla = this.tabla.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
 
         registros.forEach(registro => {
-    
-            const tr = document.createElement('TR');
             // Se convierte el objeto en un array de arrays, donde cada subarray corresponde a la propiedad y el valor, parecido a un objeto
             let arrayRegistro = Object.entries(registro);
+
+            //Obtenemos el id del registro
+            const idRegistro = arrayRegistro[0][1];
+    
+            const tr = document.createElement('TR');
  
             arrayRegistro.forEach(campo => {
-    
+                // console.log(campo);
                 if(arrayCamposTabla.includes(campo[0])){
     
                     const td = document.createElement('TD');
                     const span = document.createElement('SPAN');
-                    const texto = document.createElement('SPAN');
-    
+
                     span.classList.add('tbody__td--titulo');
     
-                    nombresCamposTabla.forEach(nombreCampo => {
-                        if (nombreCampo[0] == campo[0]){
-                            span.textContent = nombreCampo[1];
-                        }
-                    })
-    
-                    texto.textContent = campo[1];
-    
+                    // Se agrega el nombre del dato dentro del td cuando este se encuentre en modo Mobile
+                    const keyCampo = nombresCamposTabla.find(nombreCampo => nombreCampo[0] === campo[0]);
+
+                    if (keyCampo) {
+                        span.textContent = keyCampo[1];
+                    }
+
+                    //Se verifica si la tabla está en una ventana modal para convertir el campo en un link
+                    const textoTD = this.verificarTipoRegistro(campo, idRegistro);
+                    
                     td.appendChild(span);
-                    td.appendChild(texto);
+                    td.appendChild(textoTD);
                     tr.appendChild(td);
                 }
             });
-            
-            //Obtenemos el id del registro para guardarlo en los links
-            const idRegistro = arrayRegistro[0][1];
+
             tr.appendChild(this.crearTdModificar(idRegistro));
             tr.appendChild(this.crearTdEliminar(idRegistro));
             tbody.appendChild(tr);
         });
+    }
+
+    verificarTipoRegistro(campo, idRegistro){
+
+        const texto = document.createElement('SPAN');
+        const keyCampo = campo[0];
+        const valorCampo = campo[1];
+        
+        if (this.modal.isModal){
+            // Si la tabla se encuentra dentro de un modal se crea una etiqueta <A> en lugar de un <SPAN>
+            const aLink = document.createElement('A');
+            aLink.setAttribute('href', '#');
+
+            // Encuentra el objeto donde la clave existe
+            const objetoEncontrado = this.tabla.find(obj => keyCampo in obj);
+
+            // Se verifica si el dato debe ser un hipervínculo
+            if(objetoEncontrado.class.includes('tbody__td--enlace')){
+                aLink.textContent = valorCampo;
+                aLink.dataset.id = idRegistro;
+                aLink.addEventListener('click', e => { 
+                    e.preventDefault();
+                    this.asignarDatosAFormulario(e)}
+                );
+
+                // Se verifica si el campo tiene clases css para aplicar
+                if(objetoEncontrado.class.length > 0){
+                    objetoEncontrado.class.forEach(clase => {
+                        aLink.classList.add(clase);
+                    });
+                }
+                
+                return aLink;
+                
+            }else{
+
+                texto.textContent = valorCampo;
+                return texto;         
+            }
+
+        }else{
+
+            texto.textContent = valorCampo;
+            return texto;
+        }
+    }
+
+    asignarDatosAFormulario(e){
+        const idBusqueda = Object.entries(this.equivalenciaTablaAForm[0])[0][1]; // Ejemplo [id_cliente_deudor , 'id_cliente']
+
+        const objeto = this.encontrarRegistro(idBusqueda, e.target.getAttribute('data-id'));
+
+        if (objeto){
+            this.equivalenciaTablaAForm.forEach(item => {
+                const arrayCampo = Object.entries(item)[0];
+                const campo = document.querySelector(`#${arrayCampo[0]}`);
+                campo.value = objeto[arrayCampo[1]];
+            });
+    
+            cierreAutModal(this.modal.nombreModal);
+
+            habilitarBotonSubmit(this.modal.idFormularioPrincipal);
+        }
     }
 
     crearTdModificar(idRegistro){
@@ -171,6 +241,16 @@ export class ModeloBase{
         return tdEliminar;
     }
 
+    mostrarModal(e, idRegistro){
+        e.preventDefault();
+        const ventanaModal = document.querySelector(`#${this.idVentanaModal}`);
+        if (ventanaModal.className.includes('ocultar')){
+            ventanaModal.classList.remove('ocultar');
+        }
+        const clienteEncontrado = this.buscarCliente(idRegistro);
+        this.asignarValoresVentanaModal(clienteEncontrado);
+    }
+
     // Verifica que los campos requeridos sean llenados
     revisarCampos(){
         let arrayObjetos = [];
@@ -192,6 +272,10 @@ export class ModeloBase{
         }else {
             return true;
         }
+    }
+
+    encontrarRegistro(campo, id){
+        return (this.registros.find(registro => registro[campo] == id)) || false;
     }
 
     // Función únicamente para obtener los registros en memoria y realizar búsquedas
@@ -342,8 +426,8 @@ export class ModeloBase{
 
                 if (errores.hasOwnProperty(propiedad)) {
 
-                    if (this.isModal){
-                        mostrarErrorCampo(propiedad + "_modal", msg);
+                    if (this.modal.isModal){
+                        mostrarErrorCampo(propiedad + this.modal.nombreCampoComplemento, msg);
                     }else{
                         mostrarErrorCampo(propiedad, msg);
                     }

@@ -5,21 +5,10 @@ export class Cliente extends ModeloBase {
     constructor (objeto){
         super(objeto);
         //Obtenemos el listado de los campos modal y su equivalente a los campos del formulario principal para evitar conflicto de nombres y cargar los datos en la ventana modal del cliente.
-        this.camposModalCliente = objeto.camposModalCliente;
+        this.equivalenciaCamposModal = objeto.equivalenciaCamposModal;
         // Guarda el id de la ciudad seleccionada para hacer el cambio de valor en el combo de la ventana modal
         this.valueComboCiudad = null;
-        //id de los elementos del DOM con los que se interactua
-        this.idVentanaModal = objeto.idVentanaModal;
-    }
-
-    mostrarModal(e, idRegistro){
-        e.preventDefault();
-        const ventanaModal = document.querySelector(`#${this.idVentanaModal}`);
-        if (ventanaModal.className.includes('ocultar')){
-            ventanaModal.classList.remove('ocultar');
-        }
-        const clienteEncontrado = this.buscarCliente(idRegistro);
-        this.asignarValoresVentanaModal(clienteEncontrado);
+        
     }
 
     buscarCliente(idRegistro){
@@ -34,8 +23,8 @@ export class Cliente extends ModeloBase {
     
         arrayCliente.forEach(([key, value]) => {
 
-            // Encontrar el campo correspondiente en this.camposModalCliente
-            const campo = this.camposModalCliente.find(campo => campo[key]);
+            // Encontrar el campo correspondiente en this.equivalenciaCamposModal
+            const campo = this.equivalenciaCamposModal.find(campo => campo[key]);
     
             if (campo) {
                 // Desestructurar el par clave-valor del campo

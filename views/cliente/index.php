@@ -7,11 +7,12 @@
 
     <!-- Ventana Modal -->
     <div class="fondo-notificacion ocultar" id="modal-cliente">
-        <div class="contenedor-notificacion">
+        <div class="contenedor-notificacion auto">
             <?php 
                 include_once __DIR__ . '/../cliente/modal_actualizar.php';
             ?>
         </div>
+        <a href="#" class="cerrar__modal">X</a>
     </div>
 
     <form class="form" action="" id="form_cliente">
@@ -28,7 +29,7 @@
                     <p class="label__error ocultar"></p>
                 </div>
     
-                <div class="form__campo t-md">
+                <div class="form__campo t-xl">
                     <label for="nombre">Nombre del Cliente</label>
                     <input type="text" name="nombre" id="nombre" class="campo__input" require>
                     <p class="label__error ocultar"></p>

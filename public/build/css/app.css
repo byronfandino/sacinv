@@ -332,6 +332,10 @@ body {
   line-height: 140%;
 }
 
+.guia {
+  border: 1px solid red;
+}
+
 h1, h2, h3 {
   font-family: "Arial", sans-serif;
   margin: 3rem 0;
@@ -568,13 +572,17 @@ header {
   text-align: center;
   box-shadow: 0px 0px 10px #646464;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 .boton:hover {
   cursor: pointer;
 }
 .boton:focus {
   transform: scale(0.95);
+}
+
+a.boton {
+  display: inline-block;
 }
 
 .boton--primario {
@@ -675,6 +683,10 @@ header {
   .tbody__td--titulo {
     display: none;
   }
+}
+.tbody__td--enlace {
+  text-decoration: none;
+  font-weight: bold;
 }
 .tbody__td--estado {
   font-size: 1.5rem;
@@ -778,5 +790,37 @@ header {
   width: 90%;
   background-color: #ffffff;
   padding: 2rem;
+}
+
+.contenedor-notificacion {
+  height: 85vh;
+  overflow-y: auto;
+}
+.contenedor-notificacion.auto {
+  height: auto;
+}
+
+.cerrar__modal {
+  display: inline-block;
+  position: absolute;
+  text-decoration: none;
+  color: #000000;
+  font-family: "Arial";
+  font-weight: bold;
+  background-color: #ffffff;
+  border-radius: 50%;
+  padding: 0.5rem 1rem;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+@media (min-width: 1024px) {
+  .cerrar__modal {
+    right: 2rem;
+  }
+}
+@media (min-width: 1600px) {
+  .cerrar__modal {
+    top: 2rem;
+  }
 }
 /*# sourceMappingURL=app.css.map */

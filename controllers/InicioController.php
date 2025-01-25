@@ -9,15 +9,14 @@ class InicioController{
     
     public static function inicio(Router $router){
         
-        //Listar departamentos
-        // $departamentos = Departamento::all('nombre_depart');
+        $departamentos = Departamento::all('nombre_depart');
 
         $router->renderIndex('deudores/index', [
-            // 'departamentos' => $departamentos
+            'departamentos' => $departamentos
         ]);
     }
-
-          // $auth = new Usuario;
+    
+        // $auth = new Usuario;
         // // debuguear($auth);
         // $alertas = [];
 

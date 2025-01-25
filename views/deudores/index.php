@@ -4,40 +4,63 @@
 </header>
 
 <main class="main">
-    <form class="form" action="">
+
+    <!-- Ventana Modal -->
+    <div class="fondo-notificacion ocultar" id="modal_cliente_select">
+        <div class="contenedor-notificacion ">
+            <?php 
+                include_once __DIR__ . '/../deudores/modal_cliente_selec.php';
+            ?>
+        </div>
+
+        <a href="#" class="cerrar__modal">X</a>
+    </div>
+    
+    <!-- Ventana Modal -->
+    <div class="fondo-notificacion ocultar" id="modal_cliente_actualizar">
+        <div class="contenedor-notificacion ">
+            <?php 
+                include_once __DIR__ . '/../deudores/modal_cliente_actualizar.php';
+            ?>
+        </div>
+
+        <a href="#" class="cerrar__modal">X</a>
+    </div>
+    
+    <form class="form" action="" id="form_deudores">
         <fieldset>
 
             <legend>Datos del cliente</legend>
 
-            <div class="contenedor__campos">
-                <input type="hidden" name="id_cliente">
-                <div class="form__campo t-sm">
-                    <label for="cedula_nit">Cédula / Nit</label>
-                    <input type="text" id="cedula_nit" class="campo__input">
-                </div>
-                <div class="form__campo t-md">
-                    <label for="nombre_cliente">Nombre del Cliente</label>
-                    <input type="text" id="nombre_cliente" class="campo__input">
-                </div>
-                <button class="boton boton--primario" >Buscar</button>                    
-            </div>
+            <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
 
             <div class="contenedor__campos">
+
+                <input type="hidden" id="id_cliente_deudor" name="id_cliente">
+
                 <div class="form__campo t-sm">
-                    <label for="telefono">Teléfono</label>
-                    <input type="number" id="telefono" class="campo__input disabled">
+                    <label for="cedula_nit_deudor">Cédula / Nit</label>
+                    <input type="text" id="cedula_nit_deudor" class="campo__input disabled">
+                </div>
+                <div class="form__campo t-xl">
+                    <label for="nombre_deudor">Nombre del Cliente</label>
+                    <input type="text" id="nombre_deudor" class="campo__input disabled">
+                </div>
+                <div class="form__campo t-sm">
+                    <label for="telefono_deudor">Teléfono</label>
+                    <input type="number" id="telefono_deudor" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" id="direccion" class="campo__input disabled">
+                    <label for="direccion_deudor">Dirección</label>
+                    <input type="text" id="direccion_deudor" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
-                    <label for="nombre_ciudad">Ciudad</label>
-                    <input type="text" id="nombre_ciudad" class="campo__input disabled">
+                    <label for="nombre_ciudad_deudor">Ciudad</label>
+                    <input type="text" id="nombre_ciudad_deudor" class="campo__input disabled">
                 </div>
                 <div class="form__campo t-md">
-                    <label for="nombre_depart">Departamento</label>
-                    <input type="text" id="nombre_depart" class="campo__input disabled">
+                    <label for="nombre_depart_deudor">Departamento</label>
+                    <input type="text" id="nombre_depart_deudor" class="campo__input disabled">
                 </div>
             </div>
         </fieldset>
@@ -89,7 +112,7 @@
 </main>
 <?php
     if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/cxc/cxc.js" type="module"></script>';
+        $script .= '<script src="/build/js/cxc/cxc.js" type="module"></script>';        
     }else{
         $script = '<script src="/build/js/cxc/cxc.js" type="module"></script>';
     }

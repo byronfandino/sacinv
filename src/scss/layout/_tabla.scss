@@ -104,6 +104,11 @@
         }
     }
 
+    &__td--enlace{
+        text-decoration: none;
+        font-weight: bold;
+    }
+
     &__td--estado{
 
         font-size: 1.5rem;

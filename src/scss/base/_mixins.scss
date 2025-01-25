@@ -18,6 +18,12 @@
     }
 }
 
+@mixin large-desktop {
+    @media (min-width: v.$large-desktop) {
+        @content;
+    }
+}
+
 @mixin grid($columnas, $alineacion-h, $alineacion-v, $espg-h, $espg-v ) {
     display: grid;
     grid-template-columns: repeat($columnas, 1fr);

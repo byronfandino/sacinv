@@ -1,4 +1,4 @@
-export const url = 'http://127.0.0.1:3000'
+export const url = 'http://192.168.18.90:3000'
 export let clienteActualizado = false;
 
 export async function consultarAPI(rutaComplemento) {
@@ -73,4 +73,25 @@ export function limpiarFormulario(arrayCampos, campoFocus){
     });
 }
 
+// Se ejecuta al presionar en el botón de la X 
+export function cierreManualModal(e){
+    const ventana = e.target.parentElement;
+    if(!ventana.className.includes('ocultar')){
+        ventana.classList.add('ocultar');
+    }
+}
+
+// Se ejecuta cuando termina una acción en específico y se debe cerrar automáticamente
+export function cierreAutModal(idModal){
+    const clienteSectModal = document.querySelector(`#${idModal}`);
+    clienteSectModal.classList.add('ocultar');
+}
+
+export function habilitarBotonSubmit(idFormulario){
+    const btnSubmit = document.querySelector(`#${idFormulario}`).querySelector('input[type="submit"]');
+    btnSubmit.classList.remove('boton--secundario');
+    btnSubmit.classList.add('boton--primario');
+    btnSubmit.removeAttribute('disabled');
+
+}
 //# sourceMappingURL=parametros.js.map
