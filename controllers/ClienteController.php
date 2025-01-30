@@ -29,7 +29,7 @@ class ClienteController{
             if (empty($alertas)){
                 $resultado = $cliente->crear();
                 
-                if($resultado){
+                if($resultado === true){
                     echo json_encode([
                         "rta" => "true", 
                         "message" => "Guadado exitosamente"
@@ -64,7 +64,7 @@ class ClienteController{
                 
                 $resultado = $cliente->actualizar();
 
-                if($resultado){
+                if($resultado === true){
                     echo json_encode([
                         "rta" => "true", 
                         "message" => "Actualización exitosa"
@@ -87,13 +87,14 @@ class ClienteController{
     }
 
     public static function eliminar(){
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $id = $_POST['id'];
             $cliente = Cliente::find($id);
             $resultado = $cliente->eliminar($id);
 
-            if($resultado){
+            if($resultado === true){
                 echo json_encode([
                     "rta" => "true", 
                     "message" => "Registro eliminado"
@@ -101,7 +102,8 @@ class ClienteController{
             }else{
                 echo json_encode([
                     "rta" => "false", 
-                    "message" => "EL registro No se eliminó"
+                    "message" => "El registro No se eliminó, posiblemente este registro se encuentre relacionado con otra entidad",
+                    "error" => $resultado
                 ]);
             }
         }

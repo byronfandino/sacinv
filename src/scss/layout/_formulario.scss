@@ -62,6 +62,8 @@
     
     &.t-xxl{
        
+        width: 100%;
+        
         //Resolución tablet
         @include m.tablet{
             width: 95%;

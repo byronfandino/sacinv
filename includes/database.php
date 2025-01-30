@@ -21,6 +21,11 @@ try {
     $pdo = new PDO($dsn, $user, $password, $options);
 } catch (PDOException $e) {
     // Manejar cualquier error de conexión
-    echo "Error en la conexión: " . $e->getMessage();
+    // echo "Error en la conexión: " . $e->getMessage();
+    // echo json_encode([
+    //     "rta" => "false",
+    //     "message" => "Error inesperado: " . $e->getMessage()
+    // ]);
+    return $e->getMessage();
 }
 ?>

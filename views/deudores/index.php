@@ -27,16 +27,17 @@
         <a href="#" class="cerrar__modal">X</a>
     </div>
     
-    <form class="form" action="" id="form_deudores">
+    <form class="form" method="post" id="form_deuda">
+
         <fieldset>
 
             <legend>Datos del cliente</legend>
 
             <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
+            <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
+            <p class="label__error ocultar"></p>
 
             <div class="contenedor__campos">
-
-                <input type="hidden" id="id_cliente_deudor" name="id_cliente">
 
                 <div class="form__campo t-sm">
                     <label for="cedula_nit_deudor">Cédula / Nit</label>
@@ -71,21 +72,34 @@
                 <div class="form__campo t-xxl">
                     <label for="descripcion">Descripción del producto</label>
                     <input type="text" name="descripcion" id="descripcion" class="campo__input">
+                    <p class="label__error ocultar"></p>
                 </div>
                 <div class="form__campo t-md">
                     <label for="tipo_mov">Tipo de movimiento</label>
                     <select name="tipo_mov" id="tipo_mov" class="campo__input">
                         <option value="" selected disabled>-Seleccione una opción-</option>
-                        <option value="c">Por cobrar</option>
-                        <option value="a">Abonó</option>
+                        <option value="D">Debe</option>
+                        <option value="A">Abonó</option>
                     </select>
+                    <p class="label__error ocultar"></p>
                 </div>
                 <div class="form__campo t-sm">
-                    <label for="valor_deuda">Valor del producto</label>
-                    <input type="number" name="valor_deuda" id="valor_deuda" class="campo__input">
+                    <label for="valor">Valor del producto</label>
+                    <input type="number" name="valor" id="valor" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
+                <div class="form__campo t-sm">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" name="fecha" id="fecha" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
+                <div class="form__campo t-sm">
+                    <label for="hora">Hora</label>
+                    <input type="time" name="hora" id="hora" class="campo__input">
+                    <p class="label__error ocultar"></p>
                 </div>
             </div>
-            <input type="submit" value="Agregar" class="boton boton--secundario" disabled>
+            <input type="submit" value="Agregar" class="boton boton--secundario">
         </fieldset>                
     </form>
 
@@ -98,7 +112,7 @@
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Tipo Movimiento</th>
-                    <th>Descrición</th>
+                    <th>Descripción</th>
                     <th>Valor</th>
                     <th class="thead__th--icon">Eliminar</th>
                 </tr>

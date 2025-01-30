@@ -481,6 +481,9 @@ header {
     width: 38rem;
   }
 }
+.form__campo.t-xxl {
+  width: 100%;
+}
 @media (min-width: 600px) {
   .form__campo.t-xxl {
     width: 95%;

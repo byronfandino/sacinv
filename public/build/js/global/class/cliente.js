@@ -11,15 +11,9 @@ export class Cliente extends ModeloBase {
         
     }
 
-    buscarCliente(idRegistro){
-        // Usar el método find para buscar el objeto en el arreglo
-        const clienteEncontrado = this.registros.find(cliente => cliente.id_cliente === idRegistro);
-        return clienteEncontrado;
-    }
-
-    asignarValoresVentanaModal(clienteEncontrado) {
+    asignarValoresVentanaModal(objetoEncontrado) {
         // Convertir el objeto encontrado en un array de pares clave-valor
-        const arrayCliente = Object.entries(clienteEncontrado);
+        const arrayCliente = Object.entries(objetoEncontrado);
     
         arrayCliente.forEach(([key, value]) => {
 

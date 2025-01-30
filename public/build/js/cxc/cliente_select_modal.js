@@ -1,34 +1,43 @@
 import { Cliente } from "../global/class/cliente.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    cargarCliente();
+});
+
+function cargarCliente(){
     const objetoCliente = {
-
-        idformularioAgregar : 'form_cliente',
-
+    
         // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
         modal : {
             isModal : true,
-            nombreModal: 'modal_cliente_select',
+            idVentanaModal: 'modal_cliente_select',
             nombreCampoComplemento: '_agregar',
-            idFormularioPrincipal : 'form_deudores'
+            idFormularioPrincipal : 'form_deuda'
+        },
+    
+        url : {
+            agregar : '/cliente/guardar',
+            eliminar : '/cliente/eliminar',
+            apiConsultar: '/cliente/api',
         },
 
-        urlAgregar : '/cliente/guardar',
-        urlEliminar : '/cliente/eliminar',
-        urlApiListar: '/cliente/api',
         // El idVentanaModal hace referencia no solamente a la ventana que se abre desde la tabla de registros para modificar un registro en particular, sino que allí se colocan en los respectivos campos cada dato del registro
         idVentanaModal: 'modal_cliente_actualizar',
-
+    
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
-        estructuraTabla : [
-            {cedula_nit: 'Cédula / Nit', posicion: 1, class:['tbody__td--enlace']},
-            {nombre: 'Nombre del Cliente', posicion: 2, class:['tbody__td--enlace']},
-            {telefono: 'Celular', posicion:3, class: []},
-            {direccion: 'Dirección', posicion:4, class: []},
-            {nombre_ciudad: 'Ciudad', posicion:5, class: []},
-            {nombre_depart: 'Departamento', posicion:6, class: []}
-        ],
-
+        tabla : {
+            estructura : [
+                {cedula_nit: 'Cédula / Nit', posicion: 1, class:['tbody__td--enlace']},
+                {nombre: 'Nombre del Cliente', posicion: 2, class:['tbody__td--enlace']},
+                {telefono: 'Celular', posicion:3, class: []},
+                {direccion: 'Dirección', posicion:4, class: []},
+                {nombre_ciudad: 'Ciudad', posicion:5, class: []},
+                {nombre_depart: 'Departamento', posicion:6, class: []}
+            ],
+            columnaModificar: true,
+            columnaEliminar: true,
+        },
+    
         // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos, por lo tanto es necesario saber cual es el equivalente del nombre del campo de la array de datos con el nombre del campo al cual se pasa los datos
         equivalenciaCamposModal : [
         //id del campo del fomulario principal : 'id del campo de la ventana modal'
@@ -40,11 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
             {cod_depart: 'cod_depart_actualizar'},
             {fk_ciudad: 'fk_ciudad_actualizar'}
         ],
-
+    
         // Se utiliza para trasladar el registro de una tabla de una ventana modal al formulario principal
         equivalenciaTablaAForm :[
             // {id campo formulario principal : propiedad del objeto obtenido del JSON}
-            {id_cliente_deudor : 'id_cliente'},
+            {fk_cliente_deudor : 'id_cliente'},
             {cedula_nit_deudor : 'cedula_nit'},
             {nombre_deudor : 'nombre'},
             {telefono_deudor : 'telefono'},
@@ -52,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {nombre_ciudad_deudor : 'nombre_ciudad'},
             {nombre_depart_deudor : 'nombre_depart'}
         ],
-
+    
         //Se verifica que los campos diligenciados cumplan con estos registros
         validacionCampos : [
             {cedula_nit_agregar: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
@@ -63,10 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
             {fk_ciudad_agregar: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ]
     }
-
+    
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
     cliente.listarRegistros();
-
-});
+}
 //# sourceMappingURL=cliente_select_modal.js.map

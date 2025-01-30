@@ -1,26 +1,30 @@
-import { cierreAutModal, consultarAPI, habilitarBotonSubmit, mostrarErrorCampo, quitarErrorCampo, url } from "../parametros.js";
+import { 
+    cierreAutModal, 
+    consultarAPI, 
+    habilitarBotonSubmit, 
+    limpiarFormulario, 
+    mostrarErrorCampo, 
+    quitarErrorCampo, 
+    url 
+} from "../parametros.js";
 
 export class ModeloBase{
     constructor (objeto){
         this.objeto = objeto;
-        //URL API
-        this.urlApiListar = objeto.urlApiListar;
-        this.urlAgregar = objeto.urlAgregar;
-        this.urlActualizar = objeto.urlActualizar;
-        this.urlEliminar = objeto.urlEliminar;
+        //url de conexión
+        this.url = objeto.url;
         //Estructura en la que creará la tabla de los registros
-        this.tabla = objeto.estructuraTabla;
+        this.tabla = objeto.tabla;
         //Requisitos de cada campo para ser llenado
         this.validacionCampos = objeto.validacionCampos;
-        //Variable global para guardar todos los registros del JSON
-        this.registros = '';
         //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend y del frontend en el método handleResponse()
         this.modal = objeto.modal;
-        //Abre la ventana modal con el registro cargado en el formulario para actualizar el registro, este está referenciado en la tabla 
+        //Abre la ventana modal con el registro cargado en el formulario para actualizar el registro, este está referenciado en la tabla de registros ubicado en el formulario principal
         this.idVentanaModal = objeto.idVentanaModal;
         // Se utiliza para trasladar el registro de una tabla de una ventana modal al formulario principal
         this.equivalenciaTablaAForm = objeto.equivalenciaTablaAForm;
-
+        //Variable global para guardar todos los registros del JSON
+        this.registros = '';
     }
 
     asignarValidacionCampos(){
@@ -94,8 +98,8 @@ export class ModeloBase{
         //Definimos cuales son los campos en los que necesitamos iterar
         const tbody = document.querySelector('.tbody');
         tbody.innerHTML = ''; //Limpiar la tabla antes de llenarla
-        const arrayCamposTabla = this.tabla.map(obj => Object.keys(obj)[0]); 
-        const nombresCamposTabla = this.tabla.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
+        const arrayCamposTabla = this.tabla.estructura.map(obj => Object.keys(obj)[0]); 
+        const nombresCamposTabla = this.tabla.estructura.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
 
         registros.forEach(registro => {
             // Se convierte el objeto en un array de arrays, donde cada subarray corresponde a la propiedad y el valor, parecido a un objeto
@@ -131,12 +135,22 @@ export class ModeloBase{
                 }
             });
 
-            tr.appendChild(this.crearTdModificar(idRegistro));
-            tr.appendChild(this.crearTdEliminar(idRegistro));
+            const nombreCampoId = Object.entries(registro)[0][0];
+            // Si se requiere la columna modificar se crea el td
+            if(this.tabla.columnaModificar){
+                tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));
+            }
+
+            // Si se requiere la columna eliminar se crea el td
+            if(this.tabla.columnaEliminar){
+                tr.appendChild(this.crearTdEliminar(idRegistro));
+            }
+
             tbody.appendChild(tr);
         });
     }
 
+    // Método para determinar si crear un hipervínculo o no, y eso depende si la tabla se está cargando desde una ventana modal
     verificarTipoRegistro(campo, idRegistro){
 
         const texto = document.createElement('SPAN');
@@ -149,7 +163,7 @@ export class ModeloBase{
             aLink.setAttribute('href', '#');
 
             // Encuentra el objeto donde la clave existe
-            const objetoEncontrado = this.tabla.find(obj => keyCampo in obj);
+            const objetoEncontrado = this.tabla.estructura.find(obj => keyCampo in obj);
 
             // Se verifica si el dato debe ser un hipervínculo
             if(objetoEncontrado.class.includes('tbody__td--enlace')){
@@ -182,25 +196,27 @@ export class ModeloBase{
         }
     }
 
+    // Este método copia los datos del objeto encontrado en la tabla de registro que está dentro de la ventana modal y los envia al formulario principal
     asignarDatosAFormulario(e){
         const idBusqueda = Object.entries(this.equivalenciaTablaAForm[0])[0][1]; // Ejemplo [id_cliente_deudor , 'id_cliente']
 
         const objeto = this.encontrarRegistro(idBusqueda, e.target.getAttribute('data-id'));
 
         if (objeto){
+
             this.equivalenciaTablaAForm.forEach(item => {
+
                 const arrayCampo = Object.entries(item)[0];
                 const campo = document.querySelector(`#${arrayCampo[0]}`);
                 campo.value = objeto[arrayCampo[1]];
             });
     
-            cierreAutModal(this.modal.nombreModal);
-
+            cierreAutModal(this.modal.idVentanaModal);
             habilitarBotonSubmit(this.modal.idFormularioPrincipal);
         }
     }
 
-    crearTdModificar(idRegistro){
+    crearTdModificar(nombreCampoId, idRegistro){
         const spanModificar = document.createElement('SPAN');
         spanModificar.textContent="Editar";
         
@@ -212,8 +228,8 @@ export class ModeloBase{
         linkModificar.setAttribute('href', '#');
         linkModificar.appendChild(imgModificar);
         linkModificar.appendChild(spanModificar);
-        linkModificar.addEventListener('click', e => this.mostrarModal(e, idRegistro));
-    
+        linkModificar.addEventListener('click', e => this.mostrarModal(e, nombreCampoId, idRegistro));
+        
         const tdModificar = document.createElement('TD');
         tdModificar.classList.add('tbody__td--icon');
         tdModificar.appendChild(linkModificar);
@@ -221,6 +237,7 @@ export class ModeloBase{
     }
 
     crearTdEliminar(idRegistro){
+
         const spanEliminar = document.createElement('SPAN');
         spanEliminar.textContent="Eliminar";
         spanEliminar.dataset.id = idRegistro;
@@ -238,17 +255,25 @@ export class ModeloBase{
         const tdEliminar = document.createElement('TD');
         tdEliminar.classList.add('tbody__td--icon');
         tdEliminar.appendChild(linkEliminar);
+
         return tdEliminar;
     }
 
-    mostrarModal(e, idRegistro){
+    // Este evento se dispara cuando se hace clic en el botón modificar dentro de una tabla de registros, el cual traslada no solo desoculta la ventana sino que traslada los datos del registro al formulario, pero se ejecuta un método de la clase hija Cliente llamado asignarValoresVentanaModal() para darle un tratamiento particular a los campos.
+
+    mostrarModal(e, nombreCampo, idRegistro){
+
         e.preventDefault();
+        console.log(this.idVentanaModal);
         const ventanaModal = document.querySelector(`#${this.idVentanaModal}`);
+
         if (ventanaModal.className.includes('ocultar')){
             ventanaModal.classList.remove('ocultar');
         }
-        const clienteEncontrado = this.buscarCliente(idRegistro);
-        this.asignarValoresVentanaModal(clienteEncontrado);
+
+        const objetoEncontrado = this.encontrarRegistro(nombreCampo, idRegistro);
+        // Este método se encuentra en la clase hija debido a que existen tipos de campos de tipo input y select
+        this.asignarValoresVentanaModal(objetoEncontrado);
     }
 
     // Verifica que los campos requeridos sean llenados
@@ -274,18 +299,19 @@ export class ModeloBase{
         }
     }
 
+    // Método para encontrar un objeto dentro del arreglo global de los almacenados en la variable this.registros,para evitar solicitudes al backend.
     encontrarRegistro(campo, id){
         return (this.registros.find(registro => registro[campo] == id)) || false;
     }
 
     // Función únicamente para obtener los registros en memoria y realizar búsquedas
     async obtenerRegistros(){
-        if (!this.urlApiListar) {
+        if (!this.url.apiConsultar) {
             console.error("La URL para listar no está definida.");
             return;
         }
         try { 
-            const datos = await consultarAPI(this.urlApiListar); 
+            const datos = await consultarAPI(this.url.apiConsultar); 
             this.registros = datos;
             return true;
 
@@ -309,7 +335,7 @@ export class ModeloBase{
 
     async agregarRegistro(formulario){
 
-        const urlGuardar = url + this.urlAgregar;
+        const urlGuardar = url + this.url.agregar;
 
         // Crear una instancia de FormData con el formulario
         const formData = new FormData(formulario);
@@ -336,7 +362,7 @@ export class ModeloBase{
 
     async actualizarRegistro(formulario){
         
-        const urlActualizar = url + this.urlActualizar;
+        const urlActualizar = url + this.url.actualizar;
         // Hacer una solicitud fetch para enviar los datos del formulario
         try {
             const response = await fetch(urlActualizar, {
@@ -383,7 +409,7 @@ export class ModeloBase{
 
     async eliminarRegistro(id){
 
-        const urlEliminar = url + this.urlEliminar;
+        const urlEliminar = url + this.url.eliminar;
         const formData = new FormData();
         formData.append('id', id);
 
@@ -406,6 +432,7 @@ export class ModeloBase{
     }
 
     handleResponse(data) {
+        // Si el registro fue exitoso el data.rta = true
         if (data.rta == "true") {
             Swal.fire({
                 title: data.message,
@@ -416,6 +443,7 @@ export class ModeloBase{
             
             return true;
 
+        // Si el registro no se guardó por validación de campos en el backend, muestra el error en los campos
         } else if (data.alertas) {
 
             const errores = data.alertas['error'];
@@ -443,12 +471,74 @@ export class ModeloBase{
 
             return false;
 
+        // Si es un error del backend
         } else {
-            console.log(data);
+
+            console.log(data.error);
+
+            Swal.fire({
+                title: data.message,
+                icon: 'error',
+                confirmButtonColor: '#f00',
+                confirmButtonText: 'Aceptar'
+            });
 
             return false;
 
         }
+    }
+
+    formularioAgregar(idFormulario){
+        const formulario = document.querySelector(`#${idFormulario}`);
+        
+        formulario.addEventListener('submit', async (e) => {
+            // Prevenir el comportamiento por defecto del formulario
+            e.preventDefault();
+    
+            // Si pasa la validación de los campos envie la petición al post
+            if(this.revisarCampos()){
+    
+                const rta = await this.agregarRegistro(formulario);
+                
+                // Si se agregó el registro correctamente debe refrescar la tabla
+                if (rta){
+                    
+                    //Obtenemos un arreglo de nombres de los campos a partir del array de objetos validacionCampos[];
+                    const nombreCamposFormulario = this.validacionCampos.map(obj => Object.keys(obj)[0]);
+
+                    limpiarFormulario(nombreCamposFormulario);
+                    this.listarRegistros();
+
+                }
+            }
+        });
+    }
+
+    formularioActualizar(idFormulario){
+        const formulario = document.querySelector(`#${idFormulario}`);
+        formulario.addEventListener('submit', async (e) => {
+            // Prevenir el comportamiento por defecto del formulario
+            e.preventDefault();
+    
+            // Si pasa la validación de los campos envie la petición al post
+            if(this.revisarCampos()){
+    
+                let formData = new FormData(formulario); // Crear un objeto FormData con los datos del formulario
+ 
+                const rta = await this.actualizarRegistro(formData);
+                console.log(rta);
+                if(rta){
+
+                    // Cerramos el modal
+                    cierreAutModal(this.modal.idVentanaModal);
+    
+                    // Refrescar la página
+                    setTimeout(()=>{
+                        location.reload();
+                    },800);
+                }
+            }
+        });
     }
 }
 

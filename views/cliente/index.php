@@ -6,7 +6,7 @@
 <main class="main">
 
     <!-- Ventana Modal -->
-    <div class="fondo-notificacion ocultar" id="modal-cliente">
+    <div class="fondo-notificacion ocultar" id="modal_cliente_actualizar">
         <div class="contenedor-notificacion auto">
             <?php 
                 include_once __DIR__ . '/../cliente/modal_actualizar.php';
@@ -15,7 +15,7 @@
         <a href="#" class="cerrar__modal">X</a>
     </div>
 
-    <form class="form" action="" id="form_cliente">
+    <form class="form" method="post" action="" id="form_cliente">
         <fieldset>
 
             <legend>Datos del cliente</legend>

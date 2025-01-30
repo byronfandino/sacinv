@@ -34,8 +34,11 @@ export function mostrarErrorCampo(input_text, msg = ''){
         cajaTexto.classList.add('input__error');
     }
 
-    if (!label.className.includes('text__error')){
-        label.classList.add('text__error');
+    if (label){
+        if (!label.className.includes('text__error')){
+            label.classList.add('text__error');
+        }
+
     }
 
     if (msgError.className.includes('ocultar') && msg != ''){
@@ -44,7 +47,7 @@ export function mostrarErrorCampo(input_text, msg = ''){
     }
 }
 
-//Se para por parámetro el nombre de la clase input__error 
+//Se pasa por parámetro el nombre de la clase input__error 
 //para obtener todos los campos a los que se necesita quitar el error 
 
 export function quitarErrorCampo(objeto){
@@ -61,16 +64,18 @@ export function quitarErrorCampo(objeto){
     }
 }
 
-export function limpiarFormulario(arrayCampos, campoFocus){
+export function limpiarFormulario(arrayCampos){
     arrayCampos.forEach(nombreCampo => {
         const campo = document.querySelector(`#${nombreCampo}`);
         campo.value='';
-
-        if (nombreCampo == campoFocus){
-            campo.focus();
-        }
-
     });
+}
+
+export function mostrarModal(idModal){
+    const ventanaModal =  document.querySelector(`#${idModal}`);
+    if (ventanaModal.className.includes('ocultar')){
+         ventanaModal.classList.remove('ocultar');
+    }
 }
 
 // Se ejecuta al presionar en el botón de la X 

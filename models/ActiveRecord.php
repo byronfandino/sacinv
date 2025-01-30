@@ -1,5 +1,9 @@
 <?php
 namespace Model;
+
+use PDO;
+use PDOException;
+
 class ActiveRecord {
 
     // Base DE DATOS
@@ -156,8 +160,9 @@ class ActiveRecord {
 
         $array_datos = $this->atributos();
         // Eliminamos el primer elemento del arreglo asociativo que es el ID
+        // echo json_encode([$array_datos]);
         array_shift($array_datos);
-
+        
         // Insertar en la base de datos
         $query = " INSERT INTO " . static::$tabla . " ( ";
         $query .= join(', ', array_keys($array_datos));
@@ -165,24 +170,40 @@ class ActiveRecord {
         $query .= join(", :", array_keys($array_datos));
         $query .= ") ";
 
+        // Nueva linea
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // Preparar declaración sql
         $resultado = self::$pdo->prepare($query);
 
-        // Vincular los parámetros utilizando bindParam 
-        foreach ($array_datos as $key => $value) { 
-            $resultado->bindParam(':' . $key, $array_datos[$key]); 
-        } 
+        $arrayInsert = [];
 
-        // Ejecutar la declaración sql
-        if($resultado->execute()){
-            return true;
-        }else{
-            return false;
+        // Recorrer los datos y vincularlos dinámicamente
+        foreach ($array_datos as $key => $value) {
+            // Detectar el tipo de dato y asignar el tipo correcto
+            $tipo = is_numeric($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+            
+            // Forzar conversión a int si es un número
+            $valor_convertido = ($tipo === PDO::PARAM_INT) ? (int) $value : $value;
+
+            // Vincular el valor
+            $resultado->bindValue(":$key", $valor_convertido, $tipo);
+        }
+        // return $arrayInsert;
+        // return $resultado->execute();
+        try{
+            if($resultado->execute()){
+                return true;
+            }
+        } catch (PDOException $e) {
+            return $e->getMessage();
         }
     }
 
     // Actualizar el registro
     public function actualizar() {
+
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
         //Obtenemos el nombre del primer campo del arreglo de columnas
         $campoId = static::$columnasDB[0];
         
@@ -213,27 +234,38 @@ class ActiveRecord {
             // si el key corresponde al campo Id
             $stmt->bindParam(':' . $key, $array_datos[$key]); 
         }
- 
-        // Ejecutar la declaración sql
-        if($stmt->execute()){
-            return true;
-        }else{
-            return false;
+        try{
+            if($stmt->execute()){
+                return true;
+            }
+        } catch (PDOException $e) {
+            return $e->getMessage();
         }
     }
 
     // Eliminar un Registro por su ID
     public function eliminar($id) {
+
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         $query = "DELETE FROM "  . static::$tabla . " WHERE " . static::$columnasDB[0] . " = :" . static::$columnasDB[0];
         $stmt = static::$pdo->prepare($query);
         
         $stmt->bindParam(':' . static::$columnasDB[0], $id);
         
-        if($stmt->execute()){
-            return true;
-        }else{
-            return false;
+        try{
+            if($stmt->execute()){
+                return true;
+            }
+        } catch (PDOException $e) {
+            return $e->getMessage();
         }
+       
+        // if($stmt->execute()){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
     }
 
 }
