@@ -19,6 +19,8 @@ function cargarCliente(){
             agregar : '/cliente/guardar',
             eliminar : '/cliente/eliminar',
             apiConsultar: '/cliente/api',
+            //Es la url que se asigna a cada registro de una tabla que esté dentro de una ventana modal
+            apiFiltroMain: '/deuda_mov/cliente/api'
         },
 
         // El idVentanaModal hace referencia no solamente a la ventana que se abre desde la tabla de registros para modificar un registro en particular, sino que allí se colocan en los respectivos campos cada dato del registro
@@ -26,6 +28,7 @@ function cargarCliente(){
     
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
+            idTabla: 'tabla_select_cliente',
             estructura : [
                 {cedula_nit: 'Cédula / Nit', posicion: 1, class:['tbody__td--enlace']},
                 {nombre: 'Nombre del Cliente', posicion: 2, class:['tbody__td--enlace']},
@@ -35,10 +38,28 @@ function cargarCliente(){
                 {nombre_depart: 'Departamento', posicion:6, class: []}
             ],
             columnaModificar: true,
-            columnaEliminar: true,
+            columnaEliminar: true
+        },
+
+        //Esta tabla hace referencia a la tabla de la página principal, la cual se tiene que llenar al momento de seleccionar un registro de otra tabla que se encuentra en la ventana modal
+        tablaAlterna : {
+            idTabla: 'tabla_deuda',
+            estructura : [
+                // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css
+                {fecha: 'Fecha', posicion: 1, class:[]},
+                {hora: 'Hora', posicion: 2, class:[]},
+                {tipo_mov: 'Tipo Movimiento', posicion:3, class: []},
+                {descripcion: 'Descripcion', posicion:4, class: []},
+                {valor: 'Valor', posicion:5, class: []},
+                {saldo: 'Saldo', posicion:6, class: []}
+            ],
+    
+            columnaModificar: false,
+            columnaEliminar: false
         },
     
         // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos, por lo tanto es necesario saber cual es el equivalente del nombre del campo de la array de datos con el nombre del campo al cual se pasa los datos
+
         equivalenciaCamposModal : [
         //id del campo del fomulario principal : 'id del campo de la ventana modal'
             {id_cliente: 'id_cliente_actualizar'},

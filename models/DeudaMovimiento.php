@@ -3,7 +3,7 @@
 
     class DeudaMovimiento extends ActiveRecord{
         protected static $tabla = 'deuda_movimiento';
-        protected static $columnasDB = ['id_mov', 'fk_deuda', 'tipo_mov', 'descripcion', 'valor', 'fecha', 'hora'];
+        protected static $columnasDB = ['id_mov', 'fk_deuda', 'tipo_mov', 'descripcion', 'valor', 'fecha', 'hora', 'saldo'];
         
         public $id_mov;
         public $fk_deuda;
@@ -11,7 +11,8 @@
         public $descripcion;
         public $valor;
         public $fecha;
-        public $hora;   
+        public $hora;
+        public $saldo;   
     
         public function __construct($args=[])
         {
@@ -22,6 +23,7 @@
             $this->valor = $args['valor'] ?? 0;
             $this->fecha = $args['fecha'] ?? '';
             $this->hora = $args['hora'] ?? '';
+            $this->saldo = $args['saldo'] ?? 0;
         }
         
         public function validar(){
@@ -78,9 +80,14 @@
 
         }
 
-        // agregar llave foránea
+        // Actualizar llave foránea
         public function setFkDeuda($id){
             $this->fk_deuda = $id;
+        }
+
+        // Actualizar llave saldo
+        public function setSaldo($saldo){
+            $this->saldo = $saldo;
         }
     }
 

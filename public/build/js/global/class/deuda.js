@@ -1,3 +1,4 @@
+import { limpiarFormulario } from "../parametros.js";
 import { ModeloBase } from "./ModeloBase.js";
 
 export class Deuda extends ModeloBase{

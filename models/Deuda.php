@@ -4,7 +4,7 @@ namespace Model;
 
 class Deuda extends ActiveRecord{
     protected static $tabla = 'deuda';
-    protected static $columnasDB = ['id_deuda', 'fk_cliente', 'saldo'];
+    protected static $columnasDB = ['id_deuda', 'fk_cliente'];
     
     public $id_deuda;
     public $fk_cliente; 
@@ -32,10 +32,6 @@ class Deuda extends ActiveRecord{
 
     public function setIdDeuda($id){
         $this->id_deuda = $id;
-    }
-
-    public function setSaldo($saldo){
-        $this->saldo = $saldo;
     }
 }
 

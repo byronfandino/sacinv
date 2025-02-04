@@ -9,7 +9,7 @@ use Controllers\CiudadController;
 use Controllers\ClienteAPIController;
 use Controllers\ClienteController;
 use Controllers\DeudaController;
-
+use Controllers\MovDeudaClienteAPIController;
 
 $router = new Router();
 
@@ -19,6 +19,8 @@ $router->get('/', [DeudaController::class, 'inicio']);
 $router->post('/deuda/guardar', [DeudaController::class, 'guardar']);
 $router->post('/deuda/actualizar', [DeudaController::class, 'actualizar']);
 $router->post('/deuda/eliminar', [DeudaController::class, 'eliminar']);
+
+$router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'listarMovDedudaCliente']);
 
 $router->get('/ciudad/api', [CiudadController::class, 'listarCiudades']);
 

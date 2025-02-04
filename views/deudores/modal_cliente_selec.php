@@ -69,7 +69,7 @@
     <h2 class="panel__h2">Listado de registros</h2>
 
     <div class="contenedor-tabla">
-        <table class="tabla">
+        <table class="tabla" id="tabla_select_cliente">
             <thead class="thead">
                 <tr>
                     <th>Cédula</th>

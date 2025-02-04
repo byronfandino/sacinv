@@ -19,7 +19,6 @@ function cargarCliente(){
     const objetoCliente = {
 
         modal:{
-
             isModal:false
         },
 
@@ -33,6 +32,7 @@ function cargarCliente(){
 
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
+            idTabla: 'tabla_cliente',
             estructura : [
                 {cedula_nit: 'Cédula / Nit', posicion: 1, class:[]},
                 {nombre: 'Nombre del Cliente', posicion: 2, class:[]},

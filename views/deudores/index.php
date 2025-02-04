@@ -33,11 +33,10 @@
 
             <legend>Datos del cliente</legend>
 
-            <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
-            <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
-            <p class="label__error ocultar"></p>
-
             <div class="contenedor__campos">
+                <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
+                <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
+                <p class="label__error ocultar"></p> 
 
                 <div class="form__campo t-sm">
                     <label for="cedula_nit_deudor">Cédula / Nit</label>
@@ -98,6 +97,11 @@
                     <input type="time" name="hora" id="hora" class="campo__input">
                     <p class="label__error ocultar"></p>
                 </div>
+                <div class="form__campo t-sm">
+                    <label for="saldo">Saldo</label>
+                    <input type="number" name="saldo" id="saldo" class="campo__input disabled">
+                    <p class="label__error ocultar"></p>
+                </div>
             </div>
             <input type="submit" value="Agregar" class="boton boton--secundario">
         </fieldset>                
@@ -106,7 +110,7 @@
     <h2 class="panel__h2">Listado de registros</h2>
 
     <div class="contenedor-tabla">
-        <table class="tabla">
+        <table class="tabla" id="tabla_deuda">
             <thead class="thead">
                 <tr>
                     <th>Fecha</th>
@@ -114,7 +118,7 @@
                     <th>Tipo Movimiento</th>
                     <th>Descripción</th>
                     <th>Valor</th>
-                    <th class="thead__th--icon">Eliminar</th>
+                    <th>Saldo</th>
                 </tr>
             </thead>
             <tbody class="tbody">

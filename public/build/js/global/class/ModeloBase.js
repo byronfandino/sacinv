@@ -15,6 +15,7 @@ export class ModeloBase{
         this.url = objeto.url;
         //Estructura en la que creará la tabla de los registros
         this.tabla = objeto.tabla;
+        this.tablaAlterna = objeto.tablaAlterna;
         //Requisitos de cada campo para ser llenado
         this.validacionCampos = objeto.validacionCampos;
         //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend y del frontend en el método handleResponse()
@@ -25,6 +26,8 @@ export class ModeloBase{
         this.equivalenciaTablaAForm = objeto.equivalenciaTablaAForm;
         //Variable global para guardar todos los registros del JSON
         this.registros = '';
+        //Se utiliza para obtener los registros filtrados con el fin llenar la tabla de una pagina principal a partir de una tabla que se encuentra en la ventana modal
+        this.registrosAlternos = '';
     }
 
     asignarValidacionCampos(){
@@ -94,12 +97,21 @@ export class ModeloBase{
         this.crearTabla(registrosFiltrados);
     }
 
-    crearTabla(registros = this.registros){
+    crearTabla(registros, tablaAlterna = false){
+
         //Definimos cuales son los campos en los que necesitamos iterar
-        const tbody = document.querySelector('.tbody');
+        let tabla = '';
+        if (tablaAlterna === true){
+            tabla = this.tablaAlterna;
+        }else{
+            tabla = this.tabla;
+        }
+
+        const tbody = document.querySelector(`#${tabla.idTabla} .tbody`);
+        const arrayCamposTabla = tabla.estructura.map(obj => Object.keys(obj)[0]); 
+        const nombresCamposTabla = tabla.estructura.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
+        
         tbody.innerHTML = ''; //Limpiar la tabla antes de llenarla
-        const arrayCamposTabla = this.tabla.estructura.map(obj => Object.keys(obj)[0]); 
-        const nombresCamposTabla = this.tabla.estructura.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
 
         registros.forEach(registro => {
             // Se convierte el objeto en un array de arrays, donde cada subarray corresponde a la propiedad y el valor, parecido a un objeto
@@ -107,21 +119,28 @@ export class ModeloBase{
 
             //Obtenemos el id del registro
             const idRegistro = arrayRegistro[0][1];
-    
+            
             const tr = document.createElement('TR');
- 
+
+            let arrayTD = [];
+
             arrayRegistro.forEach(campo => {
-                // console.log(campo);
                 if(arrayCamposTabla.includes(campo[0])){
-    
                     const td = document.createElement('TD');
                     const span = document.createElement('SPAN');
-
+                    
                     span.classList.add('tbody__td--titulo');
-    
+                    
                     // Se agrega el nombre del dato dentro del td cuando este se encuentre en modo Mobile
                     const keyCampo = nombresCamposTabla.find(nombreCampo => nombreCampo[0] === campo[0]);
 
+                    //buscamos el objeto dentro de la tabla para obtener la posición en la tabla 
+                    const objetoTabla = tabla.estructura.find(obj => keyCampo[0] in obj);
+                    
+                    console.log(keyCampo[0]);
+                    console.log(objetoTabla);
+                    console.log(objetoTabla.posicion);
+                    
                     if (keyCampo) {
                         span.textContent = keyCampo[1];
                     }
@@ -131,18 +150,27 @@ export class ModeloBase{
                     
                     td.appendChild(span);
                     td.appendChild(textoTD);
-                    tr.appendChild(td);
+                    
+                    //Agregamos el td a la posición del arreglo según la posición del objeto dentro de la estructura de la tabla
+                    arrayTD[objetoTabla.posicion] = td;
+
                 }
             });
 
+            //Agregamos todos los td almacenados en el array
+            arrayTD.forEach(td => {
+                tr.appendChild(td);
+            });
+            
             const nombreCampoId = Object.entries(registro)[0][0];
+            
             // Si se requiere la columna modificar se crea el td
-            if(this.tabla.columnaModificar){
+            if(tabla.columnaModificar){
                 tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));
             }
 
             // Si se requiere la columna eliminar se crea el td
-            if(this.tabla.columnaEliminar){
+            if(tabla.columnaEliminar){
                 tr.appendChild(this.crearTdEliminar(idRegistro));
             }
 
@@ -166,7 +194,8 @@ export class ModeloBase{
             const objetoEncontrado = this.tabla.estructura.find(obj => keyCampo in obj);
 
             // Se verifica si el dato debe ser un hipervínculo
-            if(objetoEncontrado.class.includes('tbody__td--enlace')){
+            if(objetoEncontrado && objetoEncontrado.class.includes('tbody__td--enlace')){
+
                 aLink.textContent = valorCampo;
                 aLink.dataset.id = idRegistro;
                 aLink.addEventListener('click', e => { 
@@ -197,11 +226,14 @@ export class ModeloBase{
     }
 
     // Este método copia los datos del objeto encontrado en la tabla de registro que está dentro de la ventana modal y los envia al formulario principal
-    asignarDatosAFormulario(e){
-        const idBusqueda = Object.entries(this.equivalenciaTablaAForm[0])[0][1]; // Ejemplo [id_cliente_deudor , 'id_cliente']
+    async asignarDatosAFormulario(e){
+        const idBusqueda = Object.entries(this.equivalenciaTablaAForm[0])[0][1]; 
+        // Ejemplo [id_cliente_deudor , 'id_cliente']
 
         const objeto = this.encontrarRegistro(idBusqueda, e.target.getAttribute('data-id'));
-
+        console.log(idBusqueda);
+        console.log(objeto);
+        console.log(objeto[idBusqueda]);
         if (objeto){
 
             this.equivalenciaTablaAForm.forEach(item => {
@@ -211,8 +243,41 @@ export class ModeloBase{
                 campo.value = objeto[arrayCampo[1]];
             });
     
+            //obtenemos los datos filtrados y creamos la tabla de la página principal
+            await this.listarRegistrosAlternos(objeto[idBusqueda]);
+            
             cierreAutModal(this.modal.idVentanaModal);
             habilitarBotonSubmit(this.modal.idFormularioPrincipal);
+        }
+    }
+
+    async listarRegistrosAlternos(id){
+        if (!this.url.apiFiltroMain) {
+            console.error("La URL para consultar no está definida.");
+            return;
+        }
+
+        const urlFiltrar = url + this.url.apiFiltroMain;
+        const formData = new FormData();
+        
+        formData.append('id', id);
+
+        try {
+            const response = await fetch(urlFiltrar, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error('No hay conexión con el servidor');
+
+            const data = await response.json();
+            this.registrosAlternos = data;
+            console.log(this.registrosAlternos);
+            this.crearTabla(this.registrosAlternos, true);
+
+        } catch (error) {
+            console.error('Codigo de error:', error);
         }
     }
 
@@ -304,30 +369,19 @@ export class ModeloBase{
         return (this.registros.find(registro => registro[campo] == id)) || false;
     }
 
-    // Función únicamente para obtener los registros en memoria y realizar búsquedas
-    async obtenerRegistros(){
+    //Se reutiliza el método para obtener los registros y adicionalmente crear la tabla con los mismos datos
+    async listarRegistros(){
+
         if (!this.url.apiConsultar) {
-            console.error("La URL para listar no está definida.");
+            console.error("La URL para consultar no está definida.");
             return;
         }
+
         try { 
             const datos = await consultarAPI(this.url.apiConsultar); 
             this.registros = datos;
-            return true;
+            this.crearTabla(this.registros);
 
-        } catch (error) { 
-            console.error('Error API:', error); 
-            return false;
-        }
-    }
-
-    //Se reutiliza el método para obtener los registros y adicionalmente crear la tabla con los mismos datos
-    async listarRegistros(){
-        try { 
-            const dataOk = await this.obtenerRegistros();
-            if (dataOk){
-                this.crearTabla();
-            }
         } catch (error) { 
             console.error('Error API:', error); 
         }

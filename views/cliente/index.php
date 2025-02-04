@@ -81,7 +81,7 @@
     <h2 class="panel__h2">Listado de registros</h2>
 
     <div class="contenedor-tabla">
-        <table class="tabla">
+        <table class="tabla" id="tabla_cliente">
             <thead class="thead">
                 <tr>
                     <th>Cédula</th>
@@ -94,7 +94,7 @@
                     <th class="thead__th--icon">Eliminar</th>
                 </tr>
             </thead>
-            <tbody class="tbody">
+            <tbody class="tbody" data-id="tbody_main">
                 
             </tbody>
         </table>

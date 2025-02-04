@@ -64,21 +64,23 @@ function cargarDeudor(){
         idVentanaModal: 'modal-deudor',
 
         tabla : {
+            idTabla: 'tabla_deuda',
             estructura : [
+                // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css
                 {fecha: 'Fecha', posicion: 1, class:[]},
                 {hora: 'Hora', posicion: 2, class:[]},
                 {tipo_mov: 'Tipo Movimiento', posicion:3, class: []},
                 {descripcion: 'Descripcion', posicion:4, class: []},
-                {valor: 'Valor', posicion:5, class: []}
+                {valor: 'Valor', posicion:5, class: []},
+                {Saldo: 'Saldo', posicion:6, class: []}
             ],
     
             columnaModificar: false,
-            columnaEliminar: true
+            columnaEliminar: false
         },
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            // {fk_cliente_deudor: '^[0-9]{1,10}$', message: 'No se ha seleccionado ningún cliente', estado: false},
             {fecha: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$', message: 'Debe seleccionar una fecha', estado: true},
             {hora: '^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$', message: 'Debe seleccionar una hora', estado: true},
             {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{3,500}$', message: 'Está digitando caracteres inválidos', estado: false},
