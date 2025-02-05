@@ -137,10 +137,6 @@ export class ModeloBase{
                     //buscamos el objeto dentro de la tabla para obtener la posición en la tabla 
                     const objetoTabla = tabla.estructura.find(obj => keyCampo[0] in obj);
                     
-                    console.log(keyCampo[0]);
-                    console.log(objetoTabla);
-                    console.log(objetoTabla.posicion);
-                    
                     if (keyCampo) {
                         span.textContent = keyCampo[1];
                     }
@@ -163,7 +159,7 @@ export class ModeloBase{
             });
             
             const nombreCampoId = Object.entries(registro)[0][0];
-            
+
             // Si se requiere la columna modificar se crea el td
             if(tabla.columnaModificar){
                 tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));

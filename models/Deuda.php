@@ -8,13 +8,11 @@ class Deuda extends ActiveRecord{
     
     public $id_deuda;
     public $fk_cliente; 
-    public $saldo;
 
     public function __construct($args = [])
     {
         $this->id_deuda = $args['id_deuda'] ?? null;
         $this->fk_cliente = $args['fk_cliente'] ?? '';
-        $this->saldo = $args['saldo'] ?? 0;
     }
 
     public function validar(){
@@ -32,6 +30,10 @@ class Deuda extends ActiveRecord{
 
     public function setIdDeuda($id){
         $this->id_deuda = $id;
+    }
+
+    public function getIdDeuda(){
+        return $this->id_deuda;
     }
 }
 

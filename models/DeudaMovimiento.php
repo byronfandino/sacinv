@@ -89,6 +89,10 @@
         public function setSaldo($saldo){
             $this->saldo = $saldo;
         }
+
+        public function getSaldo(){
+            return $this->saldo;
+        }
     }
 
 ?>
