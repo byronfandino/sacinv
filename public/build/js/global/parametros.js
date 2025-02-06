@@ -99,4 +99,23 @@ export function habilitarBotonSubmit(idFormulario){
     btnSubmit.removeAttribute('disabled');
 
 }
+
+export function cargarFechaHoraActual(){
+
+    // Crear un objeto de fecha con la fecha actual
+    const now = new Date();
+
+    // Formatear la fecha en el formato YYYY-MM-DD requerido por el input date
+    const formattedDate = now.toISOString().split('T')[0];
+
+    // Formatear la hora en el formato HH:MM requerido por el input time
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    return {
+        fecha : formattedDate,
+        hora : `${hours}:${minutes}`
+    }
+
+}
 //# sourceMappingURL=parametros.js.map

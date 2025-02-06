@@ -38,7 +38,7 @@
 
             if(!$this->tipo_mov){
                 self::$alertas['error']['tipo_mov'][] = "El campo Tipo de Movimiento es obligatorio";
-            }else if(!preg_match('/^[AD]{1}$/', $this->tipo_mov)){
+            }else if(!preg_match('/^[ADR]{1}$/', $this->tipo_mov)){
                 self::$alertas['error']['tipo_mov'][] = "Debe seleccionar un tipo de movimiento válido";
             }else{
                 $this->tipo_mov = trim($this->tipo_mov);

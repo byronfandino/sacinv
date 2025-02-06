@@ -1,5 +1,5 @@
 import { Deuda } from "../global/class/deuda.js";
-import { cierreManualModal, mostrarErrorCampo, mostrarModal } from "../global/parametros.js";
+import { cargarFechaHoraActual, cierreManualModal, mostrarModal } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', () => { 
     
@@ -29,24 +29,6 @@ function cargarBotones(){
     });
 }
 
-function cargarFechaHoraActual(){
-     // Obtener los elementos de fecha y hora
-     const dateField = document.getElementById('fecha');
-     const timeField = document.getElementById('hora');
- 
-     // Crear un objeto de fecha con la fecha actual
-     const now = new Date();
- 
-     // Formatear la fecha en el formato YYYY-MM-DD requerido por el input date
-     const formattedDate = now.toISOString().split('T')[0];
-     dateField.value = formattedDate;
- 
-     // Formatear la hora en el formato HH:MM requerido por el input time
-     const hours = now.getHours().toString().padStart(2, '0');
-     const minutes = now.getMinutes().toString().padStart(2, '0');
-     timeField.value = `${hours}:${minutes}`;
-}
-
 function cargarDeudor(){
     const objetoDeudor = {
         idFormularioAgregar : 'form_deudores',
@@ -58,7 +40,7 @@ function cargarDeudor(){
         url : {
             agregar : '/deuda/guardar',
             eliminar: '/deuda/eliminar',
-            apiConsultar: '/deuda/api',
+            apiConsultar: '/deuda_mov/cliente/api'
         },
 
         idVentanaModal: 'modal-deudor',
@@ -72,7 +54,7 @@ function cargarDeudor(){
                 {tipo_mov: 'Tipo Movimiento', posicion:3, class: []},
                 {descripcion: 'Descripcion', posicion:4, class: []},
                 {valor: 'Valor', posicion:5, class: []},
-                {Saldo: 'Saldo', posicion:6, class: []}
+                {saldo: 'Saldo', posicion:6, class: []}
             ],
     
             columnaModificar: false,
@@ -81,10 +63,8 @@ function cargarDeudor(){
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            {fecha: '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$', message: 'Debe seleccionar una fecha', estado: true},
-            {hora: '^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$', message: 'Debe seleccionar una hora', estado: true},
             {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{3,500}$', message: 'Está digitando caracteres inválidos', estado: false},
-            {tipo_mov: '^[AD]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
+            {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
             {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
         ]
     }

@@ -78,28 +78,14 @@
                     <select name="tipo_mov" id="tipo_mov" class="campo__input">
                         <option value="" selected disabled>-Seleccione una opción-</option>
                         <option value="D">Debe</option>
-                        <option value="A">Abonó</option>
+                        <option value="A">Abona</option>
+                        <option value="R">Devolución</option>
                     </select>
                     <p class="label__error ocultar"></p>
                 </div>
                 <div class="form__campo t-sm">
                     <label for="valor">Valor del producto</label>
                     <input type="number" name="valor" id="valor" class="campo__input">
-                    <p class="label__error ocultar"></p>
-                </div>
-                <div class="form__campo t-sm">
-                    <label for="fecha">Fecha</label>
-                    <input type="date" name="fecha" id="fecha" class="campo__input">
-                    <p class="label__error ocultar"></p>
-                </div>
-                <div class="form__campo t-sm">
-                    <label for="hora">Hora</label>
-                    <input type="time" name="hora" id="hora" class="campo__input">
-                    <p class="label__error ocultar"></p>
-                </div>
-                <div class="form__campo t-sm">
-                    <label for="saldo">Saldo</label>
-                    <input type="number" name="saldo" id="saldo" class="campo__input disabled">
                     <p class="label__error ocultar"></p>
                 </div>
             </div>
