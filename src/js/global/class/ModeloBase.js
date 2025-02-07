@@ -107,8 +107,12 @@ export class ModeloBase{
         let tabla = '';
         if (tablaAlterna === true){
             tabla = this.tablaAlterna;
+            const contadorRegistros = document.querySelector(`#${this.idTotalRegistrosAlterno}`);
+            contadorRegistros.textContent = `Registros encontrados ( ${this.registrosAlternos.length} )`;
         }else{
             tabla = this.tabla;
+            const contadorRegistros = document.querySelector(`#${this.idTotalRegistros}`);
+            contadorRegistros.textContent = `Registros encontrados ( ${this.registros.length} )`;
         }
 
         const tbody = document.querySelector(`#${tabla.idTabla} .tbody`);
@@ -270,7 +274,7 @@ export class ModeloBase{
 
             const data = await response.json();
             this.registrosAlternos = data;
-            this.mostrarTotalRegistros(this.idTotalRegistrosAlterno, this.registrosAlternos.length);
+            // this.mostrarTotalRegistros(this.idTotalRegistrosAlterno, this.registrosAlternos.length);
             this.crearTabla(this.registrosAlternos, true);
 
         } catch (error) {
@@ -377,7 +381,7 @@ export class ModeloBase{
         try { 
             const datos = await consultarAPI(this.url.apiConsultar); 
             this.registros = datos;
-            this.mostrarTotalRegistros(this.idTotalRegistros, this.registros.length);
+            // this.mostrarTotalRegistros(this.idTotalRegistros, this.registros.length);
             this.crearTabla(this.registros);
 
         } catch (error) { 
@@ -385,10 +389,10 @@ export class ModeloBase{
         }
     }
 
-    mostrarTotalRegistros(idTitulo, total){
-        const texto = document.querySelector(`#${idTitulo}`);
-        texto.textContent = `Registros encontrados ( ${total} )`;
-    }
+    // mostrarTotalRegistros(idTitulo, total){
+    //     const texto = document.querySelector(`#${idTitulo}`);
+    //     texto.textContent = `Registros encontrados ( ${total} )`;
+    // }
 
     async agregarRegistro(formulario){
 
