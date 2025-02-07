@@ -338,7 +338,6 @@ body {
 
 h1, h2, h3 {
   font-family: "Arial", sans-serif;
-  margin: 3rem 0;
   padding: 5px 0px;
   text-align: center;
   line-height: 140%;
@@ -362,16 +361,11 @@ h1 {
 
 h2 {
   font-weight: 400;
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 @media (min-width: 600px) {
   h2 {
-    font-size: 3rem;
-  }
-}
-@media (min-width: 1024px) {
-  h2 {
-    font-size: 3.6rem;
+    font-size: 2.5rem;
   }
 }
 
@@ -470,7 +464,7 @@ header {
 }
 @media (min-width: 600px) {
   .form__campo.t-md {
-    width: 22rem;
+    width: 18rem;
   }
 }
 .form__campo.t-xl {
@@ -478,7 +472,8 @@ header {
 }
 @media (min-width: 600px) {
   .form__campo.t-xl {
-    width: 38rem;
+    flex: 1;
+    min-width: 14rem;
   }
 }
 .form__campo.t-xxl {

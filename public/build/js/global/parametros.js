@@ -118,4 +118,5 @@ export function cargarFechaHoraActual(){
     }
 
 }
+
 //# sourceMappingURL=parametros.js.map

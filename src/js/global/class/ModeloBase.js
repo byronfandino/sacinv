@@ -13,6 +13,10 @@ export class ModeloBase{
         this.objeto = objeto;
         //url de conexión
         this.url = objeto.url;
+        //id del texto en el que se muestra la totalidad de los registros
+        this.idTotalRegistros = objeto.idTotalRegistros;
+        //id del texto en el que se muestra la totalidad de los registros de la tabla en la página principal, cuando se llama desde otra tabla de la ventana modal
+        this.idTotalRegistrosAlterno = objeto.idTotalRegistrosAlterno;
         //Estructura en la que creará la tabla de los registros
         this.tabla = objeto.tabla;
         this.tablaAlterna = objeto.tablaAlterna;
@@ -224,12 +228,9 @@ export class ModeloBase{
     // Este método copia los datos del objeto encontrado en la tabla de registro que está dentro de la ventana modal y los envia al formulario principal
     async asignarDatosAFormulario(e){
         const idBusqueda = Object.entries(this.equivalenciaTablaAForm[0])[0][1]; 
-        // Ejemplo [id_cliente_deudor , 'id_cliente']
 
+        // Ejemplo [id_cliente_deudor , 'id_cliente']
         const objeto = this.encontrarRegistro(idBusqueda, e.target.getAttribute('data-id'));
-        console.log(idBusqueda);
-        console.log(objeto);
-        console.log(objeto[idBusqueda]);
         if (objeto){
 
             this.equivalenciaTablaAForm.forEach(item => {
@@ -269,7 +270,7 @@ export class ModeloBase{
 
             const data = await response.json();
             this.registrosAlternos = data;
-            console.log(this.registrosAlternos);
+            this.mostrarTotalRegistros(this.idTotalRegistrosAlterno, this.registrosAlternos.length);
             this.crearTabla(this.registrosAlternos, true);
 
         } catch (error) {
@@ -376,11 +377,17 @@ export class ModeloBase{
         try { 
             const datos = await consultarAPI(this.url.apiConsultar); 
             this.registros = datos;
+            this.mostrarTotalRegistros(this.idTotalRegistros, this.registros.length);
             this.crearTabla(this.registros);
 
         } catch (error) { 
             console.error('Error API:', error); 
         }
+    }
+
+    mostrarTotalRegistros(idTitulo, total){
+        const texto = document.querySelector(`#${idTitulo}`);
+        texto.textContent = `Registros encontrados ( ${total} )`;
     }
 
     async agregarRegistro(formulario){

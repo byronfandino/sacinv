@@ -1,9 +1,8 @@
 import { Deuda } from "../global/class/deuda.js";
-import { cargarFechaHoraActual, cierreManualModal, mostrarModal } from "../global/parametros.js";
+import { cierreManualModal, mostrarModal } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', () => { 
     
-    cargarFechaHoraActual();
     cargarBotones();
     cargarDeudor();
 
@@ -45,6 +44,10 @@ function cargarDeudor(){
 
         idVentanaModal: 'modal-deudor',
 
+        //Id del texto donde se muestra la totalidad de los registros
+        idTotalRegistros : 'registrosDeuda',
+
+
         tabla : {
             idTabla: 'tabla_deuda',
             estructura : [
@@ -57,13 +60,13 @@ function cargarDeudor(){
                 {saldo: 'Saldo', posicion:6, class: []}
             ],
     
-            columnaModificar: false,
+            columnaModificar: true,
             columnaEliminar: false
         },
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{3,500}$', message: 'Está digitando caracteres inválidos', estado: false},
+            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
             {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
             {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
         ]

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarCliente();
 });
 
-function cargarCliente(){
+async function cargarCliente(){
     const objetoCliente = {
     
         // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
@@ -26,6 +26,9 @@ function cargarCliente(){
         // El idVentanaModal hace referencia no solamente a la ventana que se abre desde la tabla de registros para modificar un registro en particular, sino que allí se colocan en los respectivos campos cada dato del registro
         idVentanaModal: 'modal_cliente_actualizar',
     
+        //Id del texto donde se muestra la totalidad de los registros
+        idTotalRegistros : 'registrosCliente',
+        
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
             idTabla: 'tabla_select_cliente',
@@ -40,6 +43,8 @@ function cargarCliente(){
             columnaModificar: true,
             columnaEliminar: true
         },
+        
+        idTotalRegistrosAlterno : 'registrosDeuda',
 
         //Esta tabla hace referencia a la tabla de la página principal, la cual se tiene que llenar al momento de seleccionar un registro de otra tabla que se encuentra en la ventana modal
         tablaAlterna : {
@@ -54,7 +59,7 @@ function cargarCliente(){
                 {saldo: 'Saldo', posicion:6, class: []}
             ],
     
-            columnaModificar: false,
+            columnaModificar: true,
             columnaEliminar: false
         },
     

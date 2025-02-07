@@ -66,7 +66,7 @@
       
     </form>
 
-    <h2 class="panel__h2">Listado de registros</h2>
+    <h2 id="registrosCliente">Registros encontrados</h2>
 
     <div class="contenedor-tabla">
         <table class="tabla" id="tabla_select_cliente">

@@ -26,30 +26,6 @@ class DeudaController{
         ]);
     }
 
-    public static function getIdDeudaSaldo($deuda){
-
-        //Obtenemos el objeto general de la deuda
-        $query = "SELECT * FROM deuda WHERE fk_cliente = ". $deuda->fk_cliente . " ORDER BY fk_cliente DESC LIMIT 1";
-        $arrayObjeto =  Deuda::SQL($query);
-
-        $objeto = $arrayObjeto[0];
-        $contador = 0;
-        $arrayDatos = [];
-
-        foreach ($objeto as $valor) {
-            // Si es igual a 0 es por está en la primera posición 
-            if ($contador == 0){
-                $arrayDatos['id'] = $valor;
-            }
-            //Se sobreescribe el valor de la variable hasta llegar a la última propiedad que es el saldo
-            $arrayDatos['saldo'] = $valor;
-
-            $contador++;
-        }
-        return $arrayDatos;
-
-    }
-
     public static function getClienteDeuda($fk_cliente){
 
         //Se obtiene el último registro del cliente que tiene saldo = 0

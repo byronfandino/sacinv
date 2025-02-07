@@ -67,12 +67,8 @@
 
         <fieldset>
             <legend>Movimiento</legend>
+            
             <div class="contenedor__campos">
-                <div class="form__campo t-xxl">
-                    <label for="descripcion">Descripción del producto</label>
-                    <input type="text" name="descripcion" id="descripcion" class="campo__input">
-                    <p class="label__error ocultar"></p>
-                </div>
                 <div class="form__campo t-md">
                     <label for="tipo_mov">Tipo de movimiento</label>
                     <select name="tipo_mov" id="tipo_mov" class="campo__input">
@@ -83,17 +79,25 @@
                     </select>
                     <p class="label__error ocultar"></p>
                 </div>
+
                 <div class="form__campo t-sm">
-                    <label for="valor">Valor del producto</label>
+                    <label for="valor">Valor</label>
                     <input type="number" name="valor" id="valor" class="campo__input">
                     <p class="label__error ocultar"></p>
                 </div>
+
+                <div class="form__campo t-xl">
+                    <label for="descripcion">Observaciones</label>
+                    <input type="text" name="descripcion" id="descripcion" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
             </div>
+
             <input type="submit" value="Agregar" class="boton boton--secundario">
         </fieldset>                
     </form>
 
-    <h2 class="panel__h2">Listado de registros</h2>
+    <h2 id="registrosDeuda">Registros encontrados</h2>
 
     <div class="contenedor-tabla">
         <table class="tabla" id="tabla_deuda">
@@ -105,6 +109,7 @@
                     <th>Descripción</th>
                     <th>Valor</th>
                     <th>Saldo</th>
+                    <th>Editar</th>
                 </tr>
             </thead>
             <tbody class="tbody">

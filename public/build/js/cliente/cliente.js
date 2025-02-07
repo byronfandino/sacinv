@@ -14,7 +14,7 @@ function cargarComboBoxCiudades(){
     ciudad.cargarCiudades('nombre_depart', 'fk_ciudad');
 }
 
-function cargarCliente(){
+async function cargarCliente(){
     //Definir el objeto Cliente para enviarlo por parámetro al constructor
     const objetoCliente = {
 
@@ -30,6 +30,9 @@ function cargarCliente(){
         
         idVentanaModal: 'modal_cliente_actualizar',
 
+        //Id del texto donde se muestra la totalidad de los registros
+        idTotalRegistros : 'registrosCliente',
+        
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
             idTabla: 'tabla_cliente',
@@ -70,10 +73,11 @@ function cargarCliente(){
     }
 
     const cliente = new Cliente(objetoCliente);
-    cliente.listarRegistros();
     cliente.asignarValidacionCampos();
     cliente.formularioAgregar('form_cliente'); //id del formulario
     botonResetFormulario(cliente);
+    cliente.listarRegistros();
+
 }
 
 function botonResetFormulario(cliente){
@@ -82,4 +86,5 @@ function botonResetFormulario(cliente){
         cliente.listarRegistros();
     })
 }
+
 //# sourceMappingURL=cliente.js.map

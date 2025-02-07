@@ -48,7 +48,7 @@
         width: 100%;
         //Resolución tablet
         @include m.tablet{
-            width: 22rem;
+            width: 18rem;
         }
     }
     
@@ -56,9 +56,13 @@
         width: 100%;
         //Resolución tablet
         @include m.tablet{
-            width: 38rem;
+            flex: 1;
+            min-width: 14rem;
+            // width: 38rem;
         }
     }
+
+    
     
     &.t-xxl{
        
