@@ -118,3 +118,10 @@ export function cargarFechaHoraActual(){
     }
 
 }
+
+export function botonResetFormulario(nombreBoton, objeto){
+    const botonReset = document.querySelector(`#${nombreBoton}`);
+    botonReset.addEventListener('click', ()=>{
+        objeto.listarRegistros();
+    })
+}

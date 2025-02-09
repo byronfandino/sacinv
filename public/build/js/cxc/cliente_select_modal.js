@@ -1,8 +1,18 @@
+import { Ciudad } from "../global/class/ciudad.js";
 import { Cliente } from "../global/class/cliente.js";
+import { botonResetFormulario } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    cargarComboBoxCiudades();
     cargarCliente();
 });
+
+// Cargar ciudades en el comboBox cada vez que se cambie de departamento
+function cargarComboBoxCiudades(){
+    const ciudad = new Ciudad();
+    ciudad.cargarCiudades('cod_depart_actualizar', 'fk_ciudad_actualizar');
+}
+
 
 async function cargarCliente(){
     const objetoCliente = {
@@ -96,11 +106,16 @@ async function cargarCliente(){
             {direccion_agregar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
             {nombre_depart_agregar: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
             {fk_ciudad_agregar: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
-        ]
+        ],
+
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: true
     }
     
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
+    cliente.formularioAgregar('form_cliente'); //id del formulario
     cliente.listarRegistros();
+    botonResetFormulario('reset_cliente_select', cliente);
 }
 //# sourceMappingURL=cliente_select_modal.js.map

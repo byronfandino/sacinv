@@ -1,5 +1,5 @@
 import { Deuda } from "../global/class/deuda.js";
-import { cierreManualModal, mostrarModal } from "../global/parametros.js";
+import { botonResetFormulario, cierreManualModal, mostrarModal } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', () => { 
     
@@ -69,11 +69,15 @@ function cargarDeudor(){
             {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
             {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
             {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
-        ]
+        ],
+
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: false
     }
 
     const deudor = new Deuda(objetoDeudor);
     deudor.asignarValidacionCampos();
     deudor.formularioAgregar('form_deuda');
+    botonResetFormulario('reset_deuda', deudor);
 }
 

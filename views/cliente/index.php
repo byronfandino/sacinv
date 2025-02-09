@@ -72,7 +72,7 @@
             </div>
             <div class="contenedor__botones">
                 <input type="submit" class="boton boton--primario" value="Agregar">     
-                <button type="reset" class="boton boton--secundario" id="reset">Reset</button>
+                <button type="reset" class="boton boton--secundario" id="reset_cliente">Reset</button>
             </div>
         </fieldset>
       

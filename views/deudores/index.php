@@ -17,8 +17,8 @@
     </div>
     
     <!-- Ventana Modal -->
-    <div class="fondo-notificacion ocultar" id="modal_cliente_actualizar">
-        <div class="contenedor-notificacion ">
+    <div class="fondo-notificacion ocultar " id="modal_cliente_actualizar">
+        <div class="contenedor-notificacion auto">
             <?php 
                 include_once __DIR__ . '/../deudores/modal_cliente_actualizar.php';
             ?>
@@ -93,7 +93,10 @@
                 </div>
             </div>
 
-            <input type="submit" value="Agregar" class="boton boton--secundario">
+            <div class="contenedor__botones">
+                <input type="submit" value="Agregar" class="boton boton--secundario">
+                <button type="reset" class="boton boton--secundario" id="reset_deuda">Reset</button>
+            </div>
         </fieldset>                
     </form>
 

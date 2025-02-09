@@ -38,7 +38,9 @@ function cargarCliente(){
             {direccion_modal: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
             {cod_depart_modal: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: true},
             {fk_ciudad_modal: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: true}
-        ]
+        ],
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: false
     }
 
     // Se envia el id del formulario para el envio de registro

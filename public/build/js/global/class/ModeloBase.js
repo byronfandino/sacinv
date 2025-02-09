@@ -32,6 +32,8 @@ export class ModeloBase{
         this.registros = '';
         //Se utiliza para obtener los registros filtrados con el fin llenar la tabla de una pagina principal a partir de una tabla que se encuentra en la ventana modal
         this.registrosAlternos = '';
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        this.filtroBusqueda = objeto.filtroBusqueda;
     }
 
     asignarValidacionCampos(){
@@ -55,7 +57,7 @@ export class ModeloBase{
                     //Completamos el valor de la propiedad value del objetoParametro
                     objetoParametro.value = e.target.value;
                     this.estadoCampo(objetoParametro);
-                    if (this.registros != ''){
+                    if (this.registros != '' && this.filtroBusqueda === true){
                         this.buscarRegistros(e.target.value);
                     }
                 });
@@ -67,7 +69,7 @@ export class ModeloBase{
                     objetoParametro.value = e.target.value;
                     this.estadoCampo(objetoParametro);  
 
-                    if (this.registros != ''){
+                    if (this.registros != ''&& this.filtroBusqueda === true){
                         const option = campo.querySelector(`option[value="${e.target.value}"]`);
                         this.buscarRegistros(option.textContent);
                     }
@@ -108,11 +110,11 @@ export class ModeloBase{
         if (tablaAlterna === true){
             tabla = this.tablaAlterna;
             const contadorRegistros = document.querySelector(`#${this.idTotalRegistrosAlterno}`);
-            contadorRegistros.textContent = `Registros encontrados ( ${this.registrosAlternos.length} )`;
+            contadorRegistros.textContent = `Registros encontrados ( ${registros.length} )`;
         }else{
             tabla = this.tabla;
             const contadorRegistros = document.querySelector(`#${this.idTotalRegistros}`);
-            contadorRegistros.textContent = `Registros encontrados ( ${this.registros.length} )`;
+            contadorRegistros.textContent = `Registros encontrados ( ${registros.length} )`;
         }
 
         const tbody = document.querySelector(`#${tabla.idTabla} .tbody`);

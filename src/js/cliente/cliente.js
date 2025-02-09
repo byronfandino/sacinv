@@ -1,5 +1,6 @@
 import { Ciudad } from "../global/class/ciudad.js";
 import { Cliente } from "../global/class/cliente.js";
+import { botonResetFormulario } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
@@ -69,20 +70,17 @@ async function cargarCliente(){
             {direccion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
             {nombre_depart: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
             {fk_ciudad: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
-        ]
+        ],
+
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: true
     }
 
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
     cliente.formularioAgregar('form_cliente'); //id del formulario
-    botonResetFormulario(cliente);
+    botonResetFormulario('reset_cliente', cliente); //id_boton_reset, objeto para listar los registros
     cliente.listarRegistros();
 
 }
 
-function botonResetFormulario(cliente){
-    const botonReset = document.querySelector('#reset');
-    botonReset.addEventListener('click', ()=>{
-        cliente.listarRegistros();
-    })
-}
