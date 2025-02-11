@@ -1,21 +1,26 @@
 import { Ciudad } from "../global/class/ciudad.js";
 import { Cliente } from "../global/class/cliente.js";
-import { botonResetFormulario } from "../global/parametros.js";
+import { botonResetFormulario, cierreManualModal } from "../global/parametros.js";
 
-document.addEventListener('DOMContentLoaded', ()=>{
-
-    cargarComboBoxCiudades();
-    cargarCliente();
+let clienteGlobal = '';
+document.addEventListener('DOMContentLoaded', async ()=>{
+    
+    comboBoxCiudades();
+    clienteGlobal = await guardarCliente();
+    actualizarCliente();
+    botonesCerrarModal();
     
 });
 
 // Cargar ciudades en el comboBox cada vez que se cambie de departamento
-function cargarComboBoxCiudades(){
-    const ciudad = new Ciudad();
-    ciudad.cargarCiudades('nombre_depart', 'fk_ciudad');
+function comboBoxCiudades(){
+    const ciudadClienteGuardar = new Ciudad();
+    ciudadClienteGuardar.cargarCiudades('nombre_depart', 'fk_ciudad');
+    const ciudadClienteActualizar = new Ciudad();
+    ciudadClienteActualizar.cargarCiudades('cod_depart_modal', 'fk_ciudad_modal');
 }
 
-async function cargarCliente(){
+async function guardarCliente(){
     //Definir el objeto Cliente para enviarlo por parámetro al constructor
     const objetoCliente = {
 
@@ -26,13 +31,17 @@ async function cargarCliente(){
         url : {
             agregar : '/cliente/guardar',
             eliminar : '/cliente/eliminar',
-            apiConsultar: '/cliente/api',
+            apiConsultar: '/cliente/api'
         },
         
         idVentanaModal: 'modal_cliente_actualizar',
 
         //Id del texto donde se muestra la totalidad de los registros
         idTotalRegistros : 'registrosCliente',
+
+        //Propiedades locales de la clase cliente para cargar las ciudades en ventana Modal desde una tabla
+        idComboDepartModal : 'cod_depart_modal',
+        idComboCiudadModal : 'fk_ciudad_modal',
         
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
@@ -80,9 +89,45 @@ async function cargarCliente(){
     cliente.asignarValidacionCampos();
     cliente.formularioAgregar('form_cliente'); //id del formulario
     botonResetFormulario('reset_cliente', cliente); //id_boton_reset, objeto para listar los registros
-    cliente.listarRegistros();
+    await cliente.listarRegistros();
+    return cliente;
 
 }
 
+function actualizarCliente(){
+    const objetoCliente = {
 
-//# sourceMappingURL=cliente.js.map
+        url : {
+            actualizar : '/cliente/actualizar',
+        },
+
+        // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
+        modal:{
+            isModal:true,
+            idVentanaModal : 'modal_cliente_actualizar',
+            nombreCampoComplemento: '_modal'
+        },
+
+        validacionCampos : [
+            {cedula_nit_modal: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: true},
+            {nombre_modal: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: true},
+            {telefono_modal: '^[0-9]{10}$', message: 'Se permite 10 números', estado: true},
+            {direccion_modal: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
+            {cod_depart_modal: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: true},
+            {fk_ciudad_modal: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: true}
+        ],
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: false
+    }
+
+    // Se envia el id del formulario para el envio de registro
+    const cliente = new Cliente(objetoCliente);
+    cliente.asignarValidacionCampos();
+    cliente.formularioActualizar('form_cliente_actualizar', clienteGlobal);
+}
+
+function botonesCerrarModal(){
+    // Hay varias ventanas modal, y por lo tanto es necesario programar cada botón
+    const btnCerraModal = document.querySelector('.cerrar__modal');
+    btnCerraModal.addEventListener('click', e => cierreManualModal(e));
+}

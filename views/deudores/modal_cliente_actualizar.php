@@ -5,7 +5,7 @@
 
 <main class="main">
 
-    <form class="form" action="" id="form_cliente_modal">
+    <form class="form" action="" id="form_cliente_actualizar">
 
         <fieldset>
 
@@ -69,12 +69,5 @@
     </form>
 
 </main>
-<?php
-    // if(isset($script) && $script != ''){
-    //     $script .= '<script src="/build/js/cliente/cliente_modal.js" type="module"></script>';
-    // }else{
-    //     $script = '<script src="/build/js/cliente/cliente_modal.js" type="module"></script>';
-    // }
-?>
 
 

@@ -332,7 +332,7 @@ export class ModeloBase{
     mostrarModal(e, nombreCampo, idRegistro){
 
         e.preventDefault();
-        console.log(this.idVentanaModal);
+        // console.log(this.idVentanaModal);
         const ventanaModal = document.querySelector(`#${this.idVentanaModal}`);
 
         if (ventanaModal.className.includes('ocultar')){
@@ -577,31 +577,28 @@ export class ModeloBase{
         });
     }
 
-    formularioActualizar(idFormulario){
-        const formulario = document.querySelector(`#${idFormulario}`);
-        formulario.addEventListener('submit', async (e) => {
-            // Prevenir el comportamiento por defecto del formulario
-            e.preventDefault();
-    
-            // Si pasa la validación de los campos envie la petición al post
-            if(this.revisarCampos()){
-    
-                let formData = new FormData(formulario); // Crear un objeto FormData con los datos del formulario
- 
-                const rta = await this.actualizarRegistro(formData);
-                console.log(rta);
-                if(rta){
+    formularioActualizar(idFormulario, objetoPrincipal){
 
-                    // Cerramos el modal
-                    cierreAutModal(this.modal.idVentanaModal);
+            const formulario = document.querySelector(`#${idFormulario}`);
+            formulario.addEventListener('submit', async (e) => {
+                // Prevenir el comportamiento por defecto del formulario
+                e.preventDefault();
+
+                // Si pasa la validación de los campos envie la petición al post
+                if(this.revisarCampos()){
+        
+                    let formData = new FormData(formulario); // Crear un objeto FormData con los datos del formulario
     
-                    // Refrescar la página
-                    setTimeout(()=>{
-                        location.reload();
-                    },800);
+                    const rta = await this.actualizarRegistro(formData);
+                    // console.log(rta);
+                    if(rta){
+
+                        // Cerramos el modal
+                        objetoPrincipal.listarRegistros();
+                        cierreAutModal(this.modal.idVentanaModal);
+                    }
                 }
-            }
-        });
+            });
     }
 }
 

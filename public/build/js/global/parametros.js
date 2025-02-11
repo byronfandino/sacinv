@@ -125,5 +125,3 @@ export function botonResetFormulario(nombreBoton, objeto){
         objeto.listarRegistros();
     })
 }
-
-//# sourceMappingURL=parametros.js.map

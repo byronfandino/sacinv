@@ -25,8 +25,8 @@ export function css( done ){
 export function javascript( done ) {
     src('src/js/**/*.js')
     //   .pipe(terser())
-      .pipe( sourcemaps.init() )
-      .pipe( sourcemaps.write('.') ) 
+    //   .pipe( sourcemaps.init() )
+    //   .pipe( sourcemaps.write('.') ) 
       .pipe( dest('public/build/js') )
     done();
 }

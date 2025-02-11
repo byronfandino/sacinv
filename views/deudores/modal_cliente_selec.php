@@ -91,9 +91,9 @@
 </main>
 <?php
     if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/cxc/cliente_select_modal.js" type="module"></script>';
+        $script .= '<script src="/build/js/cxc/modal_cliente_select.js" type="module"></script>';
     }else{
-        $script = '<script src="/build/js/cxc/cliente_select_modal.js" type="module"></script>';
+        $script = '<script src="/build/js/cxc/modal_cliente_select.js" type="module"></script>';
     }
 ?>
 

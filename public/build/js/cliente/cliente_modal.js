@@ -1,6 +1,7 @@
 import { Ciudad } from '../global/class/ciudad.js';
 import { Cliente } from '../global/class/cliente.js';
 import { cierreManualModal } from '../global/parametros.js';
+import { clienteGlobal } from './cliente.js';
 
 document.addEventListener('DOMContentLoaded', () =>{
 
@@ -46,7 +47,13 @@ function cargarCliente(){
     // Se envia el id del formulario para el envio de registro
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
-    cliente.formularioActualizar('form_cliente_actualizar');
+    cliente.formularioActualizar('form_cliente_actualizar', clienteGlobal)
+    // .then(() =>{
+    //         clienteGlobal.listarRegistros();
+    // })
+    // .catch(error => {
+    //     console.log(error);
+    // });
 }
 
 function botonesCerrarModal(){
@@ -54,4 +61,3 @@ function botonesCerrarModal(){
     const btnCerraModal = document.querySelector('.cerrar__modal');
     btnCerraModal.addEventListener('click', e => cierreManualModal(e));
 }
-//# sourceMappingURL=cliente_modal.js.map

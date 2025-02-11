@@ -62,7 +62,7 @@
             </div>
 
             <div class="contenedor__botones">
-                <input type="submit" class="boton boton--primario" value="Actualizar">
+                <input type="submit" class="boton boton--primario" value="Actualizar" id="botonActualizar">
             </div>
 
         </fieldset>
@@ -70,12 +70,3 @@
     </form>
 
 </main>
-<?php
-    if(isset($script) && $script != ''){
-        $script .= '<script src="/build/js/cliente/cliente_modal.js" type="module"></script>';
-    }else{
-        $script = '<script src="/build/js/cliente/cliente_modal.js" type="module"></script>';
-    }
-?>
-
-

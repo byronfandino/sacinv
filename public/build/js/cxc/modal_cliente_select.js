@@ -3,18 +3,19 @@ import { Cliente } from "../global/class/cliente.js";
 import { botonResetFormulario } from "../global/parametros.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    cargarComboBoxCiudades();
-    cargarCliente();
+    comboCiudades();
+    guardarCliente();
+    // actualizarCliente();
 });
 
 // Cargar ciudades en el comboBox cada vez que se cambie de departamento
-function cargarComboBoxCiudades(){
+function comboCiudades(){
     const ciudad = new Ciudad();
     ciudad.cargarCiudades('cod_depart_actualizar', 'fk_ciudad_actualizar');
 }
 
 
-async function cargarCliente(){
+async function guardarCliente(){
     const objetoCliente = {
     
         // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
@@ -35,6 +36,10 @@ async function cargarCliente(){
 
         // El idVentanaModal hace referencia no solamente a la ventana que se abre desde la tabla de registros para modificar un registro en particular, sino que allí se colocan en los respectivos campos cada dato del registro
         idVentanaModal: 'modal_cliente_actualizar',
+
+        //Propiedades locales de la clase cliente para cargar las ciudades en ventana Modal desde una tabla
+        idComboDepartModal : 'cod_depart_actualizar',
+        idComboCiudadModal : 'fk_ciudad_actualizar',
     
         //Id del texto donde se muestra la totalidad de los registros
         idTotalRegistros : 'registrosCliente',
@@ -118,4 +123,3 @@ async function cargarCliente(){
     cliente.listarRegistros();
     botonResetFormulario('reset_cliente_select', cliente);
 }
-//# sourceMappingURL=cliente_select_modal.js.map

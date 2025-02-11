@@ -3,12 +3,12 @@ import { botonResetFormulario, cierreManualModal, mostrarModal } from "../global
 
 document.addEventListener('DOMContentLoaded', () => { 
     
-    cargarBotones();
-    cargarDeudor();
+    botones();
+    deudor();
 
 });
 
-function cargarBotones(){
+function botones(){
     // Muestra la ventana modal de la tabla de registros 
     //Botón buscar
     const btnBuscarCliente = document.querySelector('#buscar_cliente');
@@ -28,7 +28,7 @@ function cargarBotones(){
     });
 }
 
-function cargarDeudor(){
+function deudor(){
     const objetoDeudor = {
         idFormularioAgregar : 'form_deudores',
         
@@ -81,5 +81,3 @@ function cargarDeudor(){
     botonResetFormulario('reset_deuda', deudor);
 }
 
-
-//# sourceMappingURL=cxc.js.map
