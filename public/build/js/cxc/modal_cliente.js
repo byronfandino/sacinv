@@ -11,8 +11,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Cargar ciudades en el comboBox cada vez que se cambie de departamento
 function comboCiudades(){
-    const ciudad = new Ciudad();
-    ciudad.cargarCiudades('cod_depart_actualizar', 'fk_ciudad_actualizar');
+    const ciudadClienteAgregar = new Ciudad();
+    ciudadClienteAgregar.cargarCiudades('nombre_depart_agregar', 'fk_ciudad_agregar');
+    const ciudadClienteActualizar = new Ciudad();
+    ciudadClienteActualizar.cargarCiudades('cod_depart_actualizar', 'fk_ciudad_actualizar');
 }
 
 
