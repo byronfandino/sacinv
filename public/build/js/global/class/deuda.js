@@ -1,7 +1,6 @@
 import { cargarFechaHoraActual, limpiarFormulario, url } from "../parametros.js";
 import { ModeloBase } from "./ModeloBase.js";
 
-
 export class Deuda extends ModeloBase{
     constructor(objeto){
         super(objeto);

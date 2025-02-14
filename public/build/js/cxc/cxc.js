@@ -1,12 +1,20 @@
 import { Deuda } from "../global/class/deuda.js";
 import { botonResetFormulario, cierreManualModal, mostrarModal } from "../global/parametros.js";
 
-document.addEventListener('DOMContentLoaded', () => { 
-    
+let deudorGLobal = '';
+
+document.addEventListener('DOMContentLoaded', async () => { 
+    campoHidden();
     botones();
     deudor();
-
 });
+
+function campoHidden(){
+    const inputHidden = document.querySelector('#fk_cliente_deudor');
+    inputHidden.addEventListener('change', e => {
+        deudorGLobal.listarRegistros(e.target.value);
+    });
+}
 
 function botones(){
     // Muestra la ventana modal de la tabla de registros 
@@ -79,5 +87,6 @@ function deudor(){
     deudor.asignarValidacionCampos();
     deudor.formularioAgregar('form_deuda');
     botonResetFormulario('reset_deuda', deudor);
+    deudorGLobal = deudor;
 }
 

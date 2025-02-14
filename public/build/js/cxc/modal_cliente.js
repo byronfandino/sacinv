@@ -17,7 +17,6 @@ function comboCiudades(){
     ciudadClienteActualizar.cargarCiudades('cod_depart_actualizar', 'fk_ciudad_actualizar');
 }
 
-
 async function guardarCliente(){
     const objetoCliente = {
     
@@ -26,7 +25,8 @@ async function guardarCliente(){
             isModal : true,
             idVentanaModal: 'modal_cliente_select',
             nombreCampoComplemento: '_agregar',
-            idFormularioPrincipal : 'form_deuda'
+            idFormularioPrincipal : 'form_deuda',
+            campoHidden : 'fk_cliente_deudor'
         },
     
         url : {
