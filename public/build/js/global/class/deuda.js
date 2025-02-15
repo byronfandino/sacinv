@@ -82,9 +82,7 @@ export class Deuda extends ModeloBase{
 
             const data = await response.json();
             this.registros = data;
-            // this.mostrarTotalRegistros(this. idTotalRegistros,this.registros.length);
-            this.crearTabla(this.registros);
-
+            this.crearTabla(data);
         } catch (error) {
             console.error('Codigo de error:', error);
         }

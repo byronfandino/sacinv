@@ -17,6 +17,8 @@ export class ModeloBase{
         this.idTotalRegistros = objeto.idTotalRegistros;
         //Estructura en la que creará la tabla de los registros
         this.tabla = objeto.tabla;
+        //Obtenemos el listado de los campos modal y su equivalente a los campos del formulario principal para evitar conflicto de nombres y cargar los datos en la ventana modal del cliente.
+        this.equivalenciaCamposModal = objeto.equivalenciaCamposModal;
         //Requisitos de cada campo para ser llenado
         this.validacionCampos = objeto.validacionCampos;
         //Esta variable confirma si se está realizando la petición desde una ventana modal y se usa unicamente para mostrar los errores del backend y del frontend en el método handleResponse()
@@ -300,8 +302,35 @@ export class ModeloBase{
         }
 
         const objetoEncontrado = this.encontrarRegistro(nombreCampo, idRegistro);
+        // console.log(objetoEncontrado);
         // Este método se encuentra en la clase hija debido a que existen tipos de campos de tipo input y select
         this.asignarValoresVentanaModal(objetoEncontrado);
+    }
+
+    asignarValoresVentanaModal(objeto){
+        console.log(objeto);
+        const arrayObjeto = Object.entries(objeto);
+
+        arrayObjeto.forEach(([key, value]) => {
+
+            console.log([key + " = " + value]);
+
+            // Encontrar el campo correspondiente en this.equivalenciaCamposModal
+            const campo = this.equivalenciaCamposModal.find(campo => campo[key]);
+    
+            console.log(campo);
+
+            if (campo) {
+                // Desestructurar el par clave-valor del campo
+                const [, campoId] = Object.entries(campo)[0];
+                const campoModal = document.querySelector(`#${campoId}`);
+                
+                if (campoModal) {
+                    
+                    campoModal.value = value;
+                }
+            }
+        });
     }
 
     // Verifica que los campos requeridos sean llenados
@@ -343,7 +372,6 @@ export class ModeloBase{
         try { 
             const datos = await consultarAPI(this.url.apiConsultar); 
             this.registros = datos;
-            // this.mostrarTotalRegistros(this.idTotalRegistros, this.registros.length);
             this.crearTabla(this.registros);
 
         } catch (error) { 

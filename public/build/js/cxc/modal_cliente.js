@@ -61,25 +61,6 @@ async function guardarCliente(){
             columnaModificar: true,
             columnaEliminar: true
         },
-        
-        idTotalRegistrosAlterno : 'registrosDeuda',
-
-        //Esta tabla hace referencia a la tabla de la página principal, la cual se tiene que llenar al momento de seleccionar un registro de otra tabla que se encuentra en la ventana modal
-        tablaAlterna : {
-            idTabla: 'tabla_deuda',
-            estructura : [
-                // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css
-                {fecha: 'Fecha', posicion: 1, class:[]},
-                {hora: 'Hora', posicion: 2, class:[]},
-                {tipo_mov: 'Tipo Movimiento', posicion:3, class: []},
-                {descripcion: 'Descripcion', posicion:4, class: []},
-                {valor: 'Valor', posicion:5, class: []},
-                {saldo: 'Saldo', posicion:6, class: []}
-            ],
-    
-            columnaModificar: true,
-            columnaEliminar: false
-        },
     
         // Se crea esta propiedad porque es necesario pasar los datos de un registro de la tabla al formulario modal para actualizar los datos, por lo tanto es necesario saber cual es el equivalente del nombre del campo de la array de datos con el nombre del campo al cual se pasa los datos
 
@@ -129,6 +110,7 @@ async function guardarCliente(){
 }
 
 function actualizarCliente(){
+    
     const objetoCliente = {
 
         url : {
@@ -136,6 +118,7 @@ function actualizarCliente(){
         },
 
         // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
+        
         modal:{
             isModal:true,
             idVentanaModal : 'modal_cliente_actualizar',

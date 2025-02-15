@@ -70,7 +70,7 @@ async function guardarCliente(){
             {cod_depart: 'cod_depart_modal'},
             {fk_ciudad: 'fk_ciudad_modal'}
         ],
-
+        
         //Se verifica que los campos diligenciados cumplan con estos registros
         validacionCampos : [
             {cedula_nit: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},

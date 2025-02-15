@@ -26,6 +26,19 @@
 
         <a href="#" class="cerrar__modal">X</a>
     </div>
+
+    
+    <!-- Ventana Modal -->
+    <div class="fondo-notificacion ocultar " id="modal_deuda_actualizar">
+        <div class="contenedor-notificacion auto">
+            <?php 
+                include_once __DIR__ . '/../deudores/modal_deuda_actualizar.php';
+            ?>
+        </div>
+
+        <a href="#" class="cerrar__modal">X</a>
+    </div>
+    
     
     <form class="form" method="post" id="form_deuda">
 
@@ -34,9 +47,11 @@
             <legend>Datos del cliente</legend>
 
             <div class="contenedor__campos">
+                
                 <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
                 <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
                 <p class="label__error ocultar"></p> 
+
 
                 <div class="form__campo t-sm">
                     <label for="cedula_nit_deudor">Cédula / Nit</label>

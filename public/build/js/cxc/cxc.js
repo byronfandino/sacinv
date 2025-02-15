@@ -6,7 +6,8 @@ let deudorGLobal = '';
 document.addEventListener('DOMContentLoaded', async () => { 
     campoHidden();
     botones();
-    deudor();
+    guardarDeudor();
+    actualizarDeudor
 });
 
 function campoHidden(){
@@ -36,7 +37,7 @@ function botones(){
     });
 }
 
-function deudor(){
+function guardarDeudor(){
     const objetoDeudor = {
         idFormularioAgregar : 'form_deudores',
         
@@ -50,11 +51,10 @@ function deudor(){
             apiConsultar: '/deuda_mov/cliente/api'
         },
 
-        idVentanaModal: 'modal-deudor',
+        idVentanaModal: 'modal_deuda_actualizar',
 
         //Id del texto donde se muestra la totalidad de los registros
         idTotalRegistros : 'registrosDeuda',
-
 
         tabla : {
             idTabla: 'tabla_deuda',
@@ -71,6 +71,14 @@ function deudor(){
             columnaModificar: true,
             columnaEliminar: false
         },
+
+        equivalenciaCamposModal : [
+            //id del campo del fomulario principal : 'id del campo de la ventana modal'
+            {id_mov: 'id_mov_actualizar'},
+            {tipo_mov: 'tipo_mov_actualizar'},
+            {valor: 'valor_actualizar'},
+            {descripcion: 'descripcion_actualizar'}
+        ],
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
@@ -90,3 +98,34 @@ function deudor(){
     deudorGLobal = deudor;
 }
 
+function actualizarDeudor(){
+
+    const objeto = {
+
+        url : {
+            actualizar : '/deuda/actualizar',
+        },
+
+        // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
+        modal:{
+            isModal:true,
+            idVentanaModal : 'modal_deuda_actualizar',
+            nombreCampoComplemento: '_actualizar'
+        },
+
+        validacionCampos : [
+            //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
+            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
+            {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
+            {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
+        ],
+
+        //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
+        filtroBusqueda: false
+    }
+
+    // Se envia el id del formulario para el envio de registro
+    const deuda = new Deuda(objeto);
+    deuda.asignarValidacionCampos();
+    deuda.formularioActualizar('form_deuda_actualizar', deudorGLobal);
+}

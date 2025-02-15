@@ -16,11 +16,10 @@ $router = new Router();
 
 //Deuda
 $router->get('/', [DeudaController::class, 'inicio']);
+$router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'listarMovDedudaCliente']);
 $router->post('/deuda/guardar', [DeudaController::class, 'guardar']);
 $router->post('/deuda/actualizar', [DeudaController::class, 'actualizar']);
 $router->post('/deuda/eliminar', [DeudaController::class, 'eliminar']);
-
-$router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'listarMovDedudaCliente']);
 
 $router->get('/ciudad/api', [CiudadController::class, 'listarCiudades']);
 

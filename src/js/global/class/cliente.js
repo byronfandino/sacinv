@@ -17,6 +17,7 @@ export class Cliente extends ModeloBase {
 
     //Este método solo es utilizado siempre y cuando el usuario de clic en el icono Editar de una tabla
     asignarValoresVentanaModal(objetoEncontrado) {
+        
         // Convertir el objeto encontrado en un array de pares clave-valor
         const arrayCliente = Object.entries(objetoEncontrado);
     
