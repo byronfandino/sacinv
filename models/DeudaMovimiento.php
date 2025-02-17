@@ -103,6 +103,12 @@
         public function getSaldo(){
             return $this->saldo;
         }
+
+        public function getTipoMov(){
+            return $this->tipo_mov;
+        }
+
+        
     }
 
 ?>

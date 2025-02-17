@@ -29,35 +29,31 @@ class DeudaController{
 
     public static function getClienteDeuda($fk_cliente){
 
-        //Se obtiene el último registro del cliente que tiene saldo = 0
         $query = "SELECT * FROM deuda WHERE fk_cliente = " . $fk_cliente . " ORDER BY id_deuda DESC LIMIT 1";
         $clienteFound = Deuda::SQL($query);
         return $clienteFound[0]; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
     }
 
     public static function getUltimoMovimiento($fk_deuda){
-        //Se obtiene el último registro del cliente que tiene saldo = 0
         $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return $mov_deuda[0]; //Retornamos únicamente el objeto
     }
 
     public static function getMovimientoDeuda($id_mov){
-        //Se obtiene el último registro del cliente que tiene saldo = 0
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov = " . $id_mov . " LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return $mov_deuda[0]; //Retornamos únicamente el objeto
     }
 
+    //Obtiene todos los registros continuos al id buscado
     public static function getMovimientosUpdate($fk_deuda, $id_mov){
-        //Se obtiene el último registro del cliente que tiene saldo = 0
         $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " AND id_mov > " . $id_mov . " ORDER BY id_mov ASC";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return $mov_deuda; //Retornamos el arreglo
     }
 
     public static function getMovimientoAnterior($fk_deuda, $id_mov){
-        //Se obtiene el último registro del cliente que tiene saldo = 0
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov < " . $id_mov . " AND fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return $mov_deuda[0]; //Retornamos únicamente el objeto        
@@ -73,7 +69,7 @@ class DeudaController{
                 $deuda = new Deuda($_POST);
                 $alertas = $deuda->validar();
 
-                if(empty($alertas)){
+                if(empty($alertas) && $_POST['tipo_mov'] === 'D'){
                     
                     //Se crea el nuevo registro
                     $resultado = $deuda->crear();
@@ -127,7 +123,7 @@ class DeudaController{
                                     echo json_encode([
                                         "rta" => "false",
                                         "message" => "El cliente es Nuevo por lo tanto La Deuda Nueva fue creada, el inicio del movimiento de la deuda con saldo 0 fue creado, pero  pero el Movimiento de la deuda con los datos actuales no pudo crearse", 
-                                        "error" => [$_POST, $resultado]
+                                        "error" => $resultado
                                     ]);
                                 }
 
@@ -154,11 +150,21 @@ class DeudaController{
                     }
 
                 }else{
-                    echo json_encode([
-                        "rta" => "false",
-                        "message" => "La deuda no existe pero no pasó la validación de campos", 
-                        "alertas" => $alertas
-                    ]);
+
+                    if (!empty($alertas)){
+                        echo json_encode([
+                            "rta" => "false",
+                            "message" => "La deuda no existe pero no pasó la validación de campos", 
+                            "alertas" => $alertas
+                        ]);
+                    }
+
+                    if ($_POST['tipo_mov'] !== "D"){
+                        echo json_encode([
+                            "rta" => "false",
+                            "message" => "No se puede comenzar con un abono, porque el cliente no tiene deuda"
+                        ]);
+                    }
                 }
 
             }else{
@@ -176,89 +182,99 @@ class DeudaController{
                 $lastSaldo = $deuda_mov->getSaldo();
 
                 if ($lastSaldo == 0){
-                    //Se crea un nuevo regitro en la tabla deuda
-                    $deuda = new Deuda($_POST);
-                    $resultado = $deuda->crear();
 
-                    if ($resultado === true){
-                        
-                        //Obtenemos el ultimo registro de la deuda
-                        $clienteInDeuda = self::getClienteDeuda((int) $_POST['fk_cliente']);
+                    if ($_POST['tipo_mov'] == "D"){
 
-                        /** @var Deuda $clienteInDeuda */
-                        $fk_deuda = $clienteInDeuda->getIdDeuda();
-                        
-                        //Se agrega un NUEVO REGISTRO de deuda_movimiento
-
-                        $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
-                        $hora_actual = date("H:i"); // Obtiene la hora actual 
-
-                        /*Se ingresa un registro en blanco a la tabla Movimiento de la Deuda*/
-                        // Creamos un objeto arreglo asociativo nuevo 
-                        $newObjectMov = [
-                            "fk_deuda" => $fk_deuda,
-                            "tipo_mov" => "A",
-                            "descripcion" => "Inicio",
-                            "valor" => 0,
-                            "fecha" => $fecha_actual,
-                            "hora" => $hora_actual,
-                            "saldo" => 0
-                        ];
-
-                        $deudaMovimiento = new DeudaMovimiento($newObjectMov);
-                        $resultado = $deudaMovimiento->crear();
-
-                        if($resultado == true){
-
-                            //Agregamos la llave foránea al POST
-                            $_POST['fk_deuda'] = $fk_deuda;
-                            $_POST['saldo'] = (int) $_POST['valor'];
-
-                            $deudaMovimiento = new DeudaMovimiento($_POST);
-                            $alertas = $deudaMovimiento->validar();
-
-                            if(empty($alertas)){
-                                
-                                $resultado = $deudaMovimiento->crear();
-
-                                if ($resultado === true ){
-                                    echo json_encode([
-                                        "rta" => "true",
-                                        "message" => "Registro agregado"
-                                    ]);
+                        //Se crea un nuevo regitro en la tabla deuda
+                        $deuda = new Deuda($_POST);
+                        $resultado = $deuda->crear();
+    
+                        if ($resultado === true){
+                            
+                            //Obtenemos el ultimo registro de la deuda
+                            $clienteInDeuda = self::getClienteDeuda((int) $_POST['fk_cliente']);
+    
+                            /** @var Deuda $clienteInDeuda */
+                            $fk_deuda = $clienteInDeuda->getIdDeuda();
+                            
+                            //Se agrega un NUEVO REGISTRO de deuda_movimiento
+    
+                            $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
+                            $hora_actual = date("H:i"); // Obtiene la hora actual 
+    
+                            /*Se ingresa un registro en blanco a la tabla Movimiento de la Deuda*/
+                            // Creamos un objeto arreglo asociativo nuevo 
+                            $newObjectMov = [
+                                "fk_deuda" => $fk_deuda,
+                                "tipo_mov" => "A",
+                                "descripcion" => "Inicio",
+                                "valor" => 0,
+                                "fecha" => $fecha_actual,
+                                "hora" => $hora_actual,
+                                "saldo" => 0
+                            ];
+    
+                            $deudaMovimiento = new DeudaMovimiento($newObjectMov);
+                            $resultado = $deudaMovimiento->crear();
+    
+                            if($resultado == true){
+    
+                                //Agregamos la llave foránea al POST
+                                $_POST['fk_deuda'] = $fk_deuda;
+                                $_POST['saldo'] = (int) $_POST['valor'];
+    
+                                $deudaMovimiento = new DeudaMovimiento($_POST);
+                                $alertas = $deudaMovimiento->validar();
+    
+                                if(empty($alertas)){
+                                    
+                                    $resultado = $deudaMovimiento->crear();
+    
+                                    if ($resultado === true ){
+                                        echo json_encode([
+                                            "rta" => "true",
+                                            "message" => "Registro agregado"
+                                        ]);
+                                    }else{
+                                        echo json_encode([
+                                            "rta" => "false",
+                                            "message" => "El cliente ya existía, La Deuda Nueva fue creada, el inicio del movimiento de la deuda con saldo 0 fue creado, pero  pero el Movimiento de la deuda con los datos actuales no pudo crearse", 
+                                            "error" => [$_POST, $resultado]
+                                        ]);
+                                    }
+    
                                 }else{
                                     echo json_encode([
                                         "rta" => "false",
-                                        "message" => "El cliente ya existía, La Deuda Nueva fue creada, el inicio del movimiento de la deuda con saldo 0 fue creado, pero  pero el Movimiento de la deuda con los datos actuales no pudo crearse", 
-                                        "error" => [$_POST, $resultado]
+                                        "message" => "El cliente ya existía, se agregó la NUEVA deuda pero no pasó la validación de campos del Movimiento de la deuda", 
+                                        "alertas" => $alertas
                                     ]);
                                 }
-
                             }else{
                                 echo json_encode([
                                     "rta" => "false",
-                                    "message" => "El cliente ya existía, se agregó la NUEVA deuda pero no pasó la validación de campos del Movimiento de la deuda", 
-                                    "alertas" => $alertas
+                                    "message" => "Se detectó que el cliente ya existía en la Deuda, por lo tanto se creó un nuevo registro porque el saldo estaba en 0, pero no se pudo crear el nuevo registro en el Movimiento de la deuda como saldo inicial en 0", 
+                                    "error" => $resultado
                                 ]);
                             }
+    
                         }else{
+    
                             echo json_encode([
                                 "rta" => "false",
-                                "message" => "Se detectó que el cliente ya existía en la Deuda, por lo tanto se creó un nuevo registro porque el saldo estaba en 0, pero no se pudo crear el nuevo registro en el Movimiento de la deuda como saldo inicial en 0", 
+                                "message" => "Ya existía un registro en en Deuda, y como el saldo es de 0, Se intentó crear un nuevo registro en la Deuda pero no fue psoble", 
                                 "error" => $resultado
                             ]);
                         }
-
                     }else{
-
                         echo json_encode([
                             "rta" => "false",
-                            "message" => "Ya existía un registro en en Deuda, y como el saldo es de 0, Se intentó crear un nuevo registro en la Deuda pero no fue psoble", 
-                            "error" => $resultado
+                            "message" => "No es posible comenzar con un abono debido a que el cliente no tiene deuda"
                         ]);
                     }
 
                 }else{
+                    
                     //Se guarda el movimiento 
                     //Actualizamos el arreglo POST
                     $_POST['fk_deuda'] = $fk_deuda;
@@ -346,24 +362,17 @@ class DeudaController{
                         
                         $nuevoSaldo = (int) $movimiento->getSaldo();
 
-                        // $array_result = [];
-                        // $array_result[0] = $nuevoSaldo; 
-                        // $cont = 1;
-    
                         foreach($array_mov as $objeto){
     
                             /** @var DeudaMovimiento $objeto */
                             if ($objeto->tipo_mov == "D"){
-                                // $array_result[$cont] = $nuevoSaldo . " + " . (int) $objeto->valor;
                                 $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor;
                             }else{
-                                // $array_result[$cont] = $nuevoSaldo . " - " . (int) $objeto->valor;
                                 $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor;
                             }
 
-                            // $cont++;
-
                             $objeto->saldo = $nuevoSaldo;
+
                             //Convertimos el objeto en un arreglo asociativo
                             $array_object = get_object_vars($objeto);
     
@@ -374,12 +383,12 @@ class DeudaController{
                     
                     echo json_encode([
                         "rta" => "true",
-                        "message" => "Registro actualizado, mostrando los datos a actualizar"
+                        "message" => "Registro actualizado"
                     ]);
                 }else{
                     echo json_encode([
                         "rta" => "false",
-                        "message" => "No fue posible actualizar el registro, error en backend", 
+                        "message" => "No fue posible actualizar el registro, error en el backend", 
                         "error" => $resultado
                     ]);
                 }
@@ -395,6 +404,64 @@ class DeudaController{
 
         }
 
+    }
+
+    public static function eliminar(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+            //Obtener el item actual y cargarlo en un objeto
+            $get_mov = self::getMovimientoDeuda((int) $_POST['id']);
+
+            //Obtener el saldo del item anterior, para obtenemos todo el objeto
+            /** @var DeudaMovimiento $get_mov */
+            $get_mov_prev = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $get_mov->getIdMov());
+            
+            //Obtenemos todos los demás items siguientes
+            /**@var DeudaMovimiento $$movimiento  */
+            $array_mov = self::getMovimientosUpdate($get_mov->getFkDeuda(), $get_mov->getIdMov());
+
+            //sumar o restar según sea el caso en el item posterior
+            if (!empty($array_mov)){
+
+                /** @var DeudaMovimiento $get_mov_prev */                        
+                $nuevoSaldo = (int) $get_mov_prev->getSaldo();
+
+                foreach($array_mov as $objeto){
+
+                    /** @var DeudaMovimiento $objeto */
+                    if ($objeto->tipo_mov == "D"){
+                        $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor;
+                    }else{
+                        $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor;
+                    }
+                    $objeto->saldo = $nuevoSaldo;
+                    //Convertimos el objeto en un arreglo asociativo
+                    $array_object = get_object_vars($objeto);
+
+                    $movObjeto = new DeudaMovimiento($array_object);
+                    $resultado = $movObjeto->actualizar();
+                }
+            }
+
+            //eliminar el registro
+            $resultado = $get_mov->eliminar((int) $_POST['id']);
+
+            if($resultado === true){
+
+                echo json_encode([
+                    "rta" => "true", 
+                    "message" => "Registro eliminado"
+                ]);
+
+            }else{
+
+                echo json_encode([
+                    "rta" => "false", 
+                    "message" => "El registro No se eliminó, posiblemente este registro se encuentre relacionado con otra entidad",
+                    "error" => $resultado
+                ]);
+            }
+        }
     }
 }
 

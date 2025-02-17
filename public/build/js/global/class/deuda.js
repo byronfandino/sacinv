@@ -142,4 +142,28 @@ export class Deuda extends ModeloBase{
 
     }
 
+    confirmarEliminacion(idRegistro){ 
+        Swal.fire({
+            title: '¿Confirma que desea eliminar este registro?',
+            text: "Después de eliminado no se puede recuperar",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '##3085d6',
+            confirmButtonText: 'Si, eliminar'
+
+            }).then((result) => {
+
+            if (result.isConfirmed) {
+                const rta = this.eliminarRegistro(idRegistro);
+                // Si se elimina el registro satisfactoriamente, se refresca la tabla
+                if (rta){
+                    const inputHidden = document.querySelector('#fk_cliente_deudor');
+                    const evento = new Event ('change');
+                    inputHidden.dispatchEvent(evento);
+                }
+            }
+        })
+    }
+
 }

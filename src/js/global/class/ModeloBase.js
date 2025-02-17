@@ -198,9 +198,9 @@ export class ModeloBase{
             if(this.tabla.columnaEliminar){
 
                 let tdEliminar = '';
-                
+
                 if(classTD != ''){
-                    tdEliminar = this.crearTdEliminar(nombreCampoId, idRegistro);
+                    tdEliminar = this.crearTdEliminar(idRegistro);
                     tdEliminar.classList.add(classTD);
                     tr.appendChild(tdEliminar);
 
