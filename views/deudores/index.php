@@ -47,7 +47,7 @@
             <legend>Datos del cliente</legend>
 
             <div class="contenedor__campos">
-                
+
                 <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
                 <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
                 <p class="label__error ocultar"></p> 
@@ -128,6 +128,7 @@
                     <th>Valor</th>
                     <th>Saldo</th>
                     <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody class="tbody">

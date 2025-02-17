@@ -28,13 +28,13 @@
         
         public function validar(){
 
-            // if(!$this->fk_deuda){
-            //     self::$alertas['error']['fk_deuda'][] = "Falta relacionar la deuda master";
-            // }else if(!preg_match('/^[0-9]{1,20}$/', $this->fk_deuda)){
-            //     self::$alertas['error']['fk_deuda'][] = "El valor de fk_deuda no es válido";
-            // }else{
-            //     $this->fk_deuda = (int) trim($this->fk_deuda);
-            // }
+            if(!$this->fk_deuda){
+                self::$alertas['error']['fk_deuda'][] = "Falta relacionar la deuda master";
+            }else if(!preg_match('/^[0-9]{1,20}$/', $this->fk_deuda)){
+                self::$alertas['error']['fk_deuda'][] = "El valor de fk_deuda no es válido";
+            }else{
+                $this->fk_deuda = (int) trim($this->fk_deuda);
+            }
 
             if(!$this->tipo_mov){
                 self::$alertas['error']['tipo_mov'][] = "El campo Tipo de Movimiento es obligatorio";
@@ -80,12 +80,22 @@
 
         }
 
-        // Actualizar llave foránea
+        public function getIdMov(){
+            return $this->id_mov;
+        }
+
         public function setFkDeuda($id){
             $this->fk_deuda = $id;
         }
 
-        // Actualizar llave saldo
+        public function getFkDeuda(){
+            return $this->fk_deuda;
+        }
+
+        public function getValor(){
+            return $this->valor;
+        }
+
         public function setSaldo($saldo){
             $this->saldo = $saldo;
         }

@@ -107,7 +107,6 @@ export class ModeloBase{
         const contadorRegistros = document.querySelector(`#${this.idTotalRegistros}`);
         contadorRegistros.textContent = `Registros encontrados ( ${registros.length} )`;
 
-
         const tbody = document.querySelector(`#${this.tabla.idTabla} .tbody`);
         const arrayCamposTabla = this.tabla.estructura.map(obj => Object.keys(obj)[0]); 
         const nombresCamposTabla = this.tabla.estructura.map(obj => [Object.keys(obj)[0], Object.values(obj)[0]]); 
@@ -124,9 +123,12 @@ export class ModeloBase{
             const tr = document.createElement('TR');
 
             let arrayTD = [];
+            let classTD = '';
 
             arrayRegistro.forEach(campo => {
+
                 if(arrayCamposTabla.includes(campo[0])){
+
                     const td = document.createElement('TD');
                     const span = document.createElement('SPAN');
                     
@@ -137,7 +139,16 @@ export class ModeloBase{
 
                     //buscamos el objeto dentro de la tabla para obtener la posición en la tabla 
                     const objetoTabla = this.tabla.estructura.find(obj => keyCampo[0] in obj);
-                    
+
+                    if (objetoTabla.reemplazar){
+
+                        const textoReemplazado = objetoTabla.reemplazar.find(obj => campo[1] in obj);
+                        const arrayCampoModificado = Object.entries(textoReemplazado);
+                        campo[1] = arrayCampoModificado[0][1];
+
+                        classTD = textoReemplazado.class;
+                    }
+
                     if (keyCampo) {
                         span.textContent = keyCampo[1];
                     }
@@ -156,6 +167,12 @@ export class ModeloBase{
 
             //Agregamos todos los td almacenados en el array
             arrayTD.forEach(td => {
+                
+                if(classTD != ''){
+                    //Agregamos la clase
+                    td.classList.add(classTD);
+                }
+
                 tr.appendChild(td);
             });
             
@@ -163,12 +180,33 @@ export class ModeloBase{
 
             // Si se requiere la columna modificar se crea el td
             if(this.tabla.columnaModificar){
-                tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));
+
+                let tdModificar = '';
+
+                if(classTD != ''){
+                    tdModificar = this.crearTdModificar(nombreCampoId, idRegistro);
+                    tdModificar.classList.add(classTD);
+                    tr.appendChild(tdModificar);
+
+                }else{
+                    tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));
+                }
+
             }
 
             // Si se requiere la columna eliminar se crea el td
             if(this.tabla.columnaEliminar){
-                tr.appendChild(this.crearTdEliminar(idRegistro));
+
+                let tdEliminar = '';
+                
+                if(classTD != ''){
+                    tdEliminar = this.crearTdEliminar(nombreCampoId, idRegistro);
+                    tdEliminar.classList.add(classTD);
+                    tr.appendChild(tdEliminar);
+
+                }else{
+                    tr.appendChild(this.crearTdEliminar(idRegistro));
+                }
             }
 
             tbody.appendChild(tr);
@@ -308,17 +346,13 @@ export class ModeloBase{
     }
 
     asignarValoresVentanaModal(objeto){
-        console.log(objeto);
+
         const arrayObjeto = Object.entries(objeto);
 
         arrayObjeto.forEach(([key, value]) => {
 
-            console.log([key + " = " + value]);
-
             // Encontrar el campo correspondiente en this.equivalenciaCamposModal
             const campo = this.equivalenciaCamposModal.find(campo => campo[key]);
-    
-            console.log(campo);
 
             if (campo) {
                 // Desestructurar el par clave-valor del campo

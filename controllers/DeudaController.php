@@ -26,6 +26,7 @@ class DeudaController{
         ]);
     }
 
+
     public static function getClienteDeuda($fk_cliente){
 
         //Se obtiene el último registro del cliente que tiene saldo = 0
@@ -41,8 +42,28 @@ class DeudaController{
         return $mov_deuda[0]; //Retornamos únicamente el objeto
     }
 
-    public static function guardar(){
+    public static function getMovimientoDeuda($id_mov){
+        //Se obtiene el último registro del cliente que tiene saldo = 0
+        $query = "SELECT * FROM deuda_movimiento WHERE id_mov = " . $id_mov . " LIMIT 1";
+        $mov_deuda = DeudaMovimiento::SQL($query);
+        return $mov_deuda[0]; //Retornamos únicamente el objeto
+    }
 
+    public static function getMovimientosUpdate($fk_deuda, $id_mov){
+        //Se obtiene el último registro del cliente que tiene saldo = 0
+        $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " AND id_mov > " . $id_mov . " ORDER BY id_mov ASC";
+        $mov_deuda = DeudaMovimiento::SQL($query);
+        return $mov_deuda; //Retornamos el arreglo
+    }
+
+    public static function getMovimientoAnterior($fk_deuda, $id_mov){
+        //Se obtiene el último registro del cliente que tiene saldo = 0
+        $query = "SELECT * FROM deuda_movimiento WHERE id_mov < " . $id_mov . " AND fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
+        $mov_deuda = DeudaMovimiento::SQL($query);
+        return $mov_deuda[0]; //Retornamos únicamente el objeto        
+    }
+
+    public static function guardar(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $clienteInDeuda = self::getClienteDeuda((int) $_POST['fk_cliente']);
@@ -68,7 +89,7 @@ class DeudaController{
 
                         //Se agrega un NUEVO REGISTRO de deuda_movimiento
                         $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
-                        $hora_actual = date("H:i:s"); // Obtiene la hora actual 
+                        $hora_actual = date("H:i"); // Obtiene la hora actual 
 
                         // Creamos un objeto arreglo asociativo nuevo 
                         $newObjectMov = [
@@ -170,7 +191,7 @@ class DeudaController{
                         //Se agrega un NUEVO REGISTRO de deuda_movimiento
 
                         $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
-                        $hora_actual = date("H:i:s"); // Obtiene la hora actual 
+                        $hora_actual = date("H:i"); // Obtiene la hora actual 
 
                         /*Se ingresa un registro en blanco a la tabla Movimiento de la Deuda*/
                         // Creamos un objeto arreglo asociativo nuevo 
@@ -281,9 +302,100 @@ class DeudaController{
                 }
             }
         }
-
     }
     
+    public static function actualizar(){
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+
+            $get_mov = self::getMovimientoDeuda((int) $_POST['id_mov']);
+
+            /** @var DeudaMovimiento $get_mov */
+            $_POST['fk_deuda'] = (int) $get_mov->getFkDeuda();
+            $_POST['fecha'] = date("Y-m-d"); // Obtiene la fecha actual 
+            $_POST['hora'] = date("H:i"); // Obtiene la hora actual
+
+            if ($_POST['tipo_mov'] == "D"){
+                
+                $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValor();
+                $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor'];
+            
+            }else{
+
+                // Consultamos el saldo del registro anterior
+                $get_mov_ant = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $_POST['id_mov']);
+                /** @var DeudaMovimiento $get_mov_ant */
+                $_POST['saldo'] = (int) $get_mov_ant->getSaldo() - (int) $_POST['valor'];
+            }
+
+            $movimiento = new DeudaMovimiento($_POST);
+            $alertas = $movimiento->validar();
+
+            if(empty($alertas)){
+
+                //Actualizamos el movimiento
+                $resultado = $movimiento->actualizar();
+
+                if($resultado === true){
+
+                    //Se procede a modificar todos los demás registros siguientes
+                    $array_mov = self::getMovimientosUpdate($movimiento->getFkDeuda(), $movimiento->getIdMov());
+                    
+                    if (!empty($array_mov)){
+                        
+                        $nuevoSaldo = (int) $movimiento->getSaldo();
+
+                        // $array_result = [];
+                        // $array_result[0] = $nuevoSaldo; 
+                        // $cont = 1;
+    
+                        foreach($array_mov as $objeto){
+    
+                            /** @var DeudaMovimiento $objeto */
+                            if ($objeto->tipo_mov == "D"){
+                                // $array_result[$cont] = $nuevoSaldo . " + " . (int) $objeto->valor;
+                                $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor;
+                            }else{
+                                // $array_result[$cont] = $nuevoSaldo . " - " . (int) $objeto->valor;
+                                $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor;
+                            }
+
+                            // $cont++;
+
+                            $objeto->saldo = $nuevoSaldo;
+                            //Convertimos el objeto en un arreglo asociativo
+                            $array_object = get_object_vars($objeto);
+    
+                            $movObjeto = new DeudaMovimiento($array_object);
+                            $resultado = $movObjeto->actualizar();
+                        }
+                    }
+                    
+                    echo json_encode([
+                        "rta" => "true",
+                        "message" => "Registro actualizado, mostrando los datos a actualizar"
+                    ]);
+                }else{
+                    echo json_encode([
+                        "rta" => "false",
+                        "message" => "No fue posible actualizar el registro, error en backend", 
+                        "error" => $resultado
+                    ]);
+                }
+
+            }else{
+                echo json_encode([
+                    "rta" => "false",
+                    "message" => "No pasó la validación en los campos", 
+                    "error" => $alertas
+                ]);
+
+            }
+
+        }
+
+    }
 }
 
 ?>

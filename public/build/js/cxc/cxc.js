@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     campoHidden();
     botones();
     guardarDeudor();
-    actualizarDeudor
+    actualizarDeudor();
 });
 
 function campoHidden(){
@@ -59,17 +59,21 @@ function guardarDeudor(){
         tabla : {
             idTabla: 'tabla_deuda',
             estructura : [
-                // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css
+                // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css, reemplazo de valores
                 {fecha: 'Fecha', posicion: 1, class:[]},
                 {hora: 'Hora', posicion: 2, class:[]},
-                {tipo_mov: 'Tipo Movimiento', posicion:3, class: []},
+                {tipo_mov: 'Tipo Movimiento', posicion:3, class: [], reemplazar : [
+                                                                        {'D' : 'Debe', class: ''},
+                                                                        {'A' : 'Abonó', class: 'td--amarillo'},
+                                                                        {'R' : 'Devolución', class: 'td--rojo'}
+                                                                    ]},
                 {descripcion: 'Descripcion', posicion:4, class: []},
                 {valor: 'Valor', posicion:5, class: []},
                 {saldo: 'Saldo', posicion:6, class: []}
             ],
     
             columnaModificar: true,
-            columnaEliminar: false
+            columnaEliminar: true
         },
 
         equivalenciaCamposModal : [
@@ -115,9 +119,9 @@ function actualizarDeudor(){
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
-            {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
-            {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
+            {descripcion_actualizar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: true},
+            {tipo_mov_actualizar: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: true},
+            {valor_actualizar: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: true}
         ],
 
         //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
@@ -127,5 +131,6 @@ function actualizarDeudor(){
     // Se envia el id del formulario para el envio de registro
     const deuda = new Deuda(objeto);
     deuda.asignarValidacionCampos();
-    deuda.formularioActualizar('form_deuda_actualizar', deudorGLobal);
+    //                                id_formulario,   id_cliente_input_hidden, objeto global
+    deuda.formularioActualizar('form_deuda_actualizar', 'fk_cliente_deudor', deudorGLobal);
 }

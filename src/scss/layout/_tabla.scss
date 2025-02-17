@@ -157,17 +157,13 @@
         }
     }
 
-    // & tr > td.tbody__td--verde{
-    //     background-color: lighten(v.$verde-claro, 30%);
-    // }
-    
-    // & tr > td.tbody__td--azul{
-    //     background-color: lighten(v.$azul-claro, 20%) ;
-    // }
-    
-    // & tr > td.tbody__td--rojo{
-    //     background-color: v.$rosado;
-    // }
+    & tr > td.td--amarillo{
+        background-color: v.$amarillo;
+    }
+
+    & tr > td.td--rojo{
+        background-color: c.adjust($color: v.$rojo, $lightness:30%);
+    }
 
     // Celdas iconos de Modificar e Historial
     &__td--icon{

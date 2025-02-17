@@ -731,6 +731,12 @@ a.boton {
     text-align: right;
   }
 }
+.tbody tr > td.td--amarillo {
+  background-color: #ffee00;
+}
+.tbody tr > td.td--rojo {
+  background-color: rgb(250.125, 142.875, 142.875);
+}
 .tbody__td--icon {
   display: flex;
   flex-flow: row wrap;

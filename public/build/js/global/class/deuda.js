@@ -1,4 +1,4 @@
-import { cargarFechaHoraActual, limpiarFormulario, url } from "../parametros.js";
+import { cargarFechaHoraActual, cierreAutModal, limpiarFormulario, url } from "../parametros.js";
 import { ModeloBase } from "./ModeloBase.js";
 
 export class Deuda extends ModeloBase{
@@ -112,4 +112,34 @@ export class Deuda extends ModeloBase{
             console.error('Codigo de error:', error);
         }
     }
+
+    formularioActualizar(idFormulario, idInputHidden, deudor){
+
+        const formulario = document.querySelector(`#${idFormulario}`);
+        const inputHidden = document.querySelector(`#${idInputHidden}`);
+
+        if(formulario && inputHidden){
+
+            formulario.addEventListener('submit', async (e) => {
+                // Prevenir el comportamiento por defecto del formulario
+                e.preventDefault();
+    
+                // Si pasa la validación de los campos envie la petición al post
+                if(this.revisarCampos()){
+        
+                    let formData = new FormData(formulario); // Crear un objeto FormData con los datos del formulario
+    
+                    const rta = await this.actualizarRegistro(formData);
+    
+                    if(rta){
+                        deudor.listarRegistros(inputHidden.value);
+                        // Cerramos el modal
+                        cierreAutModal(this.modal.idVentanaModal);
+                    }
+                }
+            });
+        }
+
+    }
+
 }
