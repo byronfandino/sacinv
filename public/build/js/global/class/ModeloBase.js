@@ -1,6 +1,7 @@
 import { 
     cierreAutModal, 
     consultarAPI, 
+    formatearMiles, 
     habilitarBotonSubmit, 
     limpiarFormulario, 
     mostrarErrorCampo, 
@@ -140,12 +141,15 @@ export class ModeloBase{
                     //buscamos el objeto dentro de la tabla para obtener la posición en la tabla 
                     const objetoTabla = this.tabla.estructura.find(obj => keyCampo[0] in obj);
 
+                    // Si existe la propiedad reemplazar, utilizada para reemplazar los datos provenientes de las tabla original y mostrar datos legibles al usuario
                     if (objetoTabla.reemplazar){
 
+                        // Buscamos en la sección reemplazar de la tabla para saber si el valor del campo por ejemplo 'D' corresponde a la llave del arreglo que está en reemplazar y obtener su equivalente 
                         const textoReemplazado = objetoTabla.reemplazar.find(obj => campo[1] in obj);
                         const arrayCampoModificado = Object.entries(textoReemplazado);
                         campo[1] = arrayCampoModificado[0][1];
 
+                        // almacenamos el valor del campo en la variable classTD, para aplicar el estilo a todos los TD del TR posteriormente
                         classTD = textoReemplazado.class;
                     }
 
@@ -155,10 +159,18 @@ export class ModeloBase{
 
                     //Se verifica si la tabla está en una ventana modal para convertir el campo en un link
                     const textoTD = this.verificarTipoRegistro(campo, idRegistro);
-                    
+
+                    // Agregamos el span y el texto al td para aplicar posteriormente las clases a nivel general
                     td.appendChild(span);
                     td.appendChild(textoTD);
-                    
+
+                    //Agregando las posibles clases existentes al TD definidas en la estructura, estas clases son en específico al campo td y no a todo el registro 
+                    if (objetoTabla.class){
+                        objetoTabla.class.forEach(clase => {
+                            td.classList.add(clase);
+                        });
+                    }
+
                     //Agregamos el td a la posición del arreglo según la posición del objeto dentro de la estructura de la tabla
                     arrayTD[objetoTabla.posicion] = td;
 
@@ -167,7 +179,7 @@ export class ModeloBase{
 
             //Agregamos todos los td almacenados en el array
             arrayTD.forEach(td => {
-                
+                // Verificamos si quedó almacenada una clase de la seccion reemplazar para aplicar el color de fondo en todos los td por ejemplo al momento de abonar toda la sección queda con fondo amarillo
                 if(classTD != ''){
                     //Agregamos la clase
                     td.classList.add(classTD);
@@ -178,7 +190,7 @@ export class ModeloBase{
             
             const nombreCampoId = Object.entries(registro)[0][0];
 
-            // Si se requiere la columna modificar se crea el td
+            // Si se requiere la columna modificar se crea el td y se aplica la clase de la seccion reemplazar en caso de que exista
             if(this.tabla.columnaModificar){
 
                 let tdModificar = '';
@@ -191,10 +203,9 @@ export class ModeloBase{
                 }else{
                     tr.appendChild(this.crearTdModificar(nombreCampoId, idRegistro));
                 }
-
             }
 
-            // Si se requiere la columna eliminar se crea el td
+            // Si se requiere la columna eliminar se crea el td y se aplica la clase de la seccion reemplazar en caso de que exista
             if(this.tabla.columnaEliminar){
 
                 let tdEliminar = '';
@@ -218,15 +229,22 @@ export class ModeloBase{
 
         const texto = document.createElement('SPAN');
         const keyCampo = campo[0];
-        const valorCampo = campo[1];
+        let valorCampo = campo[1];
+
+        // Encuentra el objeto donde la clave existe
+        const objetoEncontrado = this.tabla.estructura.find(obj => keyCampo in obj);
+       
+        //Verificamos el formato del dato
+        if (objetoEncontrado.formato){
+            if (objetoEncontrado.formato == "numero"){
+                valorCampo = formatearMiles(valorCampo)
+            }
+        }
         
         if (this.modal.isModal){
             // Si la tabla se encuentra dentro de un modal se crea una etiqueta <A> en lugar de un <SPAN>
             const aLink = document.createElement('A');
             aLink.setAttribute('href', '#');
-
-            // Encuentra el objeto donde la clave existe
-            const objetoEncontrado = this.tabla.estructura.find(obj => keyCampo in obj);
 
             // Se verifica si el dato debe ser un hipervínculo
             if(objetoEncontrado && objetoEncontrado.class.includes('tbody__td--enlace')){
@@ -237,18 +255,12 @@ export class ModeloBase{
                     e.preventDefault();
                     this.asignarDatosAFormulario(e)}
                 );
-
-                // Se verifica si el campo tiene clases css para aplicar
-                if(objetoEncontrado.class.length > 0){
-                    objetoEncontrado.class.forEach(clase => {
-                        aLink.classList.add(clase);
-                    });
-                }
                 
                 return aLink;
                 
             }else{
 
+                // Se asigna el valor del campo al span
                 texto.textContent = valorCampo;
                 return texto;         
             }

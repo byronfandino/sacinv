@@ -332,6 +332,10 @@ body {
   line-height: 140%;
 }
 
+a {
+  text-decoration: none;
+}
+
 .guia {
   border: 1px solid red;
 }
@@ -716,7 +720,7 @@ a.boton {
   }
 }
 .tbody__td--center {
-  text-align: left;
+  text-align: center;
 }
 @media (min-width: 600px) {
   .tbody__td--center {

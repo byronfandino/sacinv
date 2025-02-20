@@ -140,7 +140,7 @@
     }
 
     &__td--center{
-        text-align: left;
+        text-align: center;
 
         //Resolución tablet
         @include m.tablet{

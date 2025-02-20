@@ -125,3 +125,8 @@ export function botonResetFormulario(nombreBoton, objeto){
         objeto.listarRegistros();
     })
 }
+
+
+export function formatearMiles(numero) {
+    return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

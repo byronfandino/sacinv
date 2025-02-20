@@ -8,7 +8,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     botones();
     guardarDeudor();
     actualizarDeudor();
+    cajasTexto();
 });
+
+function cajasTexto(){
+    const inputCant = document.querySelector('#cant');
+    const inputValorUnit = document.querySelector('#valor_unit');
+    const inputValorTotal = document.querySelector('#valor_total');
+
+    inputCant.addEventListener('input', e => {
+        inputValorTotal.value = multiplicacion(e.target.value, inputValorUnit.value);
+
+    })
+
+    inputValorUnit.addEventListener('input', e => {
+        inputValorTotal.value = multiplicacion(e.target.value, inputCant.value);
+    })
+
+}
+
+function multiplicacion (valor1, valor2){
+    let resultado = parseInt(valor1) * parseInt(valor2);
+        if (resultado >= 0 ){
+            return resultado;
+        }else{
+           return 0;
+        }
+}
 
 function campoHidden(){
     const inputHidden = document.querySelector('#fk_cliente_deudor');
@@ -60,18 +86,19 @@ function guardarDeudor(){
             idTabla: 'tabla_deuda',
             estructura : [
                 // nombre_campo_bd: Titulo campo modo Mobile, orden, arreglo de clases css, reemplazo de valores
-                {fecha: 'Fecha', posicion: 1, class:[]},
-                {hora: 'Hora', posicion: 2, class:[]},
-                {tipo_mov: 'Tipo Movimiento', posicion:3, class: [], reemplazar : [
+                {fecha: 'Fecha', posicion: 1},
+                {hora: 'Hora', posicion: 2},
+                {tipo_mov: 'Tipo Movimiento', posicion:3, reemplazar : [
                                                                         {'D' : 'Debe', class: ''},
                                                                         {'A' : 'Abonó', class: 'td--amarillo'},
                                                                         {'R' : 'Devolución', class: 'td--rojo'}
                                                                     ]},
-                {descripcion: 'Descripcion', posicion:4, class: []},
-                {valor: 'Valor', posicion:5, class: []},
-                {saldo: 'Saldo', posicion:6, class: []}
+                {descripcion: 'Descripcion', posicion:4},
+                {cant: 'Cantidad', posicion:5, class: ['tbody__td--center'], formato : "numero"},
+                {valor_unit: 'V/Unit', posicion:6, class: ['tbody__td--right'], formato : "numero"},
+                {valor_total: 'V/Total', posicion:7, class: ['tbody__td--right'], formato : "numero"},
+                {saldo: 'Saldo', posicion:8, class: ['tbody__td--right'], formato : "numero"}
             ],
-    
             columnaModificar: true,
             columnaEliminar: true
         },
@@ -80,15 +107,18 @@ function guardarDeudor(){
             //id del campo del fomulario principal : 'id del campo de la ventana modal'
             {id_mov: 'id_mov_actualizar'},
             {tipo_mov: 'tipo_mov_actualizar'},
-            {valor: 'valor_actualizar'},
+            {cant: 'cant_actualizar'},
+            {valor_unit: 'valor_unit_actualizar'},
+            {valor_total: 'valor_total_actualizar'},
             {descripcion: 'descripcion_actualizar'}
         ],
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
+            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{2,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
             {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
-            {valor: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
+            {cant: '^[0-9]{1,3}$', message: 'Debe digitar un valor numérico', estado: true},
+            {valor_unit: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
         ],
 
         //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
@@ -121,7 +151,8 @@ function actualizarDeudor(){
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
             {descripcion_actualizar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: true},
             {tipo_mov_actualizar: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: true},
-            {valor_actualizar: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: true}
+            {cant_actualizar: '^[0-9]{1,3}$', message: 'Debe digitar un valor numérico', estado: true},
+            {valor_unit_actualizar: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: true}
         ],
 
         //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos

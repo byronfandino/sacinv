@@ -44,6 +44,10 @@ export class Deuda extends ModeloBase{
                         const nombreCamposFormulario = this.validacionCampos.map(obj => Object.keys(obj)[0]);
     
                         limpiarFormulario(nombreCamposFormulario);
+
+                        const inputCant = document.querySelector('#cant');
+                        inputCant.value = 1;
+
                         this.listarRegistros(campoCliente.value);
 
                     }
@@ -133,7 +137,6 @@ export class Deuda extends ModeloBase{
     
                     if(rta){
                         deudor.listarRegistros(inputHidden.value);
-                        // Cerramos el modal
                         cierreAutModal(this.modal.idVentanaModal);
                     }
                 }

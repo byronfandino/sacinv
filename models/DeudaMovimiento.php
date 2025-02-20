@@ -3,27 +3,33 @@
 
     class DeudaMovimiento extends ActiveRecord{
         protected static $tabla = 'deuda_movimiento';
-        protected static $columnasDB = ['id_mov', 'fk_deuda', 'tipo_mov', 'descripcion', 'valor', 'fecha', 'hora', 'saldo'];
+        protected static $columnasDB = ['id_mov', 'fk_deuda', 'tipo_mov', 'descripcion', 'cant', 'valor_unit', 'valor_total', 'saldo', 'fecha', 'hora'];
         
         public $id_mov;
         public $fk_deuda;
         public $tipo_mov;
         public $descripcion;
-        public $valor;
+        public $cant;
+        public $valor_unit;
+        public $valor_total;
+        public $saldo;   
         public $fecha;
         public $hora;
-        public $saldo;   
-    
+        
         public function __construct($args=[])
         {
             $this->id_mov = $args['id_mov'] ?? null;
             $this->fk_deuda = $args['fk_deuda'] ?? '';
             $this->tipo_mov = $args['tipo_mov'] ?? '';
             $this->descripcion = $args['descripcion'] ?? '';
-            $this->valor = $args['valor'] ?? 0;
+            $this->cant = $args['cant'] ?? 1;
+            $this->valor_unit = $args['valor_unit'] ?? 0;
+            $this->valor_total = $args['valor_total'] ?? 0;
+            $this->saldo = $args['saldo'] ?? 0;
             $this->fecha = $args['fecha'] ?? '';
             $this->hora = $args['hora'] ?? '';
-            $this->saldo = $args['saldo'] ?? 0;
+
+
         }
         
         public function validar(){
@@ -46,18 +52,34 @@
 
             if(!$this->descripcion){
                 self::$alertas['error']['descripcion'][] = "El campo Descripción es obligatorio";
-            }else if(!preg_match('/^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{3,500}$/', $this->descripcion)){
+            }else if(!preg_match('/^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{2,500}$/', $this->descripcion)){
                 self::$alertas['error']['descripcion'][] = "No debe digitar caracteres No válidos";
             }else{
                 $this->descripcion = trim($this->descripcion);
             }
 
-            if(!$this->valor){
-                self::$alertas['error']['valor'][] = "El campo valor es obligatorio";
-            }else if(!preg_match('/^[0-9]{2,10}$/', $this->valor)){
-                self::$alertas['error']['valor'][] = "Solo se permiten valores numéricos";
+            if(!$this->cant){
+                self::$alertas['error']['cant'][] = "El campo cantidad es obligatorio";
+            }else if(!preg_match('/^[0-9]{1,3}$/', $this->cant)){
+                self::$alertas['error']['cant'][] = "Solo se permiten números";
             }else{
-                $this->valor = (int) trim($this->valor);
+                $this->cant = (int) trim($this->cant);
+            }
+
+            if(!$this->valor_unit){
+                self::$alertas['error']['valor_unit'][] = "El campo valor unitario es obligatorio";
+            }else if(!preg_match('/^[0-9]{2,10}$/', $this->valor_unit)){
+                self::$alertas['error']['valor_unit'][] = "Solo se permiten números";
+            }else{
+                $this->valor_unit = (int) trim($this->valor_unit);
+            }
+
+            if(!$this->valor_total){
+                self::$alertas['error']['valor_total'][] = "El campo valor total es obligatorio";
+            }else if(!preg_match('/^[0-9]{2,10}$/', $this->valor_total)){
+                self::$alertas['error']['valor_total'][] = "Solo se permiten números";
+            }else{
+                $this->valor_total = (int) trim($this->valor_total);
             }
             
             if(!$this->fecha){
@@ -92,8 +114,8 @@
             return $this->fk_deuda;
         }
 
-        public function getValor(){
-            return $this->valor;
+        public function getValorTotal(){
+            return $this->valor_total;
         }
 
         public function setSaldo($saldo){

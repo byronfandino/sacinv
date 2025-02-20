@@ -25,8 +25,20 @@
             </div>
             
             <div class="form__campo t-sm">
-                <label for="valor_actualizar">Valor</label>
-                <input type="number" name="valor" id="valor_actualizar" class="campo__input">
+                <label for="cant_actualizar">Cantidad</label>
+                <input type="number" name="cant" id="cant_actualizar" value = "1" class="campo__input">
+                <p class="label__error ocultar"></p>
+            </div>
+
+            <div class="form__campo t-sm">
+                <label for="valor_unit_actualizar">Valor Unitario</label>
+                <input type="number" name="valor_unit" id="valor_unit_actualizar" class="campo__input">
+                <p class="label__error ocultar"></p>
+            </div>
+
+            <div class="form__campo t-sm">
+                <label for="valor_total_actualizar">Valor Total</label>
+                <input type="number" name="valor_total" id="valor_total_actualizar" class="campo__input disabled">
                 <p class="label__error ocultar"></p>
             </div>
             

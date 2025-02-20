@@ -26,7 +26,6 @@ class DeudaController{
         ]);
     }
 
-
     public static function getClienteDeuda($fk_cliente){
 
         $query = "SELECT * FROM deuda WHERE fk_cliente = " . $fk_cliente . " ORDER BY id_deuda DESC LIMIT 1";
@@ -92,10 +91,12 @@ class DeudaController{
                             "fk_deuda" => $fk_deuda,
                             "tipo_mov" => "A",
                             "descripcion" => "Inicio",
-                            "valor" => 0,
+                            "cant" => 1,
+                            "valor_unit" => 0,
+                            "valor_total" => 0,
+                            "saldo" => 0,
                             "fecha" => $fecha_actual,
                             "hora" => $hora_actual,
-                            "saldo" => 0
                         ];
 
                         $deudaMovimiento = new DeudaMovimiento($newObjectMov);
@@ -105,7 +106,7 @@ class DeudaController{
 
                             //Agregamos la llave foránea al POST
                             $_POST['fk_deuda'] = $fk_deuda;
-                            $_POST['saldo'] = (int) $_POST['valor'];
+                            $_POST['saldo'] = (int) $_POST['valor_total'];
 
                             $deudaMovimiento = new DeudaMovimiento($_POST);
                             $alertas = $deudaMovimiento->validar();
@@ -162,7 +163,7 @@ class DeudaController{
                     if ($_POST['tipo_mov'] !== "D"){
                         echo json_encode([
                             "rta" => "false",
-                            "message" => "No se puede comenzar con un abono, porque el cliente no tiene deuda"
+                            "message" => "No se puede guardar un abono, porque el cliente no tiene deuda"
                         ]);
                     }
                 }
@@ -176,8 +177,8 @@ class DeudaController{
 
                 //Obtenemos el registro con el último saldo registrado
                 $deuda_mov = self::getUltimoMovimiento($fk_deuda);
-                //Obtenemos el último saldo
 
+                //Obtenemos el último saldo
                 /** @var DeudaMovimiento $deuda_mov */
                 $lastSaldo = $deuda_mov->getSaldo();
 
@@ -208,10 +209,12 @@ class DeudaController{
                                 "fk_deuda" => $fk_deuda,
                                 "tipo_mov" => "A",
                                 "descripcion" => "Inicio",
-                                "valor" => 0,
+                                "cant" => 1,
+                                "valor_unit" => 0,
+                                "valor_total" => 0,
+                                "saldo" => 0,
                                 "fecha" => $fecha_actual,
                                 "hora" => $hora_actual,
-                                "saldo" => 0
                             ];
     
                             $deudaMovimiento = new DeudaMovimiento($newObjectMov);
@@ -221,7 +224,7 @@ class DeudaController{
     
                                 //Agregamos la llave foránea al POST
                                 $_POST['fk_deuda'] = $fk_deuda;
-                                $_POST['saldo'] = (int) $_POST['valor'];
+                                $_POST['saldo'] = (int) $_POST['valor_total'];
     
                                 $deudaMovimiento = new DeudaMovimiento($_POST);
                                 $alertas = $deudaMovimiento->validar();
@@ -281,9 +284,9 @@ class DeudaController{
                     
                     //Se verifica el tipo de movimiento
                     if ($_POST['tipo_mov'] == "D"){
-                        $_POST['saldo'] = (int) $lastSaldo + (int) $_POST['valor'];
+                        $_POST['saldo'] = (int) $lastSaldo + (int) $_POST['valor_total'];
                     }else{
-                        $_POST['saldo']= (int) $lastSaldo - (int) $_POST['valor'];
+                        $_POST['saldo']= (int) $lastSaldo - (int) $_POST['valor_total'];
                     }
     
                     //Se crea el objeto
@@ -334,15 +337,15 @@ class DeudaController{
 
             if ($_POST['tipo_mov'] == "D"){
                 
-                $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValor();
-                $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor'];
+                $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValorTotal();
+                $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor_total'];
             
             }else{
 
                 // Consultamos el saldo del registro anterior
                 $get_mov_ant = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $_POST['id_mov']);
                 /** @var DeudaMovimiento $get_mov_ant */
-                $_POST['saldo'] = (int) $get_mov_ant->getSaldo() - (int) $_POST['valor'];
+                $_POST['saldo'] = (int) $get_mov_ant->getSaldo() - (int) $_POST['valor_total'];
             }
 
             $movimiento = new DeudaMovimiento($_POST);
@@ -366,9 +369,9 @@ class DeudaController{
     
                             /** @var DeudaMovimiento $objeto */
                             if ($objeto->tipo_mov == "D"){
-                                $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor;
+                                $nuevoSaldo = $nuevoSaldo + (int) $objeto->getValorTotal;
                             }else{
-                                $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor;
+                                $nuevoSaldo = $nuevoSaldo - (int) $objeto->getValorTotal;
                             }
 
                             $objeto->saldo = $nuevoSaldo;
@@ -430,9 +433,9 @@ class DeudaController{
 
                     /** @var DeudaMovimiento $objeto */
                     if ($objeto->tipo_mov == "D"){
-                        $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor;
+                        $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor_total;
                     }else{
-                        $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor;
+                        $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor_total;
                     }
                     $objeto->saldo = $nuevoSaldo;
                     //Convertimos el objeto en un arreglo asociativo

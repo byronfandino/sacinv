@@ -84,6 +84,7 @@
             <legend>Movimiento</legend>
             
             <div class="contenedor__campos">
+
                 <div class="form__campo t-md">
                     <label for="tipo_mov">Tipo de movimiento</label>
                     <select name="tipo_mov" id="tipo_mov" class="campo__input">
@@ -94,10 +95,22 @@
                     </select>
                     <p class="label__error ocultar"></p>
                 </div>
+                
+                <div class="form__campo t-xs">
+                    <label for="cant">Cantidad</label>
+                    <input type="number" name="cant" id="cant" value = "1" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
 
                 <div class="form__campo t-sm">
-                    <label for="valor">Valor</label>
-                    <input type="number" name="valor" id="valor" class="campo__input">
+                    <label for="valor_unit">Valor Unitario</label>
+                    <input type="number" name="valor_unit" id="valor_unit" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
+
+                <div class="form__campo t-sm">
+                    <label for="valor_total">Valor Total</label>
+                    <input type="number" name="valor_total" id="valor_total" class="campo__input disabled" readonly>
                     <p class="label__error ocultar"></p>
                 </div>
 
@@ -125,7 +138,9 @@
                     <th>Hora</th>
                     <th>Tipo Movimiento</th>
                     <th>Descripción</th>
-                    <th>Valor</th>
+                    <th>Cantidad</th>
+                    <th>V/Unit</th>
+                    <th>V/Total</th>
                     <th>Saldo</th>
                     <th>Editar</th>
                     <th>Eliminar</th>
