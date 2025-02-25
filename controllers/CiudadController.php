@@ -20,8 +20,25 @@ class CiudadController{
 
             echo json_encode($ciudades);
         }
+        // $_GET['prueba'] = 1;
+        // echo json_encode($_GET);
 
+        // // if (isset($_GET['cod_depart'])) {
+        // //     $codDepart = $_GET['cod_depart'];
+            
+        // //     // Depuración: Ver qué está recibiendo el backend
+        // //     echo json_encode(["recibido" => $codDepart]);
+        // //     exit;
+        
+        // //     $sqlCiudad="SELECT id_ciudad, nombre_ciudad FROM ciudad WHERE codigo_depart='".$codDepart."' ORDER BY nombre_ciudad";
+        // //     $ciudades = Ciudad::SQL($sqlCiudad);
+        
+        // //     echo json_encode($ciudades);
+        // // } else {
+        // //     echo json_encode(["error" => "Falta el parámetro cod_depart"]);
+        // // }
     }
 }
+
 
 ?>

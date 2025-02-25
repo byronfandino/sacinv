@@ -237,7 +237,7 @@ export class ModeloBase{
         //Verificamos el formato del dato
         if (objetoEncontrado.formato){
             if (objetoEncontrado.formato == "numero"){
-                valorCampo = formatearMiles(valorCampo)
+                valorCampo = formatearMiles(valorCampo);
             }
         }
         

@@ -15,6 +15,17 @@ function cajasTexto(){
     const inputCant = document.querySelector('#cant');
     const inputValorUnit = document.querySelector('#valor_unit');
     const inputValorTotal = document.querySelector('#valor_total');
+    const selectMov = document.querySelector('#tipo_mov');
+    const inputDescrip = document.querySelector('#descripcion');
+
+    selectMov.addEventListener('change', e => {
+        if (e.target.value == "A"){
+            inputDescrip.value = "Abono"
+        }else{
+            inputDescrip.value = ""
+        }
+        inputValorUnit.focus();
+    });
 
     inputCant.addEventListener('input', e => {
         inputValorTotal.value = multiplicacion(e.target.value, inputValorUnit.value);

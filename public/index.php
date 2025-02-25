@@ -13,7 +13,6 @@ use Controllers\MovDeudaClienteAPIController;
 
 $router = new Router();
 
-
 //Deuda
 $router->get('/', [DeudaController::class, 'inicio']);
 $router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'listarMovDedudaCliente']);
@@ -29,7 +28,6 @@ $router->get('/cliente/api', [ClienteAPIController::class, 'listarClientes']);
 $router->post('/cliente/guardar', [ClienteController::class, 'guardar']);
 $router->post('/cliente/actualizar', [ClienteController::class, 'actualizar']);
 $router->post('/cliente/eliminar', [ClienteController::class, 'eliminar']);
-
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();
