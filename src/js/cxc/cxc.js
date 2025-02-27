@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function cajasTexto(){
+
+    //Cajas de texto del formulario principal
     const inputCant = document.querySelector('#cant');
     const inputValorUnit = document.querySelector('#valor_unit');
     const inputValorTotal = document.querySelector('#valor_total');
@@ -38,6 +40,32 @@ function cajasTexto(){
         inputValorTotal.value = multiplicacion(e.target.value, inputCant.value);
     })
 
+    // -----------------------------------------------------------------------
+    //Cajas de texto del formulario de actualización de datos
+    const inputCant_actualizar = document.querySelector('#cant_actualizar');
+    const inputValorUnit_actualizar = document.querySelector('#valor_unit_actualizar');
+    const inputValorTotal_actualizar = document.querySelector('#valor_total_actualizar');
+    const selectMov_actualizar = document.querySelector('#tipo_mov_actualizar');
+    const inputDescrip_actualizar = document.querySelector('#descripcion_actualizar');
+
+    selectMov_actualizar.addEventListener('change', e => {
+        if (e.target.value == "A"){
+            inputDescrip_actualizar.value = "Abono"
+        }else if (e.target.value == "R"){
+            inputDescrip_actualizar.value = "Devuelve"
+        }else{
+            inputDescrip_actualizar.value = ""
+        }
+        inputValorUnit_actualizar.focus();
+    });
+
+    inputCant_actualizar.addEventListener('input', e => {
+        inputValorTotal_actualizar.value = multiplicacion(e.target.value, inputValorUnit_actualizar.value);
+    })
+
+    inputValorUnit_actualizar.addEventListener('input', e => {
+        inputValorTotal_actualizar.value = multiplicacion(e.target.value, inputCant_actualizar.value);
+    })
 }
 
 function multiplicacion (valor1, valor2){
