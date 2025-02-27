@@ -21,6 +21,8 @@ function cajasTexto(){
     selectMov.addEventListener('change', e => {
         if (e.target.value == "A"){
             inputDescrip.value = "Abono"
+        }else if (e.target.value == "R"){
+            inputDescrip.value = "Devuelve"
         }else{
             inputDescrip.value = ""
         }
@@ -126,7 +128,7 @@ function guardarDeudor(){
 
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
-            {descripcion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{2,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
+            {descripcion: '^[a-zA-Z0-9#.\-áéíóúüÁÉÍÓÚñÑ -]{2,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
             {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
             {cant: '^[0-9]{1,3}$', message: 'Debe digitar un valor numérico', estado: true},
             {valor_unit: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}

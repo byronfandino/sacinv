@@ -17,7 +17,6 @@ export class Deuda extends ModeloBase{
            
             const campoCliente = document.querySelector('#fk_cliente_deudor');
             const msgError = campoCliente.nextElementSibling;
-            // console.log(campoCliente.value);
             
             //Se verifica si se seleccionó un cliente
             if (campoCliente.value != ''){
@@ -42,7 +41,8 @@ export class Deuda extends ModeloBase{
                         
                         //Obtenemos un arreglo de nombres de los campos a partir del array de objetos validacionCampos[];
                         const nombreCamposFormulario = this.validacionCampos.map(obj => Object.keys(obj)[0]);
-    
+                        nombreCamposFormulario.push('valor_total');
+
                         limpiarFormulario(nombreCamposFormulario);
 
                         const inputCant = document.querySelector('#cant');
@@ -108,13 +108,43 @@ export class Deuda extends ModeloBase{
 
             if (!response.ok) throw new Error('No hay conexión con el servidor');
 
+            
             const data = await response.json();
             const rta = this.handleResponse(data);
+            
+            console.log(rta);
             return rta;
 
         } catch (error) {
             console.error('Codigo de error:', error);
         }
+
+        //-------------------------------------------------------------------
+
+        // const urlGuardar = url + this.url.agregar;
+        // fetch(urlGuardar, {
+        //     method: "POST",
+        //     body: formulario
+        // })
+        // .then(response => {
+        //     // console.log("Content-Type:", response.headers.get("content-type"));
+        //     return response.text(); // Usa text() en lugar de json() para depurar
+        // })
+        // .then(data => {
+        //     console.log("Respuesta del servidor:", data);
+
+        //     try {
+        //         let json = JSON.parse(data);
+        //         console.log("JSON:", json);
+
+        //         const rta = this.handleResponse(json);
+        //         return rta;
+
+        //     } catch (e) {
+        //         console.error("Error al procesar JSON:", e);
+        //     }
+        // })
+        // .catch(error => console.error("Error en Fetch:", error));
     }
 
     formularioActualizar(idFormulario, idInputHidden, deudor){
@@ -155,7 +185,7 @@ export class Deuda extends ModeloBase{
             cancelButtonColor: '##3085d6',
             confirmButtonText: 'Si, eliminar'
 
-            }).then((result) => {
+        }).then((result) => {
 
             if (result.isConfirmed) {
                 const rta = this.eliminarRegistro(idRegistro);

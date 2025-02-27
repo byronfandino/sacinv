@@ -52,7 +52,7 @@
 
             if(!$this->descripcion){
                 self::$alertas['error']['descripcion'][] = "El campo Descripción es obligatorio";
-            }else if(!preg_match('/^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{2,500}$/', $this->descripcion)){
+            }else if(!preg_match('/^[a-zA-Z0-9#.\-áéíóúüÁÉÍÓÚñÑ -]{2,500}$/', $this->descripcion)){
                 self::$alertas['error']['descripcion'][] = "No debe digitar caracteres No válidos";
             }else{
                 $this->descripcion = trim($this->descripcion);

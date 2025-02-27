@@ -524,6 +524,7 @@ export class ModeloBase{
     }
 
     handleResponse(data) {
+        
         // Si el registro fue exitoso el data.rta = true
         if (data.rta == "true") {
             Swal.fire({

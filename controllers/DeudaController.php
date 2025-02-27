@@ -8,6 +8,9 @@ use Model\Departamento;
 use Model\Deuda;
 use Model\DeudaMovimiento;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once '../includes/parameters.php';
 header("Access-Control-Allow-Origin: " . $urlJSON); 
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT"); 
@@ -30,19 +33,19 @@ class DeudaController{
 
         $query = "SELECT * FROM deuda WHERE fk_cliente = " . $fk_cliente . " ORDER BY id_deuda DESC LIMIT 1";
         $clienteFound = Deuda::SQL($query);
-        return $clienteFound[0]; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
+        return isset($clienteFound[0]) ? $clienteFound[0] : null; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
     }
 
     public static function getUltimoMovimiento($fk_deuda){
         $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
-        return $mov_deuda[0]; //Retornamos únicamente el objeto
+        return isset($mov_deuda[0]) ? $mov_deuda[0] : null; //Retornamos únicamente el objeto
     }
 
     public static function getMovimientoDeuda($id_mov){
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov = " . $id_mov . " LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
-        return $mov_deuda[0]; //Retornamos únicamente el objeto
+        return isset($mov_deuda[0]) ? $mov_deuda[0] :  null; //Retornamos únicamente el objeto
     }
 
     //Obtiene todos los registros continuos al id buscado
@@ -55,10 +58,11 @@ class DeudaController{
     public static function getMovimientoAnterior($fk_deuda, $id_mov){
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov < " . $id_mov . " AND fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
-        return $mov_deuda[0]; //Retornamos únicamente el objeto        
+        return isset($mov_deuda[0]) ? $mov_deuda[0] : null; //Retornamos únicamente el objeto        
     }
 
     public static function guardar(){
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             $clienteInDeuda = self::getClienteDeuda((int) $_POST['fk_cliente']);
