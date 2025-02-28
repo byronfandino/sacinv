@@ -172,7 +172,6 @@ export class Deuda extends ModeloBase{
                 }
             });
         }
-
     }
 
     confirmarEliminacion(idRegistro){ 

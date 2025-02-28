@@ -331,7 +331,7 @@ class DeudaController{
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-
+            // Obtener el movimiento actual de la base de datos
             $get_mov = self::getMovimientoDeuda((int) $_POST['id_mov']);
 
             /** @var DeudaMovimiento $get_mov */
@@ -339,17 +339,21 @@ class DeudaController{
             $_POST['fecha'] = date("Y-m-d"); // Obtiene la fecha actual 
             $_POST['hora'] = date("H:i"); // Obtiene la hora actual
 
+            // Consultamos el saldo del registro anterior
+            $get_mov_ant = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $_POST['id_mov']);
+            $saldo_anterior = $get_mov_ant->saldo;
+
             if ($_POST['tipo_mov'] == "D"){
-                
-                $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValorTotal();
-                $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor_total'];
+                // Primero obtenemos el saldo de la base de datos y restamos el valor total
+                $_POST['saldo'] = (int) $saldo_anterior + (int) $_POST['valor_total'];
+
+                // $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValorTotal();
+                // $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor_total'];
             
             }else{
 
-                // Consultamos el saldo del registro anterior
-                $get_mov_ant = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $_POST['id_mov']);
                 /** @var DeudaMovimiento $get_mov_ant */
-                $_POST['saldo'] = (int) $get_mov_ant->getSaldo() - (int) $_POST['valor_total'];
+                $_POST['saldo'] = (int) $saldo_anterior - (int) $_POST['valor_total'];
             }
 
             $movimiento = new DeudaMovimiento($_POST);
@@ -373,9 +377,9 @@ class DeudaController{
     
                             /** @var DeudaMovimiento $objeto */
                             if ($objeto->tipo_mov == "D"){
-                                $nuevoSaldo = $nuevoSaldo + (int) $objeto->getValorTotal;
+                                $nuevoSaldo = $nuevoSaldo + (int) $objeto->valor_total;
                             }else{
-                                $nuevoSaldo = $nuevoSaldo - (int) $objeto->getValorTotal;
+                                $nuevoSaldo = $nuevoSaldo - (int) $objeto->valor_total;
                             }
 
                             $objeto->saldo = $nuevoSaldo;
@@ -404,7 +408,7 @@ class DeudaController{
                 echo json_encode([
                     "rta" => "false",
                     "message" => "No pasó la validación en los campos", 
-                    "error" => $alertas
+                    "alertas" => $alertas
                 ]);
 
             }
