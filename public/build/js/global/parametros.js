@@ -119,9 +119,42 @@ export function cargarFechaHoraActual(){
 
 }
 
-export function botonResetFormulario(nombreBoton, objeto){
+export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
+   
     const botonReset = document.querySelector(`#${nombreBoton}`);
-    botonReset.addEventListener('click', ()=>{
+    botonReset.addEventListener('click', e =>{
+        e.preventDefault();
+        
+        if (idformulario != ""){
+
+            const formulario = document.querySelector(`#${idformulario}`);
+
+            //Quitar error de los labels
+            const labels = formulario.querySelectorAll('text__error');
+            if (labels.length>0){
+                labels.forEach(label => {
+                    label.classList.remove('text__error');
+                });
+            }
+
+            //Quitar error de los textos
+            const inputs = formulario.querySelectorAll('input__error');
+            if (inputs.length > 0){
+                inputs.forEach(input => {
+                    input.classList.remove('input_error');
+                })
+            }
+
+            //Quitar mensajes de error auxiliares
+            const textos = formulario.querySelectorAll('label__error');
+            if (textos.length > 0){
+                textos.forEach(label => {
+                    label.classList.remove('input_error');
+                    label.textContent = '';
+                })
+            }
+        }
+
         objeto.listarRegistros();
     })
 }
@@ -129,4 +162,32 @@ export function botonResetFormulario(nombreBoton, objeto){
 
 export function formatearMiles(numero) {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+export function mostrarErrorJSON(url, formulario){
+    
+        fetch(url, {
+            method: 'POST',
+            body: formulario,
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            console.log("Content-Type:", response.headers.get("content-type"));
+            return response.text(); // Usa text() en lugar de json() para depurar
+        })
+        .then(data => {
+            console.log("Respuesta del servidor:", data);
+
+            try {
+                let json = JSON.parse(data);
+                console.log("JSON:", json);
+
+                // const rta = this.handleResponse(json);
+                // return rta;
+
+            } catch (e) {
+                console.error("Error al procesar JSON:", e);
+            }
+        })
+        .catch(error => console.error("Error en Fetch:", error));
 }

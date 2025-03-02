@@ -38,7 +38,7 @@
 
             <div class="form__campo t-sm">
                 <label for="valor_total_actualizar">Valor Total</label>
-                <input type="number" name="valor_total" id="valor_total_actualizar" class="campo__input disabled">
+                <input type="number" name="valor_total" id="valor_total_actualizar" class="campo__input disabled" readonly>
                 <p class="label__error ocultar"></p>
             </div>
             

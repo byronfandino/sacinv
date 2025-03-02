@@ -118,33 +118,6 @@ export class Deuda extends ModeloBase{
         } catch (error) {
             console.error('Codigo de error:', error);
         }
-
-        //-------------------------------------------------------------------
-
-        // const urlGuardar = url + this.url.agregar;
-        // fetch(urlGuardar, {
-        //     method: "POST",
-        //     body: formulario
-        // })
-        // .then(response => {
-        //     // console.log("Content-Type:", response.headers.get("content-type"));
-        //     return response.text(); // Usa text() en lugar de json() para depurar
-        // })
-        // .then(data => {
-        //     console.log("Respuesta del servidor:", data);
-
-        //     try {
-        //         let json = JSON.parse(data);
-        //         console.log("JSON:", json);
-
-        //         const rta = this.handleResponse(json);
-        //         return rta;
-
-        //     } catch (e) {
-        //         console.error("Error al procesar JSON:", e);
-        //     }
-        // })
-        // .catch(error => console.error("Error en Fetch:", error));
     }
 
     formularioActualizar(idFormulario, idInputHidden, deudor){

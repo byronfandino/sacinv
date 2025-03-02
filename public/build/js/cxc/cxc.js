@@ -102,10 +102,13 @@ function botones(){
             cierreManualModal(e);
         });
     });
+    
 }
 
 function guardarDeudor(){
+    
     const objetoDeudor = {
+
         idFormularioAgregar : 'form_deudores',
         
         modal:{
@@ -169,7 +172,7 @@ function guardarDeudor(){
     const deudor = new Deuda(objetoDeudor);
     deudor.asignarValidacionCampos();
     deudor.formularioAgregar('form_deuda');
-    botonResetFormulario('reset_deuda', deudor);
+    botonResetFormulario('reset_deuda', deudor, 'form_deuda');
     deudorGLobal = deudor;
 }
 

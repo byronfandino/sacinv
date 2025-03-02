@@ -344,14 +344,8 @@ class DeudaController{
             $saldo_anterior = $get_mov_ant->saldo;
 
             if ($_POST['tipo_mov'] == "D"){
-                // Primero obtenemos el saldo de la base de datos y restamos el valor total
                 $_POST['saldo'] = (int) $saldo_anterior + (int) $_POST['valor_total'];
-
-                // $_POST['saldo'] = (int) $get_mov->getSaldo() - (int) $get_mov->getValorTotal();
-                // $_POST['saldo'] = (int) $_POST['saldo'] + (int) $_POST['valor_total'];
-            
             }else{
-
                 /** @var DeudaMovimiento $get_mov_ant */
                 $_POST['saldo'] = (int) $saldo_anterior - (int) $_POST['valor_total'];
             }
