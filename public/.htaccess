@@ -2,7 +2,3 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
-
-# Asegurar que los parámetros GET no se pierdan en la redirección
-RewriteCond %{QUERY_STRING} .+  
-RewriteRule ^(.*)$ index.php?%{QUERY_STRING} [L]

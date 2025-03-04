@@ -104,7 +104,7 @@ async function guardarCliente(){
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
     cliente.formularioAgregar('form_cliente'); //id del formulario
-    botonResetFormulario('reset_cliente_select', cliente);
+    botonResetFormulario('reset_cliente_select', cliente, 'form_cliente');
     await cliente.listarRegistros();
     return cliente;
 }

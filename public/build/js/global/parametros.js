@@ -120,17 +120,19 @@ export function cargarFechaHoraActual(){
 }
 
 export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
-   
     const botonReset = document.querySelector(`#${nombreBoton}`);
     botonReset.addEventListener('click', e =>{
         e.preventDefault();
         
+        console.log(idformulario);
         if (idformulario != ""){
 
             const formulario = document.querySelector(`#${idformulario}`);
+            console.log(formulario);
 
             //Quitar error de los labels
-            const labels = formulario.querySelectorAll('text__error');
+            const labels = formulario.querySelectorAll('.text__error');
+            console.log(labels);
             if (labels.length>0){
                 labels.forEach(label => {
                     label.classList.remove('text__error');
@@ -138,23 +140,26 @@ export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
             }
 
             //Quitar error de los textos
-            const inputs = formulario.querySelectorAll('input__error');
+            const inputs = formulario.querySelectorAll('.input__error');
             if (inputs.length > 0){
                 inputs.forEach(input => {
-                    input.classList.remove('input_error');
+                    input.classList.remove('input__error');
                 })
             }
-
+            
             //Quitar mensajes de error auxiliares
-            const textos = formulario.querySelectorAll('label__error');
+            const textos = formulario.querySelectorAll('.label__error');
             if (textos.length > 0){
                 textos.forEach(label => {
-                    label.classList.remove('input_error');
+                    label.classList.add('ocultar');
                     label.textContent = '';
                 })
             }
-        }
 
+            //Resetear el formulario
+            formulario.reset();
+        }
+        
         objeto.listarRegistros();
     })
 }

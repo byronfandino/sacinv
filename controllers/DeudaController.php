@@ -340,6 +340,7 @@ class DeudaController{
             $_POST['hora'] = date("H:i"); // Obtiene la hora actual
 
             // Consultamos el saldo del registro anterior
+            /** @var DeudaMovimiento $get_mov_ant */
             $get_mov_ant = self::getMovimientoAnterior((int) $get_mov->getFkDeuda(), (int) $_POST['id_mov']);
             $saldo_anterior = $get_mov_ant->saldo;
 
