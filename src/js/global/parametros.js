@@ -128,11 +128,9 @@ export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
         if (idformulario != ""){
 
             const formulario = document.querySelector(`#${idformulario}`);
-            console.log(formulario);
 
             //Quitar error de los labels
             const labels = formulario.querySelectorAll('.text__error');
-            console.log(labels);
             if (labels.length>0){
                 labels.forEach(label => {
                     label.classList.remove('text__error');

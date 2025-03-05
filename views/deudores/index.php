@@ -27,7 +27,6 @@
         <a href="#" class="cerrar__modal">X</a>
     </div>
 
-    
     <!-- Ventana Modal -->
     <div class="fondo-notificacion ocultar " id="modal_deuda_actualizar">
         <div class="contenedor-notificacion auto">
@@ -127,7 +126,10 @@
         </fieldset>                
     </form>
 
-    <h2 id="registrosDeuda">Registros encontrados</h2>
+    <div class="contenedor_grid_titulos">
+        <h2 class="" id="registrosDeuda">Registros encontrados</h2>
+        <h3 class="saldo" id="saldo">Saldo $0</h3>
+    </div>
 
     <div class="contenedor-tabla">
         <table class="tabla" id="tabla_deuda">
@@ -146,11 +148,9 @@
                 </tr>
             </thead>
             <tbody class="tbody">
-                
             </tbody>
         </table>
-    </div>        
-
+    </div>
 </main>
 <?php
     if(isset($script) && $script != ''){

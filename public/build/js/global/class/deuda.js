@@ -1,4 +1,4 @@
-import { cargarFechaHoraActual, cierreAutModal, limpiarFormulario, url } from "../parametros.js";
+import { cargarFechaHoraActual, cierreAutModal, formatearMiles, limpiarFormulario, url } from "../parametros.js";
 import { ModeloBase } from "./ModeloBase.js";
 
 export class Deuda extends ModeloBase{
@@ -86,7 +86,17 @@ export class Deuda extends ModeloBase{
 
             const data = await response.json();
             this.registros = data;
+            
+            const tituloSaldo = document.querySelector('#saldo');
+            if (this.registros.length > 0){
+                const ultimoRegistro = this.registros.length - 1;
+                tituloSaldo.textContent = "Saldo " + formatearMiles(this.registros[ultimoRegistro].saldo);
+            }else{
+                tituloSaldo.textContent = "Saldo $0";
+            }
+            
             this.crearTabla(data);
+
         } catch (error) {
             console.error('Codigo de error:', error);
         }
