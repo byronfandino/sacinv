@@ -1,4 +1,4 @@
-export const url = 'http://192.168.18.90:3000'
+export const url = 'http://192.168.18.90'
 export let clienteActualizado = false;
 
 export async function consultarAPI(rutaComplemento) {
