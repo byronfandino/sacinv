@@ -19,16 +19,21 @@ function cajasTexto(){
     const inputValorTotal = document.querySelector('#valor_total');
     const selectMov = document.querySelector('#tipo_mov');
     const inputDescrip = document.querySelector('#descripcion');
+    const evento = new Event ('input');
 
     selectMov.addEventListener('change', e => {
         if (e.target.value == "A"){
             inputDescrip.value = "Abono"
+            inputDescrip.dispatchEvent(evento);
         }else if (e.target.value == "R"){
             inputDescrip.value = "Devuelve"
+            inputDescrip.dispatchEvent(evento);
         }else{
             inputDescrip.value = ""
         }
+
         inputValorUnit.focus();
+
     });
 
     inputCant.addEventListener('input', e => {

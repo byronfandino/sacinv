@@ -53,27 +53,27 @@
 
                 <div class="form__campo t-sm">
                     <label for="cedula_nit_deudor">Cédula / Nit</label>
-                    <input type="text" id="cedula_nit_deudor" class="campo__input disabled">
+                    <input type="text" id="cedula_nit_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-xl">
                     <label for="nombre_deudor">Nombre del Cliente</label>
-                    <input type="text" id="nombre_deudor" class="campo__input disabled">
+                    <input type="text" id="nombre_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-sm">
                     <label for="telefono_deudor">Teléfono</label>
-                    <input type="number" id="telefono_deudor" class="campo__input disabled">
+                    <input type="number" id="telefono_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-md">
                     <label for="direccion_deudor">Dirección</label>
-                    <input type="text" id="direccion_deudor" class="campo__input disabled">
+                    <input type="text" id="direccion_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-md">
                     <label for="nombre_ciudad_deudor">Ciudad</label>
-                    <input type="text" id="nombre_ciudad_deudor" class="campo__input disabled">
+                    <input type="text" id="nombre_ciudad_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-md">
                     <label for="nombre_depart_deudor">Departamento</label>
-                    <input type="text" id="nombre_depart_deudor" class="campo__input disabled">
+                    <input type="text" id="nombre_depart_deudor" class="campo__input disabled" readonly>
                 </div>
             </div>
         </fieldset>
