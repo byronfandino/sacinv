@@ -1,6 +1,11 @@
-<header class="header">
-    <img src="/build/img/sistema/user.svg" alt="Icono de cuentas por cobrar" width="27px" height="27px">
-    <h1>Cliente</h1>
+<header class="header__menu">
+    <div class="titulo">
+        <img src="/build/img/sistema/user.svg" alt="Icono de cuentas por cobrar" width="27px" height="27px">
+        <h1>Cliente</h1>
+    </div>
+    <?php
+        include_once __DIR__ . '/../menu.php';
+    ?>
 </header>
 
 <main class="main">

@@ -19,6 +19,7 @@ $router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'l
 $router->post('/deuda/guardar', [DeudaController::class, 'guardar']);
 $router->post('/deuda/actualizar', [DeudaController::class, 'actualizar']);
 $router->post('/deuda/eliminar', [DeudaController::class, 'eliminar']);
+$router->get('/deuda/reporte_general', [DeudaController::class, 'reporte']);
 
 $router->get('/ciudad/api', [CiudadController::class, 'listarCiudades']);
 

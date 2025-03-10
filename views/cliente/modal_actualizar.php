@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header__simple">
     <img src="/build/img/sistema/editar_usuario.svg" alt="Icono de cuentas por cobrar" width="33px" height="30px">
     <h1>Cliente</h1>
 </header>
@@ -42,10 +42,14 @@
                     <select id="cod_depart_modal" class="campo__input">
                         <option value="" selected disabled>-- Seleccione una opción --</option>
                         <?php
-                            foreach($departamentos as $departamento){
+
+                            if ( isset($departamentos) && !empty($departamentos)){
+                                
+                                foreach($departamentos as $departamento){
                                 ?>
-                                    <option value="<?php echo $departamento->cod_depart; ?>"><?php echo $departamento->nombre_depart; ?></option>
-                                <?php
+                                        <option value="<?php echo $departamento->cod_depart; ?>"><?php echo $departamento->nombre_depart; ?></option>
+                                    <?php
+                                }
                             }
                         ?>
                     </select>

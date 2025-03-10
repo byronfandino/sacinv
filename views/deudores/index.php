@@ -1,6 +1,11 @@
-<header class="header">
-    <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
-    <h1>Cuentas por cobrar</h1>
+<header class="header__menu">
+    <div class="titulo">
+        <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
+        <h1>Cuentas por cobrar</h1>
+    </div>
+    <?php
+        include_once __DIR__ . '/../menu.php';
+    ?>
 </header>
 
 <main class="main">
@@ -12,7 +17,6 @@
                 include_once __DIR__ . '/../deudores/modal_cliente_selec.php';
             ?>
         </div>
-
         <a href="#" class="cerrar__modal">X</a>
     </div>
     

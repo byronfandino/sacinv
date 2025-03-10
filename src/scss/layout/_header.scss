@@ -1,6 +1,7 @@
 @use '../base/mixins' as m;
+@use '../base/variables' as v;
 
-header{
+.header__simple{
     height:5rem;
     padding:0.5rem;
     background-color:#3353A3;
@@ -15,3 +16,51 @@ header{
     }
 }
   
+.header__menu{
+    height:10rem;
+    padding:0.5rem;
+    background-color:#3353A3;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    // justify-content: space-between;
+    // align-items:center;
+    
+    //Resolución tablet
+    @include m.tablet {
+        padding:0.5rem 1rem;
+    }
+
+    & > .titulo{
+        display:flex;
+        flex-flow:row nowrap;
+        gap:0.5rem;
+        align-items:center;
+
+        //Resolución tablet
+        @include m.tablet {
+            padding: 1rem 1.5rem 1rem 0.5rem;
+        }
+    }
+
+    & > nav.menu{
+
+        display: grid;
+        grid-template-rows: repeat(3fr);
+
+        //Resolución tablet
+        @include m.tablet {
+            grid-template-columns: repeat(3fr);
+            grid-template-rows: auto auto auto;
+        }
+
+        & > a{
+            // display:none;
+            color: v.$blanco;
+            
+            //Resolución tablet
+            @include m.tablet {
+        }
+    } 
+    
+    }
+}

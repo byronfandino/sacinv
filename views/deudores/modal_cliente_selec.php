@@ -1,4 +1,4 @@
-<header class="header">
+<header class="header__simple">
     <img src="/build/img/sistema/user.svg" alt="Icono de cuentas por cobrar" width="27px" height="27px">
     <h1>Cliente</h1>
 </header>

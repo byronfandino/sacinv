@@ -469,6 +469,48 @@ class DeudaController{
             }
         }
     }
+
+    public static function reporte(Router $router){
+        
+        // Configuración de la base de datos
+        $host = "localhost";
+        $dbname = "dbdeudores";
+        $user = "bfandino";
+        $password = "Laura0405@";
+
+        // Conectar a PostgreSQL
+        $conn = pg_connect("host=$host dbname=$dbname user=$user password=$password");
+
+        if (!$conn) {
+            die("Error de conexión: " . pg_last_error());
+        }
+
+        // Definir la consulta SQL anidada
+        $consulta_sql = "
+                SELECT c.nombre, dm.saldo, dm.fecha
+                FROM deuda_movimiento dm
+                JOIN (
+                    SELECT DISTINCT ON (fk_deuda) fk_deuda, id_mov
+                    FROM deuda_movimiento
+                    ORDER BY fk_deuda, id_mov DESC
+                ) filtro ON dm.fk_deuda = filtro.fk_deuda AND dm.id_mov = filtro.id_mov
+                JOIN deuda d ON dm.fk_deuda = d.id_deuda
+                JOIN cliente c ON d.fk_cliente = c.id_cliente
+                WHERE dm.saldo <> 0 
+                AND c.nombre <> 'Usuario de prueba'
+                ORDER BY d.fk_cliente ASC;
+        ";
+
+        // Nombre del archivo CSV a descargar
+        $archivo = "reporte_general.csv";
+
+        $router->renderIndex('deudores/reporte_general', [
+            "conn" => $conn,
+            "consulta_sql" => $consulta_sql,
+            "archivo" => $archivo
+        ]);
+    }
+
 }
 
 ?>
