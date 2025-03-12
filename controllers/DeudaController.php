@@ -477,7 +477,7 @@ class DeudaController{
         $dbname = "dbdeudores";
         $user = "bfandino";
         $password = "Laura0405@";
-
+        
         // Conectar a PostgreSQL
         $conn = pg_connect("host=$host dbname=$dbname user=$user password=$password");
 

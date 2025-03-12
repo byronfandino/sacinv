@@ -1,5 +1,6 @@
 @use '../base/mixins' as m;
 @use '../base/variables' as v;
+@use 'sass:color' as c;
 
 .header__simple{
     height:5rem;
@@ -17,50 +18,98 @@
 }
   
 .header__menu{
-    height:10rem;
+    height:5rem;
     padding:0.5rem;
     background-color:#3353A3;
     display:grid;
-    grid-template-columns: 1fr 1fr;
-    // justify-content: space-between;
-    // align-items:center;
-    
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+
     //Resolución tablet
     @include m.tablet {
         padding:0.5rem 1rem;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 1fr;
     }
 
     & > .titulo{
         display:flex;
-        flex-flow:row nowrap;
-        gap:0.5rem;
-        align-items:center;
+        flex-direction: row nowrap;
+        align-items: flex-start;
 
-        //Resolución tablet
-        @include m.tablet {
-            padding: 1rem 1.5rem 1rem 0.5rem;
+        & > h1{
+            margin: 0;
         }
     }
 
-    & > nav.menu{
+    & .menu {
 
-        display: grid;
-        grid-template-rows: repeat(3fr);
+        position: fixed;
+        z-index: 10;
+        background-color: v.$azul;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
 
-        //Resolución tablet
         @include m.tablet {
-            grid-template-columns: repeat(3fr);
-            grid-template-rows: auto auto auto;
+            background-color: transparent;
+            position:initial;
+            display:grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            justify-items: end;
+        }
+    }
+}
+
+.menu > nav{
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    align-items: center;
+
+    //Resolución tablet
+    @include m.tablet {
+        display: inline-block;
+        text-align: right;
+        padding-top: 1rem;
+
+    }
+    
+    & > a{
+        color: v.$blanco;
+        padding: 1rem;
+        
+        &:hover{
+            background-color: c.adjust($color: v.$azul, $lightness:10%);
         }
 
-        & > a{
-            // display:none;
-            color: v.$blanco;
+        &:nth-child(1){
+            position: relative;
+            text-align: right;
+            margin-right: 1rem;
             
-            //Resolución tablet
-            @include m.tablet {
+            &:hover{
+                background-color: v.$azul;
+            }
+
+            &::before{
+                
+            }
+
+        }
+
+        
+        //Resolución tablet
+        @include m.tablet {
+            margin-right: 1rem;     
+            
+            //Desaparecemos el icono de cerrar
+            &:nth-child(1){
+                display: none;
+            }
         }
     } 
-    
-    }
 }

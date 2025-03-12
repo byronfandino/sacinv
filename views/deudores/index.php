@@ -3,9 +3,11 @@
         <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
         <h1>Cuentas por cobrar</h1>
     </div>
-    <?php
-        include_once __DIR__ . '/../menu.php';
-    ?>
+    <div class="menu">
+        <?php
+            include_once __DIR__ . '/../menu.php';
+        ?>
+    </div>
 </header>
 
 <main class="main">
