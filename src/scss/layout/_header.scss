@@ -19,24 +19,35 @@
   
 .header__menu{
     height:5rem;
-    padding:0.5rem;
+    padding:0 0.5rem;
     background-color:#3353A3;
     display:grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
 
     //Resolución tablet
     @include m.tablet {
-        padding:0.5rem 1rem;
+        padding:0rem 1rem;
         grid-template-columns: 1fr 1fr;
         grid-auto-rows: 1fr;
+    }
+
+    & > .icono__menu {
+        padding-top: 0.8rem;
+        align-self: center;
+        justify-self: end;
+
+        //Resolución desktop
+        @include m.desktop {
+            display: none;    
+        }
     }
 
     & > .titulo{
         display:flex;
         flex-direction: row nowrap;
-        align-items: flex-start;
-
+        align-items:center;
+        column-gap: 1rem;
         & > h1{
             margin: 0;
         }
@@ -48,11 +59,20 @@
         z-index: 10;
         background-color: v.$azul;
         top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
+        width: 100%;
+        height: 100%;
+        left: -100%;
+        transition: transform 0.5s ease-in-out;
 
-        @include m.tablet {
+        &.mostrar{
+            transform: translateX(100%);
+        }
+
+        &.ocultar{
+            transform: translateX(-100%);
+        }
+
+        @include m.desktop {
             background-color: transparent;
             position:initial;
             display:grid;
@@ -71,10 +91,10 @@
     align-items: center;
 
     //Resolución tablet
-    @include m.tablet {
+    @include m.desktop {
         display: inline-block;
         text-align: right;
-        padding-top: 1rem;
+        padding-top: 1.3rem;
 
     }
     
@@ -86,6 +106,7 @@
             background-color: c.adjust($color: v.$azul, $lightness:10%);
         }
 
+        //Configuración del botón cerrar
         &:nth-child(1){
             position: relative;
             text-align: right;
@@ -95,15 +116,17 @@
                 background-color: v.$azul;
             }
 
-            &::before{
-                
+            & > span{
+                background-color: v.$blanco;
+                color: v.$azul;
+                padding: 0.8rem 1rem;
+                border-radius: 50%;
+                font-weight: bold;
             }
-
         }
 
-        
         //Resolución tablet
-        @include m.tablet {
+        @include m.desktop {
             margin-right: 1rem;     
             
             //Desaparecemos el icono de cerrar

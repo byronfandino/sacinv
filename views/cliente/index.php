@@ -3,9 +3,12 @@
         <img src="/build/img/sistema/user.svg" alt="Icono de cuentas por cobrar" width="27px" height="27px">
         <h1>Cliente</h1>
     </div>
-    <?php
-        include_once __DIR__ . '/../menu.php';
-    ?>
+    <a id="icono__menu" class="icono__menu" href="#"><img src="/build/img/sistema/menu.svg" width="30px" height="32px" alt="Icono Menú"/></a>
+    <div id="menu" class="menu">
+        <?php
+            include_once __DIR__ . '/../menu.php';
+        ?>
+    </div>
 </header>
 
 <main class="main">
@@ -109,8 +112,10 @@
 <?php
     if(isset($script) && $script != ''){
         $script .= '<script src="/build/js/cliente/cliente.js" type="module"></script>';
+        $script .= '<script src="/build/js/global/menu.js" type="module"></script>';        
     }else{
         $script = '<script src="/build/js/cliente/cliente.js" type="module"></script>';
+        $script .= '<script src="/build/js/global/menu.js" type="module"></script>';        
     }
 ?>
 
