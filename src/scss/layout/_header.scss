@@ -32,6 +32,7 @@
         grid-auto-rows: 1fr;
     }
 
+    // Menú hamburguesa
     & > .icono__menu {
         padding-top: 0.8rem;
         align-self: center;
@@ -53,14 +54,15 @@
         }
     }
 
+    //Contenedor Menú
     & .menu {
 
         position: fixed;
         z-index: 10;
         background-color: v.$azul;
-        top: 0;
         width: 100%;
         height: 100%;
+        top: 0;
         left: -100%;
         transition: transform 0.5s ease-in-out;
 
@@ -71,6 +73,21 @@
         &.ocultar{
             transform: translateX(-100%);
         }
+
+        //Resolución tablet
+        @include m.tablet {
+            width: 50%;
+            left: -50%;
+
+            &.mostrar{
+                transform: translateX(100%);
+            }
+
+            &.ocultar{
+                transform: translateX(0%);
+            }
+        }
+
 
         @include m.desktop {
             background-color: transparent;
