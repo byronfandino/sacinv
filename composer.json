@@ -16,5 +16,7 @@
             "email": "byronfandino@hotmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "mpdf/mpdf": "^8.2"
+    }
 }

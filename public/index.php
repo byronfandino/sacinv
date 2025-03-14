@@ -2,8 +2,6 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
-// use Controllers\CategoriaController;
-
 use MVC\Router;
 use Controllers\CiudadController;
 use Controllers\ClienteAPIController;
@@ -19,7 +17,8 @@ $router->post('/deuda_mov/cliente/api', [MovDeudaClienteAPIController::class, 'l
 $router->post('/deuda/guardar', [DeudaController::class, 'guardar']);
 $router->post('/deuda/actualizar', [DeudaController::class, 'actualizar']);
 $router->post('/deuda/eliminar', [DeudaController::class, 'eliminar']);
-$router->get('/deuda/reporte_general', [DeudaController::class, 'reporte']);
+$router->get('/deuda/reporte_general', [DeudaController::class, 'reporteCSV']);
+$router->get('/deuda/reporte_deudores', [DeudaController::class, 'reporteDeudores']);
 
 $router->get('/ciudad/api', [CiudadController::class, 'listarCiudades']);
 

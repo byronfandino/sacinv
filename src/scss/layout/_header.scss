@@ -88,7 +88,6 @@
             }
         }
 
-
         @include m.desktop {
             background-color: transparent;
             position:initial;
@@ -96,6 +95,7 @@
             grid-template-columns: 1fr;
             grid-template-rows: auto;
             justify-items: end;
+            width: 100%;
         }
     }
 }

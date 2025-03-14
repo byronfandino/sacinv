@@ -2,11 +2,13 @@
 
 namespace Controllers;
 
+use Mpdf\Mpdf;
 use Model\Cliente;
 use MVC\Router;
 use Model\Departamento;
 use Model\Deuda;
 use Model\DeudaMovimiento;
+use Model\DeudoresReporte;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -59,6 +61,23 @@ class DeudaController{
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov < " . $id_mov . " AND fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return isset($mov_deuda[0]) ? $mov_deuda[0] : null; //Retornamos únicamente el objeto        
+    }
+
+    public static function getDeudores(){
+        $query = "
+                SELECT c.nombre AS nombre_cliente, dm.saldo, dm.fecha
+                FROM deuda_movimiento dm
+                JOIN ( SELECT DISTINCT ON (deuda_movimiento.fk_deuda) deuda_movimiento.fk_deuda,
+                        deuda_movimiento.id_mov
+                    FROM deuda_movimiento
+                    ORDER BY deuda_movimiento.fk_deuda, deuda_movimiento.id_mov DESC) filtro ON dm.fk_deuda = filtro.fk_deuda AND dm.id_mov = filtro.id_mov
+                JOIN deuda d ON dm.fk_deuda = d.id_deuda
+                JOIN cliente c ON d.fk_cliente = c.id_cliente
+                WHERE dm.saldo <> 0::double precision AND c.nombre::text <> 'Usuario de prueba'::text
+                ORDER BY c.nombre;
+                ";
+        $mov_deuda = DeudoresReporte::SQL($query);
+        return $mov_deuda; //Se retorna el arreglo
     }
 
     public static function guardar(){
@@ -470,7 +489,7 @@ class DeudaController{
         }
     }
 
-    public static function reporte(Router $router){
+    public static function reporteCSV(Router $router){
         
         // Configuración de la base de datos
         $host = "localhost";
@@ -508,6 +527,40 @@ class DeudaController{
             "conn" => $conn,
             "consulta_sql" => $consulta_sql,
             "archivo" => $archivo
+        ]);
+    }
+
+    public static function reporteDeudores(Router $router){
+        
+        $mpdf = new Mpdf();
+        $deudores = self::getDeudores();
+        $html="
+            <h1 style='text-align: center;'>Reporte de Clientes</h1>
+            <table border='1' style='width: 100%; border-collapse: collapse;'>
+                <tr>
+                    <th>Nombre del Cliente</th>
+                    <th>Saldo</th>
+                    <th>Fecha</th>
+                </tr>";
+
+        if (isset($deudores) && !empty($deudores)){
+            foreach($deudores as $deudor){
+                $html .="
+                    <tr>
+                        <td>{$deudor->nombre_cliente}</td>
+                        <td>{$deudor->saldo}</td>
+                        <td>{$deudor->fecha}</td>
+                    </tr>
+                ";
+            }
+        }
+
+        $html .= "</table>";
+        $mpdf->WriteHTML($html);
+
+        $router->renderIndex('deudores/reporte_deudores', [
+            "mpdf" => $mpdf,
+            "deudores" => $deudores
         ]);
     }
 

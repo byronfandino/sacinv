@@ -7,7 +7,6 @@ use PDOException;
 class ActiveRecord {
 
     // Base DE DATOS
-    // protected static $db;
     protected static $pdo;
     protected static $tabla = '';
     protected static $columnasDB = [];
@@ -15,11 +14,6 @@ class ActiveRecord {
     // Alertas y Mensajes
     protected static $alertas = [];
     
-    // Definir la conexión a la BD - includes/database.php
-    // public static function setDB($database) {
-    //     self::$db = $database;
-    // }
-
     // Definir la conexión a la BD - includes/database.php
     public static function setPDO($pdoConexion) {
         self::$pdo = $pdoConexion;
@@ -55,21 +49,6 @@ class ActiveRecord {
         return $array;
     }
 
-    // public static function existeLlaveForanea($campo, $foreignKey){
-    //     $sql = "SELECT * FROM " . static::$tabla . " WHERE " . $campo . " = " . $foreignKey;
-    //     $resultado = self::$db->query($sql);
-
-    //     // Almacenamos únicamente los id del registro en el arreglo
-    //     $arrayId = [];
-    //     $arrayDescripcion = [];
-    //     while($registro = $resultado->fetch_assoc()){
-    //         array_push($arrayId, (int)$registro[static::$columnasDB[0]]);
-    //         array_push($arrayDescripcion, $registro[static::$columnasDB[1]]);
-    //     }
-    //     // Se retornan dos arreglos para acceder al id y al nombre en el caso específico de los nombres de los archivos que se deben eliminar del servidor
-    //     return [$arrayId , $arrayDescripcion];
-    // }
-
     // Crea el objeto en memoria que es igual al de la BD
     protected static function crearObjeto($registro) {
         $objeto = new static;
@@ -96,16 +75,6 @@ class ActiveRecord {
         return $atributos;
     }
 
-    // Sanitizar los datos antes de guardarlos en la BD
-    // public function sanitizarAtributos() {
-    //     $atributos = $this->atributos();
-    //     $sanitizado = [];
-    //     foreach($atributos as $key => $value ) {
-    //         $sanitizado[$key] = self::$db->escape_string(trim($value));
-    //     }
-    //     return $sanitizado;
-    // }
-
     // Sincroniza BD con Objetos en memoria
     public function sincronizar($args=[]) { 
         foreach($args as $key => $value) {
@@ -118,8 +87,6 @@ class ActiveRecord {
     // Todos los registros
     public static function all($columna) {
         $stmt = self::$pdo->query('SELECT * FROM ' . static::$tabla . ' ORDER BY ' . $columna . ' ASC ');
-        // $resultado = self::consultarSQL($query);
-        // $resultado = $stmt->fetchAll();
         $resultado = self::consultarSQL($stmt);
         return $resultado;
     }
@@ -130,7 +97,6 @@ class ActiveRecord {
         $stmt = self::$pdo->query($query);
         $resultado = self::consultarSQL($stmt);
         return array_shift( $resultado ) ;
-        // return $resultado;
     }
 
     // Obtener Registros con cierta cantidad
@@ -160,7 +126,6 @@ class ActiveRecord {
 
         $array_datos = $this->atributos();
         // Eliminamos el primer elemento del arreglo asociativo que es el ID
-        // echo json_encode([$array_datos]);
         array_shift($array_datos);
         
         // Insertar en la base de datos
@@ -188,8 +153,7 @@ class ActiveRecord {
             // Vincular el valor
             $resultado->bindValue(":$key", $valor_convertido, $tipo);
         }
-        // return $arrayInsert;
-        // return $resultado->execute();
+
         try{
             if($resultado->execute()){
                 return true;
@@ -260,12 +224,6 @@ class ActiveRecord {
         } catch (PDOException $e) {
             return $e->getMessage();
         }
-       
-        // if($stmt->execute()){
-        //     return true;
-        // }else{
-        //     return false;
-        // }
     }
 
 }

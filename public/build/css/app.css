@@ -493,6 +493,7 @@ p {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     justify-items: end;
+    width: 100%;
   }
 }
 
