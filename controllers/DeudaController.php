@@ -565,9 +565,8 @@ class DeudaController{
             $html .= "</table>";
 
             $fechaActual = date("Y-m-d");
-            $html .= "<h6 style='margin:0;'>Fecha Impresión: " . $fechaActual . "</h6>";
+            $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
         }
-
 
         $mpdf->WriteHTML($html);
 
