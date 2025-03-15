@@ -12,6 +12,7 @@ use Model\DeudoresReporte;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('memory_limit', '512M');
 
 require_once '../includes/parameters.php';
 header("Access-Control-Allow-Origin: " . $urlJSON); 
@@ -64,18 +65,7 @@ class DeudaController{
     }
 
     public static function getDeudores(){
-        $query = "
-                SELECT c.nombre AS nombre_cliente, dm.saldo, dm.fecha
-                FROM deuda_movimiento dm
-                JOIN ( SELECT DISTINCT ON (deuda_movimiento.fk_deuda) deuda_movimiento.fk_deuda,
-                        deuda_movimiento.id_mov
-                    FROM deuda_movimiento
-                    ORDER BY deuda_movimiento.fk_deuda, deuda_movimiento.id_mov DESC) filtro ON dm.fk_deuda = filtro.fk_deuda AND dm.id_mov = filtro.id_mov
-                JOIN deuda d ON dm.fk_deuda = d.id_deuda
-                JOIN cliente c ON d.fk_cliente = c.id_cliente
-                WHERE dm.saldo <> 0::double precision AND c.nombre::text <> 'Usuario de prueba'::text
-                ORDER BY c.nombre;
-                ";
+        $query = "SELECT c.nombre AS nombre_cliente, dm.saldo, dm.fecha FROM deuda_movimiento dm JOIN ( SELECT DISTINCT ON (deuda_movimiento.fk_deuda) deuda_movimiento.fk_deuda, deuda_movimiento.id_mov FROM deuda_movimiento ORDER BY deuda_movimiento.fk_deuda, deuda_movimiento.id_mov DESC) filtro ON dm.fk_deuda = filtro.fk_deuda AND dm.id_mov = filtro.id_mov JOIN deuda d ON dm.fk_deuda = d.id_deuda JOIN cliente c ON d.fk_cliente = c.id_cliente WHERE dm.saldo <> 0::double precision AND c.nombre::text <> 'Usuario de prueba'::text ORDER BY c.nombre";
         $mov_deuda = DeudoresReporte::SQL($query);
         return $mov_deuda; //Se retorna el arreglo
     }
@@ -532,38 +522,59 @@ class DeudaController{
 
     public static function reporteDeudores(Router $router){
         
-        $mpdf = new Mpdf();
         $deudores = self::getDeudores();
+        
+        $mpdf = new Mpdf();
+        $mpdf->SetAutoPageBreak(true, 10); // Ajusta el margen de la página
         $html="
-            <h1 style='text-align: center;'>Reporte de Clientes</h1>
-            <table border='1' style='width: 100%; border-collapse: collapse;'>
+                <table border='1' style='width: 23rem; border-collapse: collapse;'>
                 <tr>
-                    <th>Nombre del Cliente</th>
-                    <th>Saldo</th>
-                    <th>Fecha</th>
+                    <th colspan='4' style='background-color:#e1e1e1'><h4>Deudores</h4></th>
+                </tr>
+                <tr>
+                    <th style='font-size:0.8rem;background-color:#e1e1e1'>No.</th>
+                    <th style='font-size:0.8rem;background-color:#e1e1e1'>Fecha</th>
+                    <th style='font-size:0.8rem;background-color:#e1e1e1;'>Nombre del Cliente</th>
+                    <th style='font-size:0.8rem;background-color:#e1e1e1;'>Saldo</th>
                 </tr>";
 
         if (isset($deudores) && !empty($deudores)){
+            
+            $contador = 1;
+            $suma_total = 0;
+            
             foreach($deudores as $deudor){
+                
                 $html .="
                     <tr>
-                        <td>{$deudor->nombre_cliente}</td>
-                        <td>{$deudor->saldo}</td>
-                        <td>{$deudor->fecha}</td>
+                        <td style='width:2rem;text-align:center;font-family:Arial;font-size:0.8rem;'>" . $contador . "</td>
+                        <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;'>" . $deudor->fecha . "</td>
+                        <td style='width:11rem; height:1.5rem;font-family:Arial;font-size:0.8rem;'>" . $deudor->nombre_cliente . "</td>
+                        <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;'>" . number_format($deudor->saldo, 0, ',', '.') . "</td>
                     </tr>
                 ";
+
+                $contador++;
+                $suma_total += (int) $deudor->saldo;
             }
+
+            $html .= "<tr>";
+            $html .= "<td colspan='3' style='text-align:center;font-family:Arial;font-size:0.8rem;font-weight:bold;background-color:#e1e1e1;'>SUMA TOTAL</td>";
+            $html .= "<td style='text-align:right;font-family:Arial;font-size:0.8rem;font-weight:bold;background-color:#e1e1e1;'>" . number_format($suma_total, 0, ',', '.') . "</td>";
+            $html .= "</tr>";
+            $html .= "</table>";
+
+            $fechaActual = date("Y-m-d");
+            $html .= "<h6 style='margin:0;'>Fecha Impresión: " . $fechaActual . "</h6>";
         }
 
-        $html .= "</table>";
+
         $mpdf->WriteHTML($html);
 
         $router->renderIndex('deudores/reporte_deudores', [
-            "mpdf" => $mpdf,
-            "deudores" => $deudores
+            "mpdf" => $mpdf
         ]);
     }
-
 }
 
 ?>
