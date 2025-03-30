@@ -97,6 +97,16 @@ export class Deuda extends ModeloBase{
             
             this.crearTabla(data);
 
+            //Se procede a modificar el enlace del botón Descargar
+            const botonDescargar = document.querySelector('#reporte_deuda_cliente');
+
+            const id_cliente = document.querySelector('#fk_cliente_deudor').value;
+            const nombre_deudor = document.querySelector('#nombre_deudor').value;
+
+            const cadena = "/deuda/reporte_movimientos_deudor?id=" + id_cliente + "&nombre_cliente=" + nombre_deudor;
+            console.log(cadena);
+            botonDescargar.setAttribute('href', cadena);
+
         } catch (error) {
             console.error('Codigo de error:', error);
         }
@@ -180,5 +190,4 @@ export class Deuda extends ModeloBase{
             }
         })
     }
-
 }

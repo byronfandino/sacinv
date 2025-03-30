@@ -157,6 +157,9 @@
             <tbody class="tbody">
             </tbody>
         </table>
+        <div class="contenedor__botones">
+            <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
+        </div>
     </div>
 </main>
 <?php

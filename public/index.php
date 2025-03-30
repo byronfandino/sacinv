@@ -19,6 +19,7 @@ $router->post('/deuda/actualizar', [DeudaController::class, 'actualizar']);
 $router->post('/deuda/eliminar', [DeudaController::class, 'eliminar']);
 $router->get('/deuda/reporte_general', [DeudaController::class, 'reporteCSV']);
 $router->get('/deuda/reporte_deudores', [DeudaController::class, 'reporteDeudores']);
+$router->get('/deuda/reporte_movimientos_deudor', [DeudaController::class, 'reporteMovimientosDeudor']);
 
 $router->get('/ciudad/api', [CiudadController::class, 'listarCiudades']);
 
