@@ -32,6 +32,7 @@ class DeudaController{
         ]);
     }
 
+    //Obtener la llave primaria de la deuda según el último registro del cliente, para buscar sus movimientos
     public static function getClienteDeuda($fk_cliente){
 
         $query = "SELECT * FROM deuda WHERE fk_cliente = " . $fk_cliente . " ORDER BY id_deuda DESC LIMIT 1";
@@ -39,37 +40,43 @@ class DeudaController{
         return isset($clienteFound[0]) ? $clienteFound[0] : null; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
     }
 
+    //Obtener el último movimiento del cliente, para saber si el saldo es 0
+    //Si el saldo es 0 se crea un nuevo registro en la tabla deudores y se usa como llave foránea en la tabla deuda_movimiento
     public static function getUltimoMovimiento($fk_deuda){
         $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return isset($mov_deuda[0]) ? $mov_deuda[0] : null; //Retornamos únicamente el objeto
     }
 
+    //Se obtiene solo es registro completo del movimiento de la deuda, para actualizar los datos, o para eliminar el registro
     public static function getMovimientoDeuda($id_mov){
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov = " . $id_mov . " LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return isset($mov_deuda[0]) ? $mov_deuda[0] :  null; //Retornamos únicamente el objeto
     }
 
-    //Obtiene todos los registros continuos al id buscado
+    //Se obtiene todos los registros posteriores al id, con el fin de actualizar el saldo de cada registro, siempre y cuando se haya actualizado o eliminado aquel registro por el cual se está realizando esta consulta
     public static function getMovimientosUpdate($fk_deuda, $id_mov){
         $query = "SELECT * FROM deuda_movimiento WHERE fk_deuda = " . $fk_deuda . " AND id_mov > " . $id_mov . " ORDER BY id_mov ASC";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return $mov_deuda; //Retornamos el arreglo
     }
 
+    //Se obtiene únicamente el registro anterior de deuda_movimiento para actualizar el saldo en los registros posteriores 
     public static function getMovimientoAnterior($fk_deuda, $id_mov){
         $query = "SELECT * FROM deuda_movimiento WHERE id_mov < " . $id_mov . " AND fk_deuda = " . $fk_deuda . " ORDER BY id_mov DESC LIMIT 1";
         $mov_deuda = DeudaMovimiento::SQL($query);
         return isset($mov_deuda[0]) ? $mov_deuda[0] : null; //Retornamos únicamente el objeto        
     }
 
+    //Obtenemos la consulta de los clientes deudores actuales para crear un reporte en pdf
     public static function getDeudores(){
         $query = "SELECT c.nombre AS nombre_cliente, dm.saldo, dm.fecha FROM deuda_movimiento dm JOIN ( SELECT DISTINCT ON (deuda_movimiento.fk_deuda) deuda_movimiento.fk_deuda, deuda_movimiento.id_mov FROM deuda_movimiento ORDER BY deuda_movimiento.fk_deuda, deuda_movimiento.id_mov DESC) filtro ON dm.fk_deuda = filtro.fk_deuda AND dm.id_mov = filtro.id_mov JOIN deuda d ON dm.fk_deuda = d.id_deuda JOIN cliente c ON d.fk_cliente = c.id_cliente WHERE dm.saldo <> 0::double precision AND c.nombre::text <> 'Usuario de prueba'::text ORDER BY c.nombre";
         $mov_deuda = DeudoresReporte::SQL($query);
         return $mov_deuda; //Se retorna el arreglo
     }
 
+    //Obtenemos la consulta de todos los movimientos de la deuda pendiente del cliente para crear un reporte en pdf
     public static function getTotalMovimientosDeudor($id){
         $sql ="SELECT id_mov, fk_deuda, tipo_mov, descripcion, cant, valor_unit, valor_total, saldo, fecha, hora FROM deuda_movimiento WHERE fk_deuda = ( SELECT id_deuda FROM deuda WHERE fk_cliente = " . (int) $id . " ORDER BY id_deuda DESC LIMIT 1) ORDER BY id_mov ASC OFFSET 1";
         $deuda_mov = DeudaMovimiento::SQL($sql);
