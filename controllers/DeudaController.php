@@ -532,21 +532,128 @@ class DeudaController{
         
         $mpdf = new Mpdf();
         $mpdf->SetAutoPageBreak(true, 10); // Ajusta el margen de la página
+        $stylesheet = "
 
-        $html="<h1 style='text-align:center;font-family:Arial;margin:0;color:#0538a5;'>Papelería y Miscelánea Sumercé</h1><br>";
-        $html.="<h2 style='text-align:center;font-family:Arial;margin:0;color:#0538a5;'>REPORTE DE MOVIMIENTOS</h2><br>";
-        $html.="<h3 style='font-family:Arial;margin:0 0 1rem 0;'>Cliente: " . $_GET['nombre_cliente'] . "</h3>";
+            @page {
+            font-family: Arial;
+            font-size:1rem;
+            }
+
+            .titulo-h1 {
+                text-align:center;
+                font-family:Arial;
+                margin:0;
+                padding:0;
+                color:#0538a5;
+            }
+
+            .titulo-h2 {
+                text-align:center;
+                font-family:Arial;
+                margin:0;
+                color:#0538a5;
+            }
+
+            .titulo-h3 {
+                font-family:Arial;margin:0 0 1rem 0;
+            }
+
+            .th{
+                font-size:1rem;
+                background-color:#0538a5;
+                color:#fff;
+            }
+
+            .fecha{
+                width:5rem;
+                text-align:right;
+                font-family:Arial;
+                
+            }
+                
+            .hora{
+                width:4rem; 
+                height:1.5rem;
+                font-family:Arial;
+                
+            }
+
+            .movimiento{
+                width:6rem; 
+                text-align:center; 
+                height:1.5rem;
+                font-family:Arial;
+                
+            }
+
+            .abono{
+                background:#f0ff00;
+            }
+
+            .devolucion{
+                background-color:#e57b86;
+            }
+
+            .descripcion{
+                width:25rem; 
+                height:1.5rem;
+                font-family:Arial;
+                
+            }
+
+            .cant{
+                width:3rem; 
+                text-align:center; 
+                height:1.5rem;
+                font-family:Arial;
+                
+            }
+
+            .vunit{
+                width:5rem;
+                text-align:right;
+                font-family:Arial;
+                
+            }
+
+            .vtotal{
+                width:5rem;
+                text-align:right;
+                font-family:Arial;
+                
+            }
+
+            .titulo_total{
+                text-align:center;
+                font-family:Arial;
+                font-size:1rem;
+                font-weight:bold;
+                background-color:#0538a5;
+                color:#fff;
+            }
+
+            .sumatotal{
+                width:5rem;
+                text-align:right;
+                font-family:Arial;
+                font-weight:bold;
+                font-size:1rem;
+                background-color:#0538a5;
+                color:#fff;
+            }
+        ";
+
+        // Agregar los estilos al PDF
+        $mpdf->WriteHTML("<style>" . $stylesheet . "</style>", \Mpdf\HTMLParserMode::HEADER_CSS);   
+
+        $html="<h1 class='titulo-h1'>Papelería y Miscelánea Sumercé</h1><br>";
+        $html.="<h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2><br>";
+        $html.="<h3 class='titulo-h3'>Cliente: " . $_GET['nombre_cliente'] . "</h3>";
 
         $html .="
                 <table border='1' style='width: 100%; border-collapse: collapse;'>
                 <tr>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;'>Fecha</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;'>Hora</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;;'>Tipo Movimiento</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;;'>Descripción</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;;'>Cant.</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;;'>V/Unit</th>
-                    <th style='font-size:0.8rem;background-color:#0538a5;color:#fff;;'>V/Total</th>
+                    <th class='th'>Fecha</th><th class='th'>Hora</th><th class='th'>Tipo Movimiento</th><th class='th'>Descripción</th><th class='th'>Cant.</th><th class='th'>V/Unit</th><th class='th'>V/Total</th>
                 </tr>";
 
         if (isset($movimientos_deudor) && !empty($movimientos_deudor)){
@@ -557,51 +664,49 @@ class DeudaController{
 
                 if ($deudor->tipo_mov == 'D'){
                     $html .="
-                    <tr>
-                        <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;'>" . $deudor->fecha . "</td>
-                        <td style='width:4rem; height:1.5rem;font-family:Arial;font-size:0.8rem;'>" . $deudor->hora . "</td>
-                        <td style='width:6rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;'>Debe</td>
-                        <td style='width:25rem; height:1.5rem;font-family:Arial;font-size:0.8rem;'>" . $deudor->descripcion . "</td>
-                        <td style='width:3rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;'>" . $deudor->cant . "</td>
-                        <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                        <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                        <tr>
+                            <td class='fecha'>" . $deudor->fecha . "</td>
+                            <td class='hora'>" . $deudor->hora . "</td>
+                            <td class='movimiento'>Debe</td>
+                            <td class='descripcion'>" . $deudor->descripcion . "</td>
+                            <td class='cant'>" . $deudor->cant . "</td>
+                            <td class='vunit'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
                         </tr>
                         ";
 
                 }elseif($deudor->tipo_mov == 'A'){
                      $html .="
-                     <tr>
-                         <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . $deudor->fecha . "</td>
-                         <td style='width:4rem; height:1.5rem;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . $deudor->hora . "</td>
-                         <td style='width:6rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>Abonó</td>
-                         <td style='width:25rem; height:1.5rem;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . $deudor->descripcion . "</td>
-                         <td style='width:3rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . $deudor->cant . "</td>
-                         <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                         <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background:#f0ff00;'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
-                         </tr>
-                         ";
+                        <tr>
+                            <td class='fecha abono'>" . $deudor->fecha . "</td>
+                            <td class='hora abono'>" . $deudor->hora . "</td>
+                            <td class='movimiento abono'>Abonó</td>
+                            <td class='descripcion abono'>" . $deudor->descripcion . "</td>
+                            <td class='cant abono'>" . $deudor->cant . "</td>
+                            <td class='vunit abono'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal abono'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                        </tr>
+                    ";
 
                 }else{
                     $html .="
                         <tr>
-                            <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . $deudor->fecha . "</td>
-                            <td style='width:4rem; height:1.5rem;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . $deudor->hora . "</td>
-                            <td style='width:6rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>Devolución</td>
-                            <td style='width:25rem; height:1.5rem;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . $deudor->descripcion . "</td>
-                            <td style='width:3rem; text-align:center; height:1.5rem;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . $deudor->cant . "</td>
-                            <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                            <td style='width:5rem;text-align:right;font-family:Arial;font-size:0.8rem;background-color:##e57b86;'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
-                            </tr>
-                            ";
+                            <td class='fecha devolucion'>" . $deudor->fecha . "</td>
+                            <td class='hora devolucion'>" . $deudor->hora . "</td>
+                            <td class='movimiento devolucion'>Devolución</td>
+                            <td class='descripcion devolucion'>" . $deudor->descripcion . "</td>
+                            <td class='cant devolucion'>" . $deudor->cant . "</td>
+                            <td class='vunit devolucion'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal devolucion'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                        </tr>
+                    ";
                 }
-
-                
                 $saldo = $deudor->saldo;
             }
                     
             $html .= "<tr>";
-            $html .= "<td colspan='6' style='text-align:center;font-family:Arial;font-size:1rem;font-weight:bold;background-color:#0538a5;color:#fff;'>TOTAL</td>";
-            $html .= "<td style='width:5rem;text-align:right;font-family:Arial;font-weight:bold;font-size:1rem;background-color:#0538a5;color:#fff;'>" . number_format($saldo, 0, ',', '.') . "</td>";
+            $html .= "<td colspan='6' class='titulo_total'>TOTAL</td>";
+            $html .= "<td class='sumatotal'>" . number_format($saldo, 0, ',', '.') . "</td>";
             $html .= "</tr>";
             $html .= "</table>";
 
@@ -609,7 +714,8 @@ class DeudaController{
             $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
         }
 
-        $mpdf->WriteHTML($html);
+        $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
+        // $mpdf->WriteHTML($html);
         $nombre_archivo = "reporte_" . $_GET['nombre_cliente'] . ".pdf";
 
         $router->renderIndex('reportes/reporte', [
