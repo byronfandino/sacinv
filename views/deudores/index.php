@@ -75,6 +75,10 @@
                     <input type="text" id="direccion_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-md">
+                    <label for="email_deudor">Email</label>
+                    <input type="text" id="email_deudor" class="campo__input disabled" readonly>
+                </div>
+                <div class="form__campo t-md">
                     <label for="nombre_ciudad_deudor">Ciudad</label>
                     <input type="text" id="nombre_ciudad_deudor" class="campo__input disabled" readonly>
                 </div>

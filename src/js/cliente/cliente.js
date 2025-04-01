@@ -51,8 +51,9 @@ async function guardarCliente(){
                 {nombre: 'Nombre del Cliente', posicion: 2, class:[]},
                 {telefono: 'Celular', posicion:3, class: []},
                 {direccion: 'Dirección', posicion:4, class: []},
-                {nombre_ciudad: 'Ciudad', posicion:5, class: []},
-                {nombre_depart: 'Departamento', posicion:6, class: []}
+                {email: 'Email', posicion:5, class: []},
+                {nombre_ciudad: 'Ciudad', posicion:6, class: []},
+                {nombre_depart: 'Departamento', posicion:7, class: []}
             ],
     
             columnaModificar: true,
@@ -67,6 +68,7 @@ async function guardarCliente(){
             {nombre: 'nombre_modal'},
             {telefono: 'telefono_modal'},
             {direccion: 'direccion_modal'},
+            {email: 'email_modal'},
             {cod_depart: 'cod_depart_modal'},
             {fk_ciudad: 'fk_ciudad_modal'}
         ],
@@ -77,6 +79,7 @@ async function guardarCliente(){
             {nombre: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
             {telefono: '^[0-9]{10}$', message: 'Se permite 10 números', estado: false},
             {direccion: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
+            {email: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: false},
             {nombre_depart: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
             {fk_ciudad: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ],
@@ -113,6 +116,7 @@ function actualizarCliente(){
             {nombre_modal: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: true},
             {telefono_modal: '^[0-9]{10}$', message: 'Se permite 10 números', estado: true},
             {direccion_modal: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
+            {email_modal: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: true},
             {cod_depart_modal: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: true},
             {fk_ciudad_modal: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: true}
         ],

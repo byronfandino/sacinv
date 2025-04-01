@@ -55,8 +55,9 @@ async function guardarCliente(){
                 {nombre: 'Nombre del Cliente', posicion: 2, class:['tbody__td--enlace']},
                 {telefono: 'Celular', posicion:3, class: []},
                 {direccion: 'Dirección', posicion:4, class: []},
-                {nombre_ciudad: 'Ciudad', posicion:5, class: []},
-                {nombre_depart: 'Departamento', posicion:6, class: []}
+                {email: 'Email', posicion:5, class: []},
+                {nombre_ciudad: 'Ciudad', posicion:6, class: []},
+                {nombre_depart: 'Departamento', posicion:7, class: []}
             ],
             columnaModificar: true,
             columnaEliminar: true
@@ -71,6 +72,7 @@ async function guardarCliente(){
             {nombre: 'nombre_actualizar'},
             {telefono: 'telefono_actualizar'},
             {direccion: 'direccion_actualizar'},
+            {email: 'email_actualizar'},
             {cod_depart: 'cod_depart_actualizar'},
             {fk_ciudad: 'fk_ciudad_actualizar'}
         ],
@@ -83,6 +85,7 @@ async function guardarCliente(){
             {nombre_deudor : 'nombre'},
             {telefono_deudor : 'telefono'},
             {direccion_deudor : 'direccion'},
+            {email_deudor : 'email'},
             {nombre_ciudad_deudor : 'nombre_ciudad'},
             {nombre_depart_deudor : 'nombre_depart'}
         ],
@@ -93,6 +96,7 @@ async function guardarCliente(){
             {nombre_agregar: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
             {telefono_agregar: '^[0-9]{10}$', message: 'Se permite 10 números', estado: false},
             {direccion_agregar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
+            {email_agregar: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: false},
             {nombre_depart_agregar: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
             {fk_ciudad_agregar: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ],
@@ -118,7 +122,6 @@ function actualizarCliente(){
         },
 
         // Es utilizado únicamente para mostrar los mensajes de error en los campos del formulario que contienen un nombre adicional, y que estos errores provienen del backend y del frontend 
-        
         modal:{
             isModal:true,
             idVentanaModal : 'modal_cliente_actualizar',
@@ -130,6 +133,7 @@ function actualizarCliente(){
             {nombre_actualizar: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: true},
             {telefono_actualizar: '^[0-9]{10}$', message: 'Se permite 10 números', estado: true},
             {direccion_actualizar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: true},
+            {email_actualizar: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: true},
             {cod_depart_actualizar: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: true},
             {fk_ciudad_actualizar: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: true}
         ],

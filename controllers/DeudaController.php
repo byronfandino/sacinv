@@ -32,6 +32,13 @@ class DeudaController{
         ]);
     }
 
+    //Obtener todos los datos del cliente con el id, utilizado para crear el reporte
+    public static function getCliente($id){
+        $query = "SELECT * FROM cliente WHERE id_cliente = " . $id;
+        $clienteFound = Cliente::SQL($query);
+        return isset($clienteFound[0]) ? $clienteFound[0] : null; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
+    }
+
     //Obtener la llave primaria de la deuda según el último registro del cliente, para buscar sus movimientos
     public static function getClienteDeuda($fk_cliente){
 
@@ -534,7 +541,7 @@ class DeudaController{
     }
 
     public static function reporteMovimientosDeudor(Router $router){
-        
+        $cliente = self::getCliente($_GET['id']);
         $movimientos_deudor = self::getTotalMovimientosDeudor($_GET['id']);
         
         $mpdf = new Mpdf();
@@ -655,7 +662,8 @@ class DeudaController{
 
         $html="<h1 class='titulo-h1'>Papelería y Miscelánea Sumercé</h1><br>";
         $html.="<h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2><br>";
-        $html.="<h3 class='titulo-h3'>Cliente: " . $_GET['nombre_cliente'] . "</h3>";
+        $html.="<h3 class='titulo-h3'>Cliente: " . $cliente->nombre . "</h3>";
+        $html.="<h3 class='titulo-h3'>Cédula: " . $cliente->cedula_nit . "</h3>";
 
         $html .="
                 <table border='1' style='width: 100%; border-collapse: collapse;'>

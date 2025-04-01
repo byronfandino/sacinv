@@ -107,23 +107,6 @@ function botones(){
             cierreManualModal(e);
         });
     });
-    
-    // const btnDeudaCliente = document.querySelector('#descargar_deuda_cliente');
-    // btnDeudaCliente.addEventListener('click', e => {
-    //     e.preventDefault();
-    //     const id_cliente = document.querySelector('#fk_cliente_deudor').value;
-    //     const nombre_deudor = document.querySelector('#nombre_deudor').value;
-
-    //     const objetoDeudor = {
-    //         url : {
-    //             apiConsultar: '/deuda/reporte_movimientos_deudor'
-    //         }
-    //     }
-    
-    //     const deudor = new Deuda(objetoDeudor);
-    //     deudor.reporteMovimientosDeudor(id_cliente, nombre_deudor);
-    // });
-    
 }
 
 function guardarDeudor(){

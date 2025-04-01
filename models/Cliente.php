@@ -4,13 +4,14 @@ namespace Model;
 
 class Cliente extends ActiveRecord{
     protected static $tabla='cliente';
-    protected static $columnasDB=['id_cliente','cedula_nit','nombre','telefono','direccion','fk_ciudad'];
+    protected static $columnasDB=['id_cliente','cedula_nit','nombre','telefono','direccion','email','fk_ciudad'];
 
     public $id_cliente;
     public $cedula_nit;
     public $nombre;
     public $telefono;
     public $direccion;
+    public $email;
     public $fk_ciudad;
 
     public function __construct($args=[]){
@@ -20,6 +21,7 @@ class Cliente extends ActiveRecord{
         $this->nombre=$args['nombre'] ?? '';
         $this->telefono=$args['telefono'] ?? '';
         $this->direccion=$args['direccion'] ?? '';
+        $this->email=$args['email'] ?? 'No registra';
         $this->fk_ciudad=$args['fk_ciudad'] ?? '';
         
     }
@@ -64,6 +66,14 @@ class Cliente extends ActiveRecord{
 
         }else{
             $this->direccion = trim($this->direccion);
+        }
+
+        if (!$this->email){
+            self::$alertas['error']['email'][]="El campo email es Obligatorio";
+        }else if (!preg_match($regex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $this->email)){
+            self::$alertas['error']['email'][]="No cumple con los requisitos mínimos para un email";
+        }else{
+            $this->email = trim($this->email);
         }
 
         if (!$this->fk_ciudad || !preg_match('/^[0-9]{1,5}$/', $this->fk_ciudad)){

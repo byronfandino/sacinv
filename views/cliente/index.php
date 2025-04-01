@@ -54,6 +54,12 @@
                     <input type="text" name="direccion" id="direccion" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
+
+                <div class="form__campo t-md">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" class="campo__input" require>
+                    <p class="label__error ocultar"></p>
+                </div>
     
                 <div class="form__campo t-md ">
                     <label for="nombre_depart">Departamento</label>
@@ -96,6 +102,7 @@
                     <th>Nombre del Cliente</th>
                     <th>Celular</th>
                     <th>Dirección</th>
+                    <th>Email</th>
                     <th>Ciudad</th>
                     <th>Departamento</th>
                     <th class="thead__th--icon">Modificar</th>

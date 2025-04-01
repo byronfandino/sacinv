@@ -37,6 +37,12 @@
                     <input type="text" name="direccion" id="direccion_actualizar" class="campo__input">
                     <p class="label__error ocultar"></p>
                 </div>
+
+                <div class="form__campo t-md">
+                    <label for="email_actualizar">Email</label>
+                    <input type="text" name="email" id="email_actualizar" class="campo__input">
+                    <p class="label__error ocultar"></p>
+                </div>
     
                 <div class="form__campo t-md ">
                     <label for="cod_depart_actualizar">Departamento</label>
