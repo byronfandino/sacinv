@@ -547,10 +547,10 @@ class DeudaController{
         $movimientos_deudor = self::getTotalMovimientosDeudor($_GET['id']);
         
         $mpdf = new Mpdf([
-            'margin_top' => 54, // Ajusta el margen superior según el tamaño del encabezado
-            'margin_bottom' => 20 // También puedes ajustar el margen inferior si es necesario
+            'margin_top' => 60, // Ajusta el margen superior según el tamaño del encabezado
+            'margin_bottom' => 10 // También puedes ajustar el margen inferior si es necesario
         ]);
-        $mpdf->SetAutoPageBreak(true, 10); // Ajusta el margen de la página
+        $mpdf->SetAutoPageBreak(true, 30); // Ajusta el margen de la página
 
         $color_primario="#0538a5";
 
@@ -669,7 +669,7 @@ class DeudaController{
             }
 
             .tabla{
-                margin-top:1rem;
+                margin: 0;
                 border-collapse: collapse;
                 border-spacing: 0;
             }
@@ -698,6 +698,10 @@ class DeudaController{
                 font-size:0.9rem;
             }
 
+            hr{
+                border:3px solid $color_primario;
+            }
+
         ";
 
         // Agregar los estilos al PDF
@@ -715,7 +719,7 @@ class DeudaController{
                     </td>
                 </tr>
             </table>
-
+            <hr>
             <table class="tabla" border="1" width="100%">
                 <tr>
                     <td class="campo_cliente">Cliente:</td><td class="dato_cliente">' . $cliente->nombre .'</td>
@@ -802,6 +806,7 @@ class DeudaController{
         
         // Definir el pie de página
         $mpdf->SetHTMLFooter('
+            <hr>
             <table class="tabla" width="100%">
                 <tr>
                     <td class="footer">Cel: 3123433699 </td>
