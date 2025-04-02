@@ -796,10 +796,10 @@ class DeudaController{
             $html .= "</tr>";
             $html .= "</table>";
 
-            $fechaActual = date("Y-m-d");
-            $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
         }
-
+        $fechaActual = date("Y-m-d");
+        // $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
+        
         // Definir el pie de página
         $mpdf->SetHTMLFooter('
             <table class="tabla" width="100%">
@@ -809,7 +809,8 @@ class DeudaController{
                     <td class="footer" style="text-align:right;">pymsumerce@hotmail.com</td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align:center;">Página {PAGENO} de {nbpg}</td>
+                    <td colspan="2" style="height:2.5rem;">Fecha de impresión: ' . $fechaActual . '</td>
+                    <td style="text-align:right;">Página {PAGENO} de {nbpg}</td>
                 </tr>
             </table>
         ');
