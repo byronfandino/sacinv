@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Mpdf\Mpdf;
 use Model\Cliente;
+use Model\ClienteAPI;
 use MVC\Router;
 use Model\Departamento;
 use Model\Deuda;
@@ -34,8 +35,8 @@ class DeudaController{
 
     //Obtener todos los datos del cliente con el id, utilizado para crear el reporte
     public static function getCliente($id){
-        $query = "SELECT * FROM cliente WHERE id_cliente = " . $id;
-        $clienteFound = Cliente::SQL($query);
+        $query = "SELECT id_cliente, cedula_nit, nombre, telefono, direccion, email, fk_ciudad, nombre_ciudad, cod_depart, nombre_depart FROM cliente as cl, ciudad as cd, departamento as dp WHERE cl.fk_ciudad = cd.id_ciudad AND dp.cod_depart = cd.codigo_depart AND id_cliente = " . $id . " ORDER BY nombre";
+        $clienteFound = ClienteAPI::SQL($query);
         return isset($clienteFound[0]) ? $clienteFound[0] : null; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
     }
 
@@ -541,31 +542,38 @@ class DeudaController{
     }
 
     public static function reporteMovimientosDeudor(Router $router){
+        /** @var ClienteAPI $cliente */
         $cliente = self::getCliente($_GET['id']);
         $movimientos_deudor = self::getTotalMovimientosDeudor($_GET['id']);
         
-        $mpdf = new Mpdf();
+        $mpdf = new Mpdf([
+            'margin_top' => 54, // Ajusta el margen superior según el tamaño del encabezado
+            'margin_bottom' => 20 // También puedes ajustar el margen inferior si es necesario
+        ]);
         $mpdf->SetAutoPageBreak(true, 10); // Ajusta el margen de la página
+
+        $color_primario="#0538a5";
+
         $stylesheet = "
 
             @page {
-            font-family: Arial;
-            font-size:1rem;
+                font-family: Arial;
+                font-size:1rem;
             }
 
             .titulo-h1 {
+                width:100%;
                 text-align:center;
                 font-family:Arial;
-                margin:0;
                 padding:0;
-                color:#0538a5;
+                color:$color_primario;
             }
 
             .titulo-h2 {
-                text-align:center;
                 font-family:Arial;
                 margin:0;
-                color:#0538a5;
+                color:#fff;
+                font-size:1.3rem;
             }
 
             .titulo-h3 {
@@ -573,8 +581,9 @@ class DeudaController{
             }
 
             .th{
-                font-size:1rem;
-                background-color:#0538a5;
+                font-size:1.1rem;
+                font-family:Arial;
+                background-color:$color_primario;
                 color:#fff;
             }
 
@@ -634,7 +643,10 @@ class DeudaController{
                 width:5rem;
                 text-align:right;
                 font-family:Arial;
-                
+            }
+            
+            .size-tabla{
+                font-size:1rem;
             }
 
             .titulo_total{
@@ -642,7 +654,7 @@ class DeudaController{
                 font-family:Arial;
                 font-size:1rem;
                 font-weight:bold;
-                background-color:#0538a5;
+                background-color:$color_primario;
                 color:#fff;
             }
 
@@ -652,21 +664,79 @@ class DeudaController{
                 font-family:Arial;
                 font-weight:bold;
                 font-size:1rem;
-                background-color:#0538a5;
+                background-color:$color_primario;
                 color:#fff;
             }
+
+            .tabla{
+                margin-top:1rem;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            .nit{
+                color:$color_primario;
+                font-family:Arial;
+                font-weight:bold;
+            }
+                
+            .footer{
+                color:$color_primario;
+                font-family:Arial;
+                font-weight:bold;
+                font-size:0.9rem;
+            }
+
+            .campo_cliente{
+                width:6rem;
+                color:#fff;
+                background-color:$color_primario;
+            }
+            
+            .dato_cliente{
+                font-family:Arial;
+                font-size:0.9rem;
+            }
+
         ";
 
         // Agregar los estilos al PDF
         $mpdf->WriteHTML("<style>" . $stylesheet . "</style>", \Mpdf\HTMLParserMode::HEADER_CSS);   
+        
 
-        $html="<h1 class='titulo-h1'>Papelería y Miscelánea Sumercé</h1><br>";
-        $html.="<h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2><br>";
-        $html.="<h3 class='titulo-h3'>Cliente: " . $cliente->nombre . "</h3>";
-        $html.="<h3 class='titulo-h3'>Cédula: " . $cliente->cedula_nit . "</h3>";
+        // Definir el encabezado
+        $mpdf->SetHTMLHeader('
+            <table>
+                <tr>
+                    <td><img class="logo" src="/build/img/sistema/logo_papeleria.png" width="90" /></td>
+                    <td style="text-align:center;">
+                        <h1 class="titulo-h1">&nbsp;Papelería y Miscelánea Sumercé</h1>
+                        <p class="nit">Nit 23622049-3</p>
+                    </td>
+                </tr>
+            </table>
 
-        $html .="
+            <table class="tabla" border="1" width="100%">
+                <tr>
+                    <td class="campo_cliente">Cliente:</td><td class="dato_cliente">' . $cliente->nombre .'</td>
+                    <td class="campo_cliente">Cédula/Nit:</td><td class="dato_cliente">' . $cliente->cedula_nit .'</td>
+                    <td class="campo_cliente">Teléfono:</td><td class="dato_cliente">' . $cliente->telefono .'</td>
+                </tr>
+                <tr>
+                    <td class="campo_cliente">Dirección:</td><td class="dato_cliente">' . $cliente->direccion .'</td>
+                    <td class="campo_cliente">Email:</td><td colspan="3" class="dato_cliente">' . $cliente->email .'</td>
+                </tr>
+                 <tr>
+                    <td class="campo_cliente">Ciudad:</td><td class="dato_cliente">' . $cliente->nombre_ciudad .'</td>
+                    <td class="campo_cliente">Departamento:</td><td colspan="3" class="dato_cliente">' . $cliente->nombre_depart .'</td>
+                </tr>
+            </table>
+                
+        ');
+
+        $html="
                 <table border='1' style='width: 100%; border-collapse: collapse;'>
+                <tr><td class='th' colspan='7' style='text-align:center;'><h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2></td></tr>
                 <tr>
                     <th class='th'>Fecha</th><th class='th'>Hora</th><th class='th'>Tipo Movimiento</th><th class='th'>Descripción</th><th class='th'>Cant.</th><th class='th'>V/Unit</th><th class='th'>V/Total</th>
                 </tr>";
@@ -677,42 +747,43 @@ class DeudaController{
 
             foreach($movimientos_deudor as $deudor){
 
+                /** @var DeudaMovimiento $deudor */
                 if ($deudor->tipo_mov == 'D'){
                     $html .="
                         <tr>
-                            <td class='fecha'>" . $deudor->fecha . "</td>
-                            <td class='hora'>" . $deudor->hora . "</td>
-                            <td class='movimiento'>Debe</td>
-                            <td class='descripcion'>" . $deudor->descripcion . "</td>
-                            <td class='cant'>" . $deudor->cant . "</td>
-                            <td class='vunit'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                            <td class='vtotal'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                            <td class='fecha size-tabla'>" . $deudor->fecha . "</td>
+                            <td class='hora size-tabla'>" . $deudor->hora . "</td>
+                            <td class='movimiento size-tabla'>Debe</td>
+                            <td class='descripcion size-tabla'>" . $deudor->descripcion . "</td>
+                            <td class='cant size-tabla'>" . $deudor->cant . "</td>
+                            <td class='vunit size-tabla'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal size-tabla'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
                         </tr>
                         ";
 
                 }elseif($deudor->tipo_mov == 'A'){
                      $html .="
                         <tr>
-                            <td class='fecha abono'>" . $deudor->fecha . "</td>
-                            <td class='hora abono'>" . $deudor->hora . "</td>
-                            <td class='movimiento abono'>Abonó</td>
-                            <td class='descripcion abono'>" . $deudor->descripcion . "</td>
-                            <td class='cant abono'>" . $deudor->cant . "</td>
-                            <td class='vunit abono'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                            <td class='vtotal abono'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                            <td class='fecha size-tabla abono'>" . $deudor->fecha . "</td>
+                            <td class='hora size-tabla abono'>" . $deudor->hora . "</td>
+                            <td class='movimiento size-tabla abono'>Abonó</td>
+                            <td class='descripcion size-tabla abono'>" . $deudor->descripcion . "</td>
+                            <td class='cant size-tabla abono'>" . $deudor->cant . "</td>
+                            <td class='vunit size-tabla abono'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal size-tabla abono'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
                         </tr>
                     ";
 
                 }else{
                     $html .="
                         <tr>
-                            <td class='fecha devolucion'>" . $deudor->fecha . "</td>
-                            <td class='hora devolucion'>" . $deudor->hora . "</td>
-                            <td class='movimiento devolucion'>Devolución</td>
-                            <td class='descripcion devolucion'>" . $deudor->descripcion . "</td>
-                            <td class='cant devolucion'>" . $deudor->cant . "</td>
-                            <td class='vunit devolucion'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
-                            <td class='vtotal devolucion'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
+                            <td class='fecha size-tabla devolucion'>" . $deudor->fecha . "</td>
+                            <td class='hora size-tabla devolucion'>" . $deudor->hora . "</td>
+                            <td class='movimiento size-tabla devolucion'>Devolución</td>
+                            <td class='descripcion size-tabla devolucion'>" . $deudor->descripcion . "</td>
+                            <td class='cant size-tabla devolucion'>" . $deudor->cant . "</td>
+                            <td class='vunit size-tabla devolucion'>" . number_format($deudor->valor_unit, 0, ',', '.') . "</td>
+                            <td class='vtotal size-tabla devolucion'>" . number_format($deudor->valor_total, 0, ',', '.') . "</td>
                         </tr>
                     ";
                 }
@@ -729,11 +800,25 @@ class DeudaController{
             $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
         }
 
-        $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
-        // $mpdf->WriteHTML($html);
-        $nombre_archivo = "reporte_" . $_GET['nombre_cliente'] . ".pdf";
+        // Definir el pie de página
+        $mpdf->SetHTMLFooter('
+            <table class="tabla" width="100%">
+                <tr>
+                    <td class="footer">Cel: 3123433699 </td>
+                    <td class="footer" style="text-align:center;">Dirección: Calle 12 # 6 - 03, Guateque - Boyacá</td>
+                    <td class="footer" style="text-align:right;">pymsumerce@hotmail.com</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align:center;">Página {PAGENO} de {nbpg}</td>
+                </tr>
+            </table>
+        ');
 
-        $router->renderIndex('reportes/reporte', [
+        $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
+
+        $nombre_archivo = "reporte " . $_GET['nombre_cliente'] . ".pdf";
+
+        $router->renderIndex('reportes/reporte_pdf', [
             "mpdf" => $mpdf,
             "nombre_archivo" => $nombre_archivo
         ]);
@@ -763,7 +848,8 @@ class DeudaController{
             $suma_total = 0;
             
             foreach($deudores as $deudor){
-                
+
+                /** @var DeudoresReporte $deudor */
                 $html .="
                     <tr>
                         <td style='width:2rem;text-align:center;font-family:Arial;font-size:0.8rem;'>" . $contador . "</td>
