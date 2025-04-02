@@ -822,7 +822,7 @@ class DeudaController{
 
         $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
 
-        $nombre_archivo = "reporte " . $_GET['nombre_cliente'] . ".pdf";
+        $nombre_archivo = "reporte " . $cliente->nombre . ".pdf";
 
         $router->renderIndex('reportes/reporte_pdf', [
             "mpdf" => $mpdf,
