@@ -101,11 +101,8 @@ export class Deuda extends ModeloBase{
             const botonDescargar = document.querySelector('#reporte_deuda_cliente');
 
             const id_cliente = document.querySelector('#fk_cliente_deudor').value;
-            const nombre_deudor = document.querySelector('#nombre_deudor').value;
-
-            const cadena = "/deuda/reporte_movimientos_deudor?id=" + id_cliente + "&nombre_cliente=" + nombre_deudor;
-            console.log(cadena);
-            botonDescargar.setAttribute('href', cadena);
+            const url_reporte = "/deuda/reporte_movimientos_deudor?id=" + id_cliente;
+            botonDescargar.setAttribute('href', url_reporte);
 
         } catch (error) {
             console.error('Codigo de error:', error);
