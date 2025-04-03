@@ -700,18 +700,18 @@ class DeudaController{
         $fechaActual = date("Y-m-d");
         // Definir el encabezado
         $mpdf->SetHTMLHeader('
-            <table class="tabla" border="1" width="100%">
+            <table class="tabla" width="100%">
                 <tr>
-                    <td><img class="logo" src="/build/img/sistema/logo_papeleria.png" width="90" /></td>
+                    <td><img class="logo" src="/build/img/sistema/logo.png" width="90" /></td>
                     <td style="text-align:center;">
                         <h1 class="titulo-h1">&nbsp;Papelería y Miscelánea Sumercé</h1>
                         <p class="nit">Nit 23622049-3</p>
                     </td>
                     <td>
                         <table class="tabla">
-                            <tr><td style="text-align:center;font-size:0.7rem;">Fecha: ' . $fechaActual . '</td></tr>
-                            <tr><td style="height:2rem;"></td></tr>
                             <tr><td style="text-align:center;font-size:0.7rem;">Página {PAGENO} de {nbpg}</td></tr>
+                            <tr><td style="height:2rem;"></td></tr>
+                            <tr><td style="text-align:center;font-size:0.7rem;">Fecha: ' . $fechaActual . '</td></tr>
                         </table>
                     </td>
                 </tr>
@@ -806,9 +806,12 @@ class DeudaController{
             <hr>
             <table class="tabla" width="100%">
                 <tr>
-                    <td class="footer">Cel: 3123433699 </td>
-                    <td class="footer" style="text-align:center;">Dirección: Calle 12 # 6 - 03, Guateque - Boyacá</td>
-                    <td class="footer" style="text-align:right;">pymsumerce@hotmail.com</td>
+                    <td colspan="3" class="footer" style="text-align:center;padding-bottom:0.5rem;">Contáctenos</td>
+                </tr>
+                <tr>
+                    <td class="footer"><img src="/build/img/sistema/phone.svg" width="0.8rem"/> 3123433699 </td>
+                    <td class="footer" style="text-align:center;"><img src="/build/img/sistema/location.svg" width="0.65rem"/> Dirección: Calle 12 # 6 - 03, Guateque - Boyacá</td>
+                    <td class="footer" style="text-align:right;"><img src="/build/img/sistema/email.svg" width="0.8rem"/> pymsumerce@hotmail.com</td>
                 </tr>
             </table>
         ');
