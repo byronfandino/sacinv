@@ -547,42 +547,54 @@ class DeudaController{
         $movimientos_deudor = self::getTotalMovimientosDeudor($_GET['id']);
         
         $mpdf = new Mpdf([
-            'margin_top' => 60, // Ajusta el margen superior según el tamaño del encabezado
+            'margin_top' => 51, // Ajusta el margen superior según el tamaño del encabezado
             'margin_bottom' => 10 // También puedes ajustar el margen inferior si es necesario
         ]);
-        $mpdf->SetAutoPageBreak(true, 30); // Ajusta el margen de la página
+        $mpdf->SetAutoPageBreak(true, 15); // Ajusta el margen de la página
 
         $color_primario="#0538a5";
+        $fuente="Arial"; 
 
         $stylesheet = "
 
             @page {
-                font-family: Arial;
+                font-family: $fuente;
                 font-size:1rem;
             }
 
             .titulo-h1 {
                 width:100%;
                 text-align:center;
-                font-family:Arial;
+                font-family:$fuente;
                 padding:0;
                 color:$color_primario;
+                font-size: 1.8rem;
             }
 
+            /*Header - Tabla del cliente*/
+            .campo_cliente{
+                width:5rem;
+                color:#fff;
+                background-color:$color_primario;
+                font-size:0.8rem;
+            }
+            
+            .dato_cliente{
+                font-family:$fuente;
+                font-size:0.8rem;
+            }
+
+            /*Body - Tabla de datos*/
             .titulo-h2 {
-                font-family:Arial;
+                font-family:$fuente;
                 margin:0;
                 color:#fff;
-                font-size:1.3rem;
-            }
-
-            .titulo-h3 {
-                font-family:Arial;margin:0 0 1rem 0;
+                font-size:1rem;
             }
 
             .th{
-                font-size:1.1rem;
-                font-family:Arial;
+                font-size:0.8rem;
+                font-family:$fuente;
                 background-color:$color_primario;
                 color:#fff;
             }
@@ -590,23 +602,20 @@ class DeudaController{
             .fecha{
                 width:5rem;
                 text-align:right;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
                 
             .hora{
                 width:4rem; 
                 height:1.5rem;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
 
             .movimiento{
                 width:6rem; 
                 text-align:center; 
                 height:1.5rem;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
 
             .abono{
@@ -620,29 +629,26 @@ class DeudaController{
             .descripcion{
                 width:25rem; 
                 height:1.5rem;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
 
             .cant{
                 width:3rem; 
                 text-align:center; 
                 height:1.5rem;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
 
             .vunit{
                 width:5rem;
                 text-align:right;
-                font-family:Arial;
-                
+                font-family:$fuente;
             }
 
             .vtotal{
                 width:5rem;
                 text-align:right;
-                font-family:Arial;
+                font-family:$fuente;
             }
             
             .size-tabla{
@@ -651,7 +657,7 @@ class DeudaController{
 
             .titulo_total{
                 text-align:center;
-                font-family:Arial;
+                font-family:$fuente;
                 font-size:1rem;
                 font-weight:bold;
                 background-color:$color_primario;
@@ -661,7 +667,7 @@ class DeudaController{
             .sumatotal{
                 width:5rem;
                 text-align:right;
-                font-family:Arial;
+                font-family:$fuente;
                 font-weight:bold;
                 font-size:1rem;
                 background-color:$color_primario;
@@ -676,51 +682,42 @@ class DeudaController{
 
             .nit{
                 color:$color_primario;
-                font-family:Arial;
+                font-family:$fuente;
                 font-weight:bold;
             }
                 
             .footer{
                 color:$color_primario;
-                font-family:Arial;
+                font-family:$fuente;
                 font-weight:bold;
                 font-size:0.9rem;
             }
-
-            .campo_cliente{
-                width:6rem;
-                color:#fff;
-                background-color:$color_primario;
-            }
-            
-            .dato_cliente{
-                font-family:Arial;
-                font-size:0.9rem;
-            }
-
-            hr{
-                border:3px solid $color_primario;
-            }
-
         ";
 
         // Agregar los estilos al PDF
         $mpdf->WriteHTML("<style>" . $stylesheet . "</style>", \Mpdf\HTMLParserMode::HEADER_CSS);   
         
-
+        $fechaActual = date("Y-m-d");
         // Definir el encabezado
         $mpdf->SetHTMLHeader('
-            <table>
+            <table class="tabla" border="1" width="100%">
                 <tr>
                     <td><img class="logo" src="/build/img/sistema/logo_papeleria.png" width="90" /></td>
                     <td style="text-align:center;">
                         <h1 class="titulo-h1">&nbsp;Papelería y Miscelánea Sumercé</h1>
                         <p class="nit">Nit 23622049-3</p>
                     </td>
+                    <td>
+                        <table class="tabla">
+                            <tr><td style="text-align:center;font-size:0.7rem;">Fecha: ' . $fechaActual . '</td></tr>
+                            <tr><td style="height:2rem;"></td></tr>
+                            <tr><td style="text-align:center;font-size:0.7rem;">Página {PAGENO} de {nbpg}</td></tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
-            <hr>
-            <table class="tabla" border="1" width="100%">
+
+            <table style="margin-top:1rem;" class="tabla" border="1" width="100%">
                 <tr>
                     <td class="campo_cliente">Cliente:</td><td class="dato_cliente">' . $cliente->nombre .'</td>
                     <td class="campo_cliente">Cédula/Nit:</td><td class="dato_cliente">' . $cliente->cedula_nit .'</td>
@@ -801,7 +798,7 @@ class DeudaController{
             $html .= "</table>";
 
         }
-        $fechaActual = date("Y-m-d");
+      
         // $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
         
         // Definir el pie de página
@@ -812,10 +809,6 @@ class DeudaController{
                     <td class="footer">Cel: 3123433699 </td>
                     <td class="footer" style="text-align:center;">Dirección: Calle 12 # 6 - 03, Guateque - Boyacá</td>
                     <td class="footer" style="text-align:right;">pymsumerce@hotmail.com</td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="height:2.5rem;">Fecha de impresión: ' . $fechaActual . '</td>
-                    <td style="text-align:right;">Página {PAGENO} de {nbpg}</td>
                 </tr>
             </table>
         ');
