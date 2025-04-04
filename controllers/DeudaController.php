@@ -878,7 +878,7 @@ class DeudaController{
         $mpdf->WriteHTML($html);
         $nombre_archivo = "deudores.pdf";
 
-        $router->renderIndex('reportes/reporte', [
+        $router->renderIndex('reportes/reporte_pdf', [
             "mpdf" => $mpdf,
             "nombre_archivo" => $nombre_archivo
         ]);
