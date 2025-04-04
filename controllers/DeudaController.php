@@ -550,7 +550,7 @@ class DeudaController{
             'margin_top' => 51, // Ajusta el margen superior según el tamaño del encabezado
             'margin_bottom' => 10 // También puedes ajustar el margen inferior si es necesario
         ]);
-        $mpdf->SetAutoPageBreak(true, 15); // Ajusta el margen de la página
+        $mpdf->SetAutoPageBreak(true, 25); // Ajusta el margen de la página
 
         $color_primario="#0538a5";
         $fuente="Arial"; 
