@@ -547,7 +547,7 @@ class DeudaController{
         $movimientos_deudor = self::getTotalMovimientosDeudor($_GET['id']);
         
         $mpdf = new Mpdf([
-            'margin_top' => 51, // Ajusta el margen superior según el tamaño del encabezado
+            'margin_top' => 60, // Ajusta el margen superior según el tamaño del encabezado
             'margin_bottom' => 10 // También puedes ajustar el margen inferior si es necesario
         ]);
         $mpdf->SetAutoPageBreak(true, 25); // Ajusta el margen de la página
@@ -574,21 +574,23 @@ class DeudaController{
             /*Header - Tabla del cliente*/
             .campo_cliente{
                 width:5rem;
-                color:#fff;
-                background-color:$color_primario;
+                color:$color_primario;
+                font-weight:bold;
                 font-size:0.8rem;
+                vertical-align: top;
             }
             
             .dato_cliente{
                 font-family:$fuente;
                 font-size:0.8rem;
+                vertical-align: top;
             }
 
             /*Body - Tabla de datos*/
             .titulo-h2 {
                 font-family:$fuente;
                 margin:0;
-                color:#fff;
+                color:$color_primario;
                 font-size:1rem;
             }
 
@@ -609,6 +611,7 @@ class DeudaController{
                 width:4rem; 
                 height:1.5rem;
                 font-family:$fuente;
+                text-align:center;
             }
 
             .movimiento{
@@ -652,7 +655,7 @@ class DeudaController{
             }
             
             .size-tabla{
-                font-size:1rem;
+                font-size:0.8rem;
             }
 
             .titulo_total{
@@ -675,9 +678,22 @@ class DeudaController{
             }
 
             .tabla{
-                margin: 0;
+                margin: 0 auto;
                 border-collapse: collapse;
                 border-spacing: 0;
+
+                }
+                
+            .tabla-cliente{
+                margin-top:0.5rem;
+                border:1px solid $color_primario;
+                border-radius:1rem;
+                padding:0.01rem 0.01rem 1rem 0.01rem;
+                text-align:center;
+            }
+
+            .tabla-datos > tr:nth-of-type(odd) > td{
+                background-color:$color_primario;   
             }
 
             .nit{
@@ -685,7 +701,7 @@ class DeudaController{
                 font-family:$fuente;
                 font-weight:bold;
             }
-                
+             
             .footer{
                 color:$color_primario;
                 font-family:$fuente;
@@ -707,37 +723,36 @@ class DeudaController{
                         <h1 class="titulo-h1">&nbsp;Papelería y Miscelánea Sumercé</h1>
                         <p class="nit">Nit 23622049-3</p>
                     </td>
-                    <td>
-                        <table class="tabla">
-                            <tr><td style="text-align:center;font-size:0.7rem;">Página {PAGENO} de {nbpg}</td></tr>
-                            <tr><td style="height:2rem;"></td></tr>
-                            <tr><td style="text-align:center;font-size:0.7rem;">Fecha: ' . $fechaActual . '</td></tr>
-                        </table>
+                    <td style="text-align:center;font-size:0.7rem;">
+                        Página {PAGENO} de {nbpg}
                     </td>
                 </tr>
             </table>
 
-            <table style="margin-top:1rem;" class="tabla" border="1" width="100%">
-                <tr>
-                    <td class="campo_cliente">Cliente:</td><td class="dato_cliente">' . $cliente->nombre .'</td>
-                    <td class="campo_cliente">Cédula/Nit:</td><td class="dato_cliente">' . $cliente->cedula_nit .'</td>
-                    <td class="campo_cliente">Teléfono:</td><td class="dato_cliente">' . $cliente->telefono .'</td>
-                </tr>
-                <tr>
-                    <td class="campo_cliente">Dirección:</td><td class="dato_cliente">' . $cliente->direccion .'</td>
-                    <td class="campo_cliente">Email:</td><td colspan="3" class="dato_cliente">' . $cliente->email .'</td>
-                </tr>
-                 <tr>
-                    <td class="campo_cliente">Ciudad:</td><td class="dato_cliente">' . $cliente->nombre_ciudad .'</td>
-                    <td class="campo_cliente">Departamento:</td><td colspan="3" class="dato_cliente">' . $cliente->nombre_depart .'</td>
-                </tr>
-            </table>
+            <div class="tabla-cliente">
+                <table style="margin-top:1rem;" class="tabla" width="95%">
+                    <tr>
+                        <td class="campo_cliente">Cliente:</td><td class="dato_cliente">' . $cliente->nombre .'</td>
+                        <td class="campo_cliente">Cédula/Nit:</td><td class="dato_cliente">' . $cliente->cedula_nit .'</td>
+                        <td class="campo_cliente">Fecha:</td><td class="dato_cliente">' . $fechaActual .'</td>
+                    </tr>
+                    <tr>
+                        <td class="campo_cliente">Email:</td><td colspan="3" class="dato_cliente">' . $cliente->email .'</td>
+                        <td class="campo_cliente">Teléfono:</td><td class="dato_cliente">' . $cliente->telefono .'</td>
+                    </tr>
+                    <tr>
+                        <td class="campo_cliente">Dirección:</td><td class="dato_cliente">' . $cliente->direccion .'</td>
+                        <td class="campo_cliente">Ciudad:</td><td class="dato_cliente">' . $cliente->nombre_ciudad .'</td>
+                        <td class="campo_cliente">Departamento:</td><td class="dato_cliente">' . $cliente->nombre_depart .'</td>
+                    </tr>
+                </table>
+            </div>
                 
         ');
 
         $html="
-                <table border='1' style='width: 100%; border-collapse: collapse;'>
-                <tr><td class='th' colspan='7' style='text-align:center;'><h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2></td></tr>
+                <table class='tabla-datos' style='width: 100%; border-collapse: collapse;'>
+                <tr><td class='' colspan='7' style='text-align:center;'><h2 class='titulo-h2'>REPORTE DE MOVIMIENTOS</h2></td></tr>
                 <tr>
                     <th class='th'>Fecha</th><th class='th'>Hora</th><th class='th'>Tipo Movimiento</th><th class='th'>Descripción</th><th class='th'>Cant.</th><th class='th'>V/Unit</th><th class='th'>V/Total</th>
                 </tr>";
