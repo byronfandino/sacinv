@@ -806,11 +806,12 @@ class DeudaController{
             <hr>
             <table class="tabla" width="100%">
                 <tr>
-                    <td colspan="3" class="footer" style="text-align:center;padding-bottom:0.5rem;">Contáctenos</td>
+                    <td colspan="4" class="footer" style="text-align:center;padding-bottom:0.5rem;">Contáctenos</td>
                 </tr>
                 <tr>
                     <td class="footer"><img src="/build/img/sistema/phone.svg" width="0.8rem"/> 3123433699 </td>
-                    <td class="footer" style="text-align:center;"><img src="/build/img/sistema/location.svg" width="0.65rem"/> Dirección: Calle 12 # 6 - 03, Guateque - Boyacá</td>
+                    <td class="footer" style="text-align:center;">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/build/img/sistema/whatsapp.svg" width="0.8rem"/> 3135787739 </td>
+                    <td class="footer" style="text-align:center;"><img src="/build/img/sistema/location.svg" width="0.65rem"/> Calle 12 # 6 - 03, Guateque</td>
                     <td class="footer" style="text-align:right;"><img src="/build/img/sistema/email.svg" width="0.8rem"/> pymsumerce@hotmail.com</td>
                 </tr>
             </table>
