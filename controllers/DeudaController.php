@@ -562,6 +562,21 @@ class DeudaController{
                 font-size:1rem;
             }
 
+            .tabla{
+                margin: 0 auto;
+                border-collapse: collapse;
+                border-spacing: 0;
+
+            }
+                
+            .tabla-cliente{
+                margin-top:0.5rem;
+                border:1px solid $color_primario;
+                border-radius:1rem;
+                padding:0.01rem 0.01rem 1rem 0.01rem;
+                text-align:center;
+            }
+
             .titulo-h1 {
                 width:100%;
                 text-align:center;
@@ -677,25 +692,6 @@ class DeudaController{
                 color:#fff;
             }
 
-            .tabla{
-                margin: 0 auto;
-                border-collapse: collapse;
-                border-spacing: 0;
-
-                }
-                
-            .tabla-cliente{
-                margin-top:0.5rem;
-                border:1px solid $color_primario;
-                border-radius:1rem;
-                padding:0.01rem 0.01rem 1rem 0.01rem;
-                text-align:center;
-            }
-
-            .tabla-datos > tr:nth-of-type(odd) > td{
-                background-color:$color_primario;   
-            }
-
             .nit{
                 color:$color_primario;
                 font-family:$fuente;
@@ -807,8 +803,8 @@ class DeudaController{
             }
                     
             $html .= "<tr>";
-            $html .= "<td colspan='6' class='titulo_total'>TOTAL</td>";
-            $html .= "<td class='sumatotal'>" . number_format($saldo, 0, ',', '.') . "</td>";
+            $html .= "<td colspan='6' class='titulo_total' style='background-color:$color_primario;'>TOTAL</td>";
+            $html .= "<td class='sumatotal' style='background-color:$color_primario;'>" . number_format($saldo, 0, ',', '.') . "</td>";
             $html .= "</tr>";
             $html .= "</table>";
 
