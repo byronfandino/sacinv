@@ -4,12 +4,27 @@ import { botonResetFormulario, cierreManualModal } from "../global/parametros.js
 
 let clienteGlobal = '';
 document.addEventListener('DOMContentLoaded', async ()=>{
-    
+
     comboBoxCiudades();
     clienteGlobal = await guardarCliente();
     actualizarCliente();
     botonesCerrarModal();
-    
+
+    const toggleButton = document.getElementById("toggleButton");
+    const contenedorCampos = document.getElementById("contenedor__campos");
+
+    if(toggleButton && contenedorCampos){
+        toggleButton.addEventListener("click", () => {
+            console.log(contenedorCampos);
+            if (contenedorCampos.classList.contains("expandido")) {
+                contenedorCampos.classList.remove("expandido");
+                toggleButton.textContent = "Mostrar más";
+            } else {
+                contenedorCampos.classList.add("expandido");
+                toggleButton.textContent = "Mostrar menos";
+            }
+        });
+    }
 });
 
 // Cargar ciudades en el comboBox cada vez que se cambie de departamento

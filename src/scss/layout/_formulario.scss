@@ -4,7 +4,6 @@
 
 .form{
     margin-top: 0.5rem;
-    // padding:0 0.2rem 0 1rem;
     padding: 1rem 0.2rem;
     
     //Resolución tablet
@@ -13,25 +12,60 @@
     }
 }
 
+.fieldset__expansion{
+    position:relative;
+    
+}
+
+
 .contenedor__campos{
+    position: relative;;
     display: flex;
     flex-flow: row wrap;
-    align-items: flex-start;
-    column-gap: 0.7rem;
+    gap: 0.7rem;
+    
+    // Flecha para expansión 
+    .toggleButton{
+        position: absolute;
+        top:-0.5rem;
+        right: 0.5rem;
+        width:1.5rem;
+        height:1.5rem;
+        border-style: solid;
+        border-width:0.8rem;
+        border-color: transparent v.$negro v.$negro transparent;
+        transform: rotate(45deg);
+    }
 
-    // Cuando el botòn se encuentra en el mismo contenedor, por ejemplo el boton buscar, este genera un desplazamiento hacia abajo
-    & > button{
+    & > button {
         margin-top: auto;
+    }
+    
+    &.campos__cliente{
+        // Altura inicial (cuando está colapsado)
+        
+        overflow: hidden;
+        max-height: 6rem;
+        transition: max-height 0.3s linear;
+        
+        /* Expansión cuando se añade la clase 'expandido' */
+        &.expandido {
+            max-height: 60rem;
+        }
+    
+        //Resolución tablet
+        @include m.tablet{
+            max-height: none;
+            height: auto;
+        }
     }
 }
 
 .form__campo{
-    // display: inline-block;
     display: flex;
     flex-flow: row wrap;
     margin-bottom: 1rem;
     line-height: 0;
-    // border: 1px solid red;
 
     &.t-xs{
         width: 10rem;
@@ -62,8 +96,6 @@
         }
     }
 
-    
-    
     &.t-xxl{
        
         width: 100%;

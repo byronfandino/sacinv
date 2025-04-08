@@ -24,31 +24,36 @@
     </div>
 
     <form class="form" method="post" action="" id="form_cliente">
-        <fieldset>
+        <fieldset class="fieldset__expansion">
 
             <legend>Datos del cliente</legend>
 
+            
             <input type="hidden" name="id_cliente">
+            
+            <div class="contenedor__campos campos__cliente" id="contenedor__campos">
 
-            <div class="contenedor__campos">
-                <div class="form__campo t-sm">
-                    <label for="cedula_nit">Cédula / Nit</label>
-                    <input type="text" name="cedula_nit" id="cedula_nit" class="campo__input" require autofocus>
-                    <p class="label__error ocultar"></p>
-                </div>
-    
+            <!-- botón toggle -->
+                <div class="toggleButton" id="toggleButton"></div>
+
                 <div class="form__campo t-xl">
                     <label for="nombre">Nombre del Cliente</label>
-                    <input type="text" name="nombre" id="nombre" class="campo__input" require>
+                    <input type="text" name="nombre" id="nombre" class="campo__input" require autofocus>
                     <p class="label__error ocultar"></p>
-                </div>              
-    
+                </div>   
+
+                <div class="form__campo t-sm">
+                    <label for="cedula_nit">Cédula / Nit</label>
+                    <input type="text" name="cedula_nit" id="cedula_nit" class="campo__input" require>
+                    <p class="label__error ocultar"></p>
+                </div>
+
                 <div class="form__campo t-sm">
                     <label for="telefono">Teléfono</label>
                     <input type="number" name="telefono" id="telefono" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
-    
+
                 <div class="form__campo t-md">
                     <label for="direccion">Dirección</label>
                     <input type="text" name="direccion" id="direccion" class="campo__input" require>
@@ -91,7 +96,7 @@
         </fieldset>
       
     </form>
-
+    <button type="button" id="toggleButton">Mostrar</button>
     <h2 id="registrosCliente">Registros encontrados</h2>
 
     <div class="contenedor-tabla">
