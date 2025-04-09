@@ -18,6 +18,16 @@
     flex-flow: row wrap;
     gap: 0.7rem;
     
+    // Altura inicial (cuando está colapsado)
+    overflow: hidden;
+    transition: height 0.3s linear;
+
+    //Resolución tablet
+    @include m.tablet{
+        max-height: none;
+        height: auto;
+    }
+
     // Flecha para expansión 
     .toggleButton{
         cursor: pointer;
@@ -45,25 +55,7 @@
     & > button {
         margin-top: auto;
     }
-    
-    &.campos__cliente{
-        // Altura inicial (cuando está colapsado)
-        
-        overflow: hidden;
-        max-height: 6rem;
-        transition: max-height 0.3s linear;
-        
-        /* Expansión cuando se añade la clase 'expandido' */
-        &.expandido {
-            max-height: 60rem;
-        }
-    
-        //Resolución tablet
-        @include m.tablet{
-            max-height: none;
-            height: auto;
-        }
-    }
+
 }
 
 .form__campo{

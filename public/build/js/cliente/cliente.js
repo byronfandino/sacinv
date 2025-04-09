@@ -3,6 +3,7 @@ import { Cliente } from "../global/class/cliente.js";
 import { botonResetFormulario, cierreManualModal, expandirContenedor } from "../global/parametros.js";
 
 let clienteGlobal = '';
+
 document.addEventListener('DOMContentLoaded', async ()=>{
 
     comboBoxCiudades();
@@ -10,7 +11,9 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     actualizarCliente();
     botonCerrarModal();
     //Botón toogle cliente
-    expandirContenedor('toggleButtonCliente', 'contenedor__campos__cliente');
+    expandirContenedor('toggleButton', 'contenedor__campos');
+
+
 });
 
 function botonCerrarModal(){

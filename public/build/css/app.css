@@ -556,6 +556,14 @@ p {
   display: flex;
   flex-flow: row wrap;
   gap: 0.7rem;
+  overflow: hidden;
+  transition: height 0.3s linear;
+}
+@media (min-width: 600px) {
+  .contenedor__campos {
+    max-height: none;
+    height: auto;
+  }
 }
 .contenedor__campos .toggleButton {
   cursor: pointer;
@@ -580,21 +588,6 @@ p {
 }
 .contenedor__campos > button {
   margin-top: auto;
-}
-.contenedor__campos.campos__cliente {
-  overflow: hidden;
-  max-height: 6rem;
-  transition: max-height 0.3s linear;
-  /* Expansión cuando se añade la clase 'expandido' */
-}
-.contenedor__campos.campos__cliente.expandido {
-  max-height: 60rem;
-}
-@media (min-width: 600px) {
-  .contenedor__campos.campos__cliente {
-    max-height: none;
-    height: auto;
-  }
 }
 
 .form__campo {

@@ -1,5 +1,5 @@
 import { Deuda } from "../global/class/deuda.js";
-import { botonResetFormulario, cierreManualModal, mostrarModal } from "../global/parametros.js";
+import { botonResetFormulario, cierreManualModal, mostrarModal, expandirContenedor } from "../global/parametros.js";
 
 let deudorGLobal = '';
 
@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     guardarDeudor();
     actualizarDeudor();
     cajasTexto();
+
+    expandirContenedor('toggleButton', 'contenedor__campos');
 });
 
 function cajasTexto(){

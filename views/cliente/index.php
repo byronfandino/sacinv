@@ -31,10 +31,10 @@
             
             <input type="hidden" name="id_cliente">
             
-            <div class="contenedor__campos campos__cliente" id="contenedor__campos__cliente">
+            <div class="contenedor__campos" id="contenedor__campos">
 
             <!-- botón toggle -->
-                <a class="toggleButton" id="toggleButtonCliente">&#9660;</a>
+                <a class="toggleButton" id="toggleButton">&#9660;</a>
 
                 <div class="form__campo t-xl">
                     <label for="nombre">Nombre del Cliente</label>

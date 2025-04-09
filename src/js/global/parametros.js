@@ -194,18 +194,40 @@ export function mostrarErrorJSON(url, formulario){
 }
 
 export function expandirContenedor(idBoton, idContenedor){
-    const toggleButton = document.getElementById(`${idBoton}`);
-    const contenedor = document.getElementById(`${idContenedor}`);
 
-    if(toggleButton && contenedor){
-        toggleButton.addEventListener("click", () => {
-            if (contenedor.classList.contains("expandido")) {
-                contenedor.classList.remove("expandido");
-                toggleButton.classList.remove('cerrar');
-            } else {
-                contenedor.classList.add("expandido");
-                toggleButton.classList.add('cerrar');
-            }
-        });
-    }
+    let isExpanded = false;
+    const container = document.getElementById(`${idContenedor}`);
+    const button = document.getElementById(`${idBoton}`);
+
+    container.style.height = container.querySelector('.form__campo').offsetHeight + 10 + 'px';
+
+    button.addEventListener('click', () => {
+        const fullHeight = container.scrollHeight; // Altura completa con todos los campos
+
+        if (!isExpanded) {
+            container.style.height = fullHeight + 'px';
+            button.classList.add('cerrar');
+        } else {
+            const inputHeight = container.querySelector('input').offsetHeight + 20;
+            container.style.height = inputHeight + 'px';
+            button.classList.remove('cerrar');
+        }
+
+        isExpanded = !isExpanded;
+    });
+
+    // const toggleButton = document.getElementById(`${idBoton}`);
+    // const contenedor = document.getElementById(`${idContenedor}`);
+
+    // if(toggleButton && contenedor){
+    //     toggleButton.addEventListener("click", () => {
+    //         if (contenedor.classList.contains("expandido")) {
+    //             contenedor.classList.remove("expandido");
+    //             toggleButton.classList.remove('cerrar');
+    //         } else {
+    //             contenedor.classList.add("expandido");
+    //             toggleButton.classList.add('cerrar');
+    //         }
+    //     });
+    // }
 }

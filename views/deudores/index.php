@@ -52,10 +52,10 @@
 
             <legend>Datos del cliente</legend>
 
-            <div class="contenedor__campos campos__cliente--deudor" id="contenedor__campos__cliente--deudor">
+            <div class="contenedor__campos" id="contenedor__campos">
 
                 <!-- botón toggle -->
-                <a class="toggleButton" id="toggleButtonCliente">&#9660;</a>
+                <a class="toggleButton" id="toggleButton">&#9660;</a>
 
                 <a href="#" class="boton boton--primario" id="buscar_cliente">Buscar</a>
                 <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
