@@ -31,10 +31,10 @@
             
             <input type="hidden" name="id_cliente">
             
-            <div class="contenedor__campos campos__cliente" id="contenedor__campos">
+            <div class="contenedor__campos campos__cliente" id="contenedor__campos__cliente">
 
             <!-- botón toggle -->
-                <div class="toggleButton" id="toggleButton"></div>
+                <a class="toggleButton" id="toggleButtonCliente">&#9660;</a>
 
                 <div class="form__campo t-xl">
                     <label for="nombre">Nombre del Cliente</label>
@@ -96,7 +96,6 @@
         </fieldset>
       
     </form>
-    <button type="button" id="toggleButton">Mostrar</button>
     <h2 id="registrosCliente">Registros encontrados</h2>
 
     <div class="contenedor-tabla">

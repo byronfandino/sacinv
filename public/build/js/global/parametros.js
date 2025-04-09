@@ -123,8 +123,7 @@ export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
     const botonReset = document.querySelector(`#${nombreBoton}`);
     botonReset.addEventListener('click', e =>{
         e.preventDefault();
-        
-        console.log(idformulario);
+
         if (idformulario != ""){
 
             const formulario = document.querySelector(`#${idformulario}`);
@@ -162,7 +161,6 @@ export function botonResetFormulario(nombreBoton, objeto, idformulario = ""){
     })
 }
 
-
 export function formatearMiles(numero) {
     return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
@@ -193,4 +191,21 @@ export function mostrarErrorJSON(url, formulario){
             }
         })
         .catch(error => console.error("Error en Fetch:", error));
+}
+
+export function expandirContenedor(idBoton, idContenedor){
+    const toggleButton = document.getElementById(`${idBoton}`);
+    const contenedor = document.getElementById(`${idContenedor}`);
+
+    if(toggleButton && contenedor){
+        toggleButton.addEventListener("click", () => {
+            if (contenedor.classList.contains("expandido")) {
+                contenedor.classList.remove("expandido");
+                toggleButton.classList.remove('cerrar');
+            } else {
+                contenedor.classList.add("expandido");
+                toggleButton.classList.add('cerrar');
+            }
+        });
+    }
 }

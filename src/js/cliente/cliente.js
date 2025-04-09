@@ -1,6 +1,6 @@
 import { Ciudad } from "../global/class/ciudad.js";
 import { Cliente } from "../global/class/cliente.js";
-import { botonResetFormulario, cierreManualModal } from "../global/parametros.js";
+import { botonResetFormulario, cierreManualModal, expandirContenedor } from "../global/parametros.js";
 
 let clienteGlobal = '';
 document.addEventListener('DOMContentLoaded', async ()=>{
@@ -8,24 +8,17 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     comboBoxCiudades();
     clienteGlobal = await guardarCliente();
     actualizarCliente();
-    botonesCerrarModal();
-
-    const toggleButton = document.getElementById("toggleButton");
-    const contenedorCampos = document.getElementById("contenedor__campos");
-
-    if(toggleButton && contenedorCampos){
-        toggleButton.addEventListener("click", () => {
-            console.log(contenedorCampos);
-            if (contenedorCampos.classList.contains("expandido")) {
-                contenedorCampos.classList.remove("expandido");
-                toggleButton.textContent = "Mostrar más";
-            } else {
-                contenedorCampos.classList.add("expandido");
-                toggleButton.textContent = "Mostrar menos";
-            }
-        });
-    }
+    botonCerrarModal();
+    //Botón toogle cliente
+    expandirContenedor('toggleButtonCliente', 'contenedor__campos__cliente');
 });
+
+function botonCerrarModal(){
+    // Botón Cerrar Modal
+    // Hay varias ventanas modal, y por lo tanto es necesario programar cada botón
+    const btnCerraModal = document.querySelector('.cerrar__modal');
+    btnCerraModal.addEventListener('click', e => cierreManualModal(e));
+}
 
 // Cargar ciudades en el comboBox cada vez que se cambie de departamento
 function comboBoxCiudades(){
@@ -143,10 +136,4 @@ function actualizarCliente(){
     const cliente = new Cliente(objetoCliente);
     cliente.asignarValidacionCampos();
     cliente.formularioActualizar('form_cliente_actualizar', clienteGlobal);
-}
-
-function botonesCerrarModal(){
-    // Hay varias ventanas modal, y por lo tanto es necesario programar cada botón
-    const btnCerraModal = document.querySelector('.cerrar__modal');
-    btnCerraModal.addEventListener('click', e => cierreManualModal(e));
 }

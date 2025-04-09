@@ -26,15 +26,25 @@
     
     // Flecha para expansión 
     .toggleButton{
+        display: inline-block;
         position: absolute;
         top:-0.5rem;
         right: 0.5rem;
-        width:1.5rem;
-        height:1.5rem;
-        border-style: solid;
-        border-width:0.8rem;
-        border-color: transparent v.$negro v.$negro transparent;
-        transform: rotate(45deg);
+        color:v.$azul;
+        font-weight: bold;
+        font-size: 2rem;
+        transform: rotate(0deg);
+        transition: transform 0.3s linear;
+        transform-origin: center;
+        
+        &.cerrar{
+            transform: rotate(180deg);
+        }
+
+        //Resolución tablet
+        @include m.tablet{
+            display: none;
+        }
     }
 
     & > button {

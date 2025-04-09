@@ -562,15 +562,24 @@ p {
   gap: 0.7rem;
 }
 .contenedor__campos .toggleButton {
+  display: inline-block;
   position: absolute;
   top: -0.5rem;
   right: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-style: solid;
-  border-width: 0.8rem;
-  border-color: transparent #000000 #000000 transparent;
-  transform: rotate(45deg);
+  color: #3353A3;
+  font-weight: bold;
+  font-size: 2rem;
+  transform: rotate(0deg);
+  transition: transform 0.3s linear;
+  transform-origin: center;
+}
+.contenedor__campos .toggleButton.cerrar {
+  transform: rotate(180deg);
+}
+@media (min-width: 600px) {
+  .contenedor__campos .toggleButton {
+    display: none;
+  }
 }
 .contenedor__campos > button {
   margin-top: auto;
