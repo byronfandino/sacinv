@@ -12,12 +12,6 @@
     }
 }
 
-.fieldset__expansion{
-    position:relative;
-    
-}
-
-
 .contenedor__campos{
     position: relative;;
     display: flex;
@@ -26,6 +20,7 @@
     
     // Flecha para expansión 
     .toggleButton{
+        cursor: pointer;
         display: inline-block;
         position: absolute;
         top:-0.5rem;

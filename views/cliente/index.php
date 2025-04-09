@@ -24,7 +24,7 @@
     </div>
 
     <form class="form" method="post" action="" id="form_cliente">
-        <fieldset class="fieldset__expansion">
+        <fieldset>
 
             <legend>Datos del cliente</legend>
 

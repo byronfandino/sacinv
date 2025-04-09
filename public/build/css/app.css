@@ -551,10 +551,6 @@ p {
   }
 }
 
-.fieldset__expansion {
-  position: relative;
-}
-
 .contenedor__campos {
   position: relative;
   display: flex;
@@ -562,6 +558,7 @@ p {
   gap: 0.7rem;
 }
 .contenedor__campos .toggleButton {
+  cursor: pointer;
   display: inline-block;
   position: absolute;
   top: -0.5rem;
