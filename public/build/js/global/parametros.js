@@ -193,13 +193,13 @@ export function mostrarErrorJSON(url, formulario){
         .catch(error => console.error("Error en Fetch:", error));
 }
 
-export function expandirContenedor(idBoton, idContenedor){
+export function expandirContenedor(idBoton, idContenedor, espacioInicial, espacioFinal){
 
     let isExpanded = false;
     const container = document.getElementById(`${idContenedor}`);
     const button = document.getElementById(`${idBoton}`);
 
-    container.style.height = container.querySelector('.form__campo').offsetHeight + 10 + 'px';
+    container.style.height = container.querySelector('.form__campo').offsetHeight + espacioInicial + 'px';
 
     button.addEventListener('click', () => {
         const fullHeight = container.scrollHeight; // Altura completa con todos los campos
@@ -208,7 +208,7 @@ export function expandirContenedor(idBoton, idContenedor){
             container.style.height = fullHeight + 'px';
             button.classList.add('cerrar');
         } else {
-            const inputHeight = container.querySelector('input').offsetHeight + 20;
+            const inputHeight = container.querySelector('input').offsetHeight + espacioFinal;
             container.style.height = inputHeight + 'px';
             button.classList.remove('cerrar');
         }

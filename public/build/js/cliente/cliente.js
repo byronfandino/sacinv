@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     actualizarCliente();
     botonCerrarModal();
     //Botón toogle cliente
-    expandirContenedor('toggleButton', 'contenedor__campos');
+    expandirContenedor('toggleButton', 'contenedor__campos', 10, 20);
 
 
 });

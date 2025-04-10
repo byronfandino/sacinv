@@ -61,13 +61,13 @@
                 <input type="hidden" id="fk_cliente_deudor" name="fk_cliente">
                 <p class="label__error ocultar"></p> 
 
-                <div class="form__campo t-sm">
-                    <label for="cedula_nit_deudor">Cédula / Nit</label>
-                    <input type="text" id="cedula_nit_deudor" class="campo__input disabled" readonly>
-                </div>
                 <div class="form__campo t-xl">
                     <label for="nombre_deudor">Nombre del Cliente</label>
                     <input type="text" id="nombre_deudor" class="campo__input disabled" readonly>
+                </div>
+                <div class="form__campo t-sm">
+                    <label for="cedula_nit_deudor">Cédula / Nit</label>
+                    <input type="text" id="cedula_nit_deudor" class="campo__input disabled" readonly>
                 </div>
                 <div class="form__campo t-sm">
                     <label for="telefono_deudor">Teléfono</label>

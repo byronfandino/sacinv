@@ -10,16 +10,20 @@
 
             <legend>Filtra o Agrega un Cliente</legend>
 
-            <div class="contenedor__campos">
-                <div class="form__campo t-sm">
-                    <label for="cedula_nit_agregar">Cédula / Nit</label>
-                    <input type="text" name="cedula_nit" id="cedula_nit_agregar" class="campo__input" require autofocus>
-                    <p class="label__error ocultar"></p>
-                </div>
-    
+            <div class="contenedor__campos" id="contenedor__campos--cliente">
+                
+                <!-- botón toggle -->
+                <a class="toggleButton" id="toggle__button--cliente">&#9660;</a>
+                
                 <div class="form__campo t-md">
                     <label for="nombre_agregar">Nombre del Cliente</label>
-                    <input type="text" name="nombre" id="nombre_agregar" class="campo__input" require>
+                    <input type="text" name="nombre" id="nombre_agregar" class="campo__input" require autofocus>
+                    <p class="label__error ocultar"></p>
+                </div>
+
+                <div class="form__campo t-sm">
+                    <label for="cedula_nit_agregar">Cédula / Nit</label>
+                    <input type="text" name="cedula_nit" id="cedula_nit_agregar" class="campo__input" require >
                     <p class="label__error ocultar"></p>
                 </div>
                 

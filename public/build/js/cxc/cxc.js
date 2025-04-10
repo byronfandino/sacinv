@@ -9,8 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     guardarDeudor();
     actualizarDeudor();
     cajasTexto();
+    
+    //Contenedor para el formulario Deudores
+    expandirContenedor('toggleButton', 'contenedor__campos', 60, 110);
 
-    expandirContenedor('toggleButton', 'contenedor__campos');
+    //Contenedor para el formulario Modal Seleccionar Cliente
+    expandirContenedor('toggle__button--cliente', 'contenedor__campos--cliente', 60, 40);
 });
 
 function cajasTexto(){
@@ -33,9 +37,7 @@ function cajasTexto(){
         }else{
             inputDescrip.value = ""
         }
-
         inputValorUnit.focus();
-
     });
 
     inputCant.addEventListener('input', e => {
