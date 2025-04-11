@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //Contenedor para el formulario Modal Seleccionar Cliente
     expandirContenedor('toggle__button--cliente', 'contenedor__campos--cliente', 60, 40);
+    
+    //Contenedor para la tabla de registros del deudor
+    expandirContenedor('toggle__button--tabla--deudor', 'contenedor__tabla--deudores', 60, 40);
 });
 
 function cajasTexto(){
@@ -34,9 +37,8 @@ function cajasTexto(){
         }else if (e.target.value == "R"){
             inputDescrip.value = "Devuelve"
             inputDescrip.dispatchEvent(evento);
-        }else{
-            inputDescrip.value = ""
         }
+
         inputValorUnit.focus();
     });
 

@@ -2,38 +2,53 @@
 @use '../base/mixins' as m;
 @use 'sass:color' as c;
 
-.contenedor_grid_titulos{
+.contenedor_grid_titulos {
     max-width: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
     text-align: center;
     
     & > h2 {
-        grid-row: 2;
-    }
-    
-    & > h3{
         grid-row: 1;
     }
     
-    //Resolución tablet
-    @include m.tablet{
+    & > h3 {
+        grid-row: 2;
+    }
+    
+    & > .boton {
+        grid-row: 3;
+        justify-self: center; /* Centra el botón horizontalmente */
+        margin-top: 1rem; /* Espacio entre el h3 y el botón */
+        width: fit-content; /* Ajusta el ancho al contenido */
+    }
+    
+    // Resolución tablet
+    @include m.tablet {
         margin: 0 auto;
         max-width: 95%;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: auto;
+        align-items: center; /* Centra verticalmente todos los elementos */
 
         & > h2 {
             text-align: left;
-            grid-column: 1; /* Se coloca en la primera columna */
-            grid-row: 1; /* Se asegura que esté en la primera fila */
+            grid-column: 1;
+            grid-row: 1;
+            justify-self: start; /* Alinea a la izquierda */
         }
 
         & > h3 {
-            text-align: right;
-            grid-column: 2; /* Se coloca en la segunda columna */
-            grid-row: 1; /* Se asegura que esté en la primera fila */
+            text-align: center;
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        & > .boton {
+            grid-column: 3;
+            grid-row: 1;
+            justify-self: right; /* Centra el botón en su columna */
+            margin-top: 0; /* Elimina el margen superior en tablet */
         }
     }
 }

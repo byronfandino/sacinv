@@ -100,8 +100,8 @@
                 <div class="form__campo t-md">
                     <label for="tipo_mov">Tipo de movimiento</label>
                     <select name="tipo_mov" id="tipo_mov" class="campo__input">
-                        <option value="" selected disabled>-Seleccione una opción-</option>
-                        <option value="D">Debe</option>
+                        <option value="" disabled>-Seleccione una opción-</option>
+                        <option value="D" selected>Debe</option>
                         <option value="A">Abona</option>
                         <option value="R">Devolución</option>
                     </select>
@@ -143,6 +143,7 @@
     <div class="contenedor_grid_titulos">
         <h2 class="" id="registrosDeuda">Registros encontrados</h2>
         <h3 class="saldo" id="saldo">Saldo $0</h3>
+        <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
     </div>
 
     <div class="contenedor-tabla">
@@ -165,7 +166,6 @@
             </tbody>
         </table>
         <div class="contenedor__botones">
-            <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
         </div>
     </div>
 </main>
