@@ -1016,7 +1016,7 @@ a.boton {
   .contenedor_grid_titulos > .boton {
     grid-column: 3;
     grid-row: 1;
-    justify-self: right; /* Centra el botón en su columna */
+    justify-self: end; /* Centra el botón en su columna */
     margin-top: 0; /* Elimina el margen superior en tablet */
   }
 }

@@ -17,6 +17,8 @@
     }
     
     & > .boton {
+        display: inline-block;
+        padding: 0.5rem;
         grid-row: 3;
         justify-self: center; /* Centra el botón horizontalmente */
         margin-top: 1rem; /* Espacio entre el h3 y el botón */
@@ -47,7 +49,7 @@
         & > .boton {
             grid-column: 3;
             grid-row: 1;
-            justify-self: right; /* Centra el botón en su columna */
+            justify-self: end; /* Centra el botón en su columna */
             margin-top: 0; /* Elimina el margen superior en tablet */
         }
     }

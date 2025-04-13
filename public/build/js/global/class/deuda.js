@@ -14,7 +14,7 @@ export class Deuda extends ModeloBase{
             
             // Prevenir el comportamiento por defecto del formulario
             e.preventDefault();
-           
+            
             const campoCliente = document.querySelector('#fk_cliente_deudor');
             const msgError = campoCliente.nextElementSibling;
             
@@ -44,6 +44,13 @@ export class Deuda extends ModeloBase{
                         nombreCamposFormulario.push('valor_total');
 
                         limpiarFormulario(nombreCamposFormulario);
+
+                        //Asignar valores predeterminados a los campos
+                        const selecTipoMov = document.querySelector('#tipo_mov');
+                        selecTipoMov.value = "D";
+
+                        const selecTipoMovActualizar = document.querySelector('#tipo_mov_actualizar');
+                        selecTipoMovActualizar.value = "D";
 
                         const inputCant = document.querySelector('#cant');
                         inputCant.value = 1;

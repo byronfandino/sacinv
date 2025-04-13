@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     //Contenedor para el formulario Modal Seleccionar Cliente
     expandirContenedor('toggle__button--cliente', 'contenedor__campos--cliente', 60, 40);
     
-    //Contenedor para la tabla de registros del deudor
-    expandirContenedor('toggle__button--tabla--deudor', 'contenedor__tabla--deudores', 60, 40);
 });
 
 function cajasTexto(){
@@ -28,15 +26,15 @@ function cajasTexto(){
     const inputValorTotal = document.querySelector('#valor_total');
     const selectMov = document.querySelector('#tipo_mov');
     const inputDescrip = document.querySelector('#descripcion');
-    const evento = new Event ('input');
+    const eventInput = new Event ('input');
 
     selectMov.addEventListener('change', e => {
         if (e.target.value == "A"){
             inputDescrip.value = "Abono"
-            inputDescrip.dispatchEvent(evento);
+            inputDescrip.dispatchEvent(eventInput);
         }else if (e.target.value == "R"){
             inputDescrip.value = "Devuelve"
-            inputDescrip.dispatchEvent(evento);
+            inputDescrip.dispatchEvent(eventInput);
         }
 
         inputValorUnit.focus();
@@ -64,8 +62,6 @@ function cajasTexto(){
             inputDescrip_actualizar.value = "Abono"
         }else if (e.target.value == "R"){
             inputDescrip_actualizar.value = "Devuelve"
-        }else{
-            inputDescrip_actualizar.value = ""
         }
         inputValorUnit_actualizar.focus();
     });
@@ -170,7 +166,7 @@ function guardarDeudor(){
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
             {descripcion: '^[a-zA-Z0-9#.\-áéíóúüÁÉÍÓÚñÑ -]{2,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: false},
-            {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
+            // {tipo_mov: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: false},
             {cant: '^[0-9]{1,3}$', message: 'Debe digitar un valor numérico', estado: true},
             {valor_unit: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: false}
         ],
@@ -204,7 +200,7 @@ function actualizarDeudor(){
         validacionCampos : [
             //id del campo : 'expresión regular', mensaje de error: 'XXXXX', estado(Cumple con la expresion regular : true | false)
             {descripcion_actualizar: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ /-]{3,500}$', message: 'Este campo es obligatorio y puede digitar caracteres mayúsculas, minusculas, números y caracteres como (- . #)', estado: true},
-            {tipo_mov_actualizar: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: true},
+            // {tipo_mov_actualizar: '^[ADR]{1}$', message: 'Debe seleccionar un tipo de movimiento', estado: true},
             {cant_actualizar: '^[0-9]{1,3}$', message: 'Debe digitar un valor numérico', estado: true},
             {valor_unit_actualizar: '^[0-9]{2,10}$', message: 'Debe digitar un valor numérico', estado: true}
         ],
