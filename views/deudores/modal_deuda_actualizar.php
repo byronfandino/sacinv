@@ -3,7 +3,7 @@
     <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
     <h1>Cuentas por cobrar</h1>
 </header>
-    
+
 <form class="form" id="form_deuda_actualizar">
 
     <fieldset>
