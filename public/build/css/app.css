@@ -763,6 +763,16 @@ a.boton {
   margin: 0 auto;
   border-spacing: 0;
 }
+@media (min-width: 600px) {
+  .tabla.width--50 {
+    width: 50%;
+  }
+}
+@media (min-width: 1024px) {
+  .tabla.width--30 {
+    width: 30%;
+  }
+}
 
 .thead {
   display: none;
@@ -989,6 +999,8 @@ a.boton {
   grid-row: 2;
 }
 .contenedor_grid_titulos > .boton {
+  display: inline-block;
+  padding: 0.5rem;
   grid-row: 3;
   justify-self: center; /* Centra el botón horizontalmente */
   margin-top: 1rem; /* Espacio entre el h3 y el botón */

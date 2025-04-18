@@ -32,7 +32,7 @@ async function guardarTabla(){
             apiConsultar: '/tabla/api'
         },
         
-        idVentanaModal: 'modal_cliente_actualizar',
+        idVentanaModal: 'modal_tabla_actualizar',
 
         //Id del texto donde se muestra la totalidad de los registros
         idTotalRegistros : 'registrosTabla',

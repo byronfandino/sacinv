@@ -16,6 +16,21 @@
     width: 100%;
     margin: 0 auto;
     border-spacing: 0;
+
+    //Resolución tablet
+    @include m.tablet {
+
+        &.width--50{
+            width: 50%;
+        }    
+    }
+
+    //Resolución desktop
+    @include m.desktop {
+        &.width--30{
+            width: 30%;
+        }
+    }
 }
 
 .thead{

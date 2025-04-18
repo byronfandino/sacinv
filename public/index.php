@@ -8,6 +8,7 @@ use Controllers\ClienteAPIController;
 use Controllers\ClienteController;
 use Controllers\DeudaController;
 use Controllers\MovDeudaClienteAPIController;
+use Controllers\TablaAPIController;
 use Controllers\TablaController;
 
 $router = new Router();
@@ -33,6 +34,10 @@ $router->post('/cliente/eliminar', [ClienteController::class, 'eliminar']);
 
 //Tabla
 $router->get('/tabla', [TablaController::class, 'inicio']);
+$router->get('/tabla/api', [TablaAPIController::class, 'listartablas']);
+$router->post('/tabla/guardar', [TablaController::class, 'guardar']);
+$router->post('/tabla/actualizar', [TablaController::class, 'actualizar']);
+$router->post('/tabla/eliminar', [TablaController::class, 'eliminar']);
 
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

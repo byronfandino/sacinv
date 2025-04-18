@@ -27,16 +27,16 @@ class TablaController{
     public static function guardar(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            $cliente = new Tabla($_POST);
-            $alertas = $cliente->validar();
+            $tabla = new Tabla($_POST);
+            $alertas = $tabla->validar();
 
             if (empty($alertas)){
 
-                $cliente_exist = self::existeClienteCedula($cliente->cedula_nit); 
+                $tabla_exist = self::existeTabla($tabla->nombre_tb); 
 
-                if (is_null($cliente_exist)){
+                if (is_null($tabla_exist)){
 
-                    $resultado = $cliente->crear();
+                    $resultado = $tabla->crear();
                     
                     if($resultado === true){
                         echo json_encode([
@@ -68,61 +68,61 @@ class TablaController{
         
     }
 
-    // public static function actualizar(){
-    //     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    public static function actualizar(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    //         $cliente = new Cliente($_POST);
+            $tabla = new Tabla($_POST);
             
-    //         $alertas = $cliente->validar();
+            $alertas = $tabla->validar();
             
-    //         if (empty($alertas)){
+            if (empty($alertas)){
                 
-    //             $resultado = $cliente->actualizar();
+                $resultado = $tabla->actualizar();
 
-    //             if($resultado === true){
-    //                 echo json_encode([
-    //                     "rta" => "true", 
-    //                     "message" => "Actualización exitosa"
-    //                 ]);
-    //             }else{
-    //                 echo json_encode([
-    //                     "rta" => "false", 
-    //                     "message" => "Error de validación en la base de datos"
-    //                 ]);
-    //             }
-    //         }else{
+                if($resultado === true){
+                    echo json_encode([
+                        "rta" => "true", 
+                        "message" => "Actualización exitosa"
+                    ]);
+                }else{
+                    echo json_encode([
+                        "rta" => "false", 
+                        "message" => "Error de validación en la base de datos"
+                    ]);
+                }
+            }else{
                 
-    //             echo json_encode([
-    //                 "rta" => "false",
-    //                 "message" => "No cumple con la validación de campos", 
-    //                 "alertas" => $alertas
-    //             ]);
-    //         }
-    //     }
-    // }
+                echo json_encode([
+                    "rta" => "false",
+                    "message" => "No cumple con la validación de campos", 
+                    "alertas" => $alertas
+                ]);
+            }
+        }
+    }
 
-    // public static function eliminar(){
+    public static function eliminar(){
 
-    //     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    //         $id = $_POST['id'];
-    //         $cliente = Cliente::find($id);
-    //         $resultado = $cliente->eliminar($id);
+            $id = $_POST['id'];
+            $tabla = Tabla::find($id);
+            $resultado = $tabla->eliminar($id);
 
-    //         if($resultado === true){
-    //             echo json_encode([
-    //                 "rta" => "true", 
-    //                 "message" => "Registro eliminado"
-    //             ]);
-    //         }else{
-    //             echo json_encode([
-    //                 "rta" => "false", 
-    //                 "message" => "El registro No se eliminó, posiblemente este registro se encuentre relacionado con otra entidad",
-    //                 "error" => $resultado
-    //             ]);
-    //         }
-    //     }
-    // }
+            if($resultado === true){
+                echo json_encode([
+                    "rta" => "true", 
+                    "message" => "Registro eliminado"
+                ]);
+            }else{
+                echo json_encode([
+                    "rta" => "false", 
+                    "message" => "El registro No se eliminó, posiblemente este registro se encuentre relacionado con otra entidad",
+                    "error" => $resultado
+                ]);
+            }
+        }
+    }
 }
 
 ?>

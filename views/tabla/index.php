@@ -50,7 +50,7 @@
     <h2 id="registrosTabla">Registros encontrados</h2>
 
     <div class="contenedor-tabla">
-        <table class="tabla" id="tabla">
+        <table class="tabla width--30 width--50" id="tabla">
             <thead class="thead">
                 <tr>
                     <th>Nombre de Tabla</th>
