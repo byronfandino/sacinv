@@ -1,6 +1,7 @@
 <?php
 
-namespace Model;
+namespace Model\API;
+use Model\ActiveRecord;
 
 class ClienteAPI extends ActiveRecord{
     protected static $tabla='cliente';

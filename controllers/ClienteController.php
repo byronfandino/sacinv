@@ -3,7 +3,7 @@
 namespace Controllers;
 use MVC\Router;
 use Model\Cliente;
-use Model\Departamento;
+use Model\API\Departamento;
 
 require_once '../includes/parameters.php';
 header("Access-Control-Allow-Origin: " . $urlJSON); 

@@ -3,10 +3,9 @@
 namespace Controllers;
 
 use Mpdf\Mpdf;
-use Model\Cliente;
-use Model\ClienteAPI;
 use MVC\Router;
-use Model\Departamento;
+use Model\API\ClienteAPI;
+use Model\API\Departamento;
 use Model\Deuda;
 use Model\DeudaMovimiento;
 use Model\DeudoresReporte;

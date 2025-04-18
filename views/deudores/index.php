@@ -1,6 +1,6 @@
 <header class="header__menu">
     <div class="titulo">
-        <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
+        <img src="/build/img/sistema/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
         <h1>Deudores</h1>
     </div>
     <a id="icono__menu" class="icono__menu" href="#"><img src="/build/img/sistema/menu.svg" width="30px" height="32px" alt="Icono Menú"/></a>

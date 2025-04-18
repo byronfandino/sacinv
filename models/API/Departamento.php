@@ -1,6 +1,7 @@
 <?php
 
-namespace Model;
+namespace Model\API;
+use Model\ActiveRecord;
 
 class Departamento extends ActiveRecord{
     protected static $tabla = 'departamento';
@@ -9,6 +10,7 @@ class Departamento extends ActiveRecord{
     Public $id_depart; 
     Public $cod_depart; 
     Public $nombre_depart;
+    
 }
 
 ?>

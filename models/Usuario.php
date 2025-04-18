@@ -81,30 +81,30 @@ class Usuario extends ActiveRecord{
         return self::$alertas;
     }
 
-    public function existeUsuario(){
+    // public function existeUsuario(){
         
-        $query1 = "SELECT * FROM " . self::$tabla ." WHERE Us_NickName = '" . $this->Us_NickName . "'  LIMIT 1";
-        $query2 = "SELECT * FROM " . self::$tabla ." WHERE Us_Email = '" . $this->Us_Email . "' LIMIT 1";
+    //     $query1 = "SELECT * FROM " . self::$tabla ." WHERE Us_NickName = '" . $this->Us_NickName . "'  LIMIT 1";
+    //     $query2 = "SELECT * FROM " . self::$tabla ." WHERE Us_Email = '" . $this->Us_Email . "' LIMIT 1";
         
-        $resultado1 = self::$db->query($query1);
-        $resultado2 = self::$db->query($query2);
+    //     $resultado1 = self::$db->query($query1);
+    //     $resultado2 = self::$db->query($query2);
         
-        //Si ya existe el Nickname se agrega el error
-        if($resultado1->num_rows){
-            self::$alertas['error-reg']['nickname'][] = "Este NickName ya está registrado";
-            return $resultado1;
-        }
+    //     //Si ya existe el Nickname se agrega el error
+    //     if($resultado1->num_rows){
+    //         self::$alertas['error-reg']['nickname'][] = "Este NickName ya está registrado";
+    //         return $resultado1;
+    //     }
         
-        //Si ya existe el Email se agrega el error
-        if($resultado2->num_rows){
-            self::$alertas['error-reg']['email'][] = "Este Email ya está registrado";
-            return $resultado2;
-        }
+    //     //Si ya existe el Email se agrega el error
+    //     if($resultado2->num_rows){
+    //         self::$alertas['error-reg']['email'][] = "Este Email ya está registrado";
+    //         return $resultado2;
+    //     }
 
-        //también podemos retornar $resulado1, de todas formas en caso de llegar hasta esta línea quiere decir que pasó las dos anteriores validaciones
-        return $resultado2;
+    //     //también podemos retornar $resulado1, de todas formas en caso de llegar hasta esta línea quiere decir que pasó las dos anteriores validaciones
+    //     return $resultado2;
         
-    }
+    // }
 
     public function hashPassword(){
         $this->Us_Password = password_hash($this->Us_Password, PASSWORD_BCRYPT);
