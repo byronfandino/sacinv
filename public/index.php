@@ -7,11 +7,26 @@ use Controllers\APIController;
 use Controllers\ClienteController;
 use Controllers\DeudaController;
 use Controllers\TablaController;
+use Controllers\UsuarioController;
 
 $router = new Router();
 
 //API Ciudad
 $router->get('/ciudad/api', [APIController::class, 'listarCiudades']);
+
+//Tabla
+$router->get('/tabla', [TablaController::class, 'inicio']);
+$router->get('/tabla/api', [APIController::class, 'listartablas']);
+$router->post('/tabla/guardar', [TablaController::class, 'guardar']);
+$router->post('/tabla/actualizar', [TablaController::class, 'actualizar']);
+$router->post('/tabla/eliminar', [TablaController::class, 'eliminar']);
+
+//Usuario
+$router->get('/usuario', [UsuarioController::class, 'inicio']);
+$router->get('/usuario/api', [APIController::class, 'listarUsuarios']);
+$router->post('/usuario/guardar', [UsuarioController::class, 'guardar']);
+$router->post('/usuario/actualizar', [UsuarioController::class, 'actualizar']);
+$router->post('/usuario/eliminar', [UsuarioController::class, 'eliminar']);
 
 // Cliente
 $router->get('/cliente', [ClienteController::class, 'inicio']);
@@ -30,12 +45,6 @@ $router->get('/deuda/reporte_general', [DeudaController::class, 'reporteCSV']);
 $router->get('/deuda/reporte_deudores', [DeudaController::class, 'reporteDeudores']);
 $router->get('/deuda/reporte_movimientos_deudor', [DeudaController::class, 'reporteMovimientosDeudor']);
 
-//Tabla
-$router->get('/tabla', [TablaController::class, 'inicio']);
-$router->get('/tabla/api', [APIController::class, 'listartablas']);
-$router->post('/tabla/guardar', [TablaController::class, 'guardar']);
-$router->post('/tabla/actualizar', [TablaController::class, 'actualizar']);
-$router->post('/tabla/eliminar', [TablaController::class, 'eliminar']);
 
 //Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();
