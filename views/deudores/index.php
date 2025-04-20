@@ -141,9 +141,11 @@
     </form>
 
     <div class="contenedor_grid_titulos">
-        <h2 class="" id="registrosDeuda">Registros encontrados</h2>
+        <h2 id="registrosDeuda">Registros encontrados</h2>
         <h3 class="saldo" id="saldo">Saldo $0</h3>
-        <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
+        <div class="contenedor__botones">
+            <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
+        </div>
     </div>
 
     <div class="contenedor-tabla">
