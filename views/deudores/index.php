@@ -142,7 +142,7 @@
 
     <div class="contenedor_grid_titulos">
         <h2 id="registrosDeuda">Registros encontrados</h2>
-        <h3 class="saldo" id="saldo">Saldo $0</h3>
+        <p class="saldo" id="saldo">Saldo $0</p>
         <div class="contenedor__botones">
             <a class="boton boton--primario" id="reporte_deuda_cliente" href="#">Descargar</a>
         </div>

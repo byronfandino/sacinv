@@ -1033,7 +1033,9 @@ a.boton {
   }
 }
 
-h3.saldo {
+p.saldo {
+  margin: 0;
+  padding: 0;
   font-weight: bold;
   color: #e60a0a;
 }
