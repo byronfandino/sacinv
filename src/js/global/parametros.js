@@ -195,6 +195,8 @@ export function mostrarErrorJSON(url, formulario){
 
 export function expandirContenedor(idBoton, idContenedor, espacioInicial, espacioFinal){
 
+    if (!window.matchMedia('(max-width: 599px)').matches) return;
+
     let isExpanded = false;
     const container = document.getElementById(`${idContenedor}`);
     const button = document.getElementById(`${idBoton}`);
@@ -215,19 +217,4 @@ export function expandirContenedor(idBoton, idContenedor, espacioInicial, espaci
 
         isExpanded = !isExpanded;
     });
-
-    // const toggleButton = document.getElementById(`${idBoton}`);
-    // const contenedor = document.getElementById(`${idContenedor}`);
-
-    // if(toggleButton && contenedor){
-    //     toggleButton.addEventListener("click", () => {
-    //         if (contenedor.classList.contains("expandido")) {
-    //             contenedor.classList.remove("expandido");
-    //             toggleButton.classList.remove('cerrar');
-    //         } else {
-    //             contenedor.classList.add("expandido");
-    //             toggleButton.classList.add('cerrar');
-    //         }
-    //     });
-    // }
 }

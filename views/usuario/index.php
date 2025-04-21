@@ -49,25 +49,25 @@
                 </div>
 
                 <div class="form__campo t-sm">
-                    <label for="nickname">Nickname</label>
-                    <input type="text" name="nickname" id="nickname" class="campo__input" require>
+                    <label for="nickname_us">Nickname</label>
+                    <input type="text" name="nickname_us" id="nickname_us" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
 
-                <div class="form__campo t-sm">
+                <div class="form__campo t-xl">
                     <label for="password_us">Contraseña</label>
                     <input type="password" name="password_us" id="password_us" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
 
-                <div class="form__campo t-sm">
-                    <label for="password_conf">Confirmación de Contraseña</label>
+                <div class="form__campo t-xl">
+                    <label for="password_conf">Confirme Contraseña</label>
                     <input type="password" id="password_conf" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
 
                 <div class="form__campo t-sm">
-                    <label for="celular_us">Teléfono</label>
+                    <label for="celular_us">Celular</label>
                     <input type="tel" name="celular_us" id="celular_us" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
@@ -125,10 +125,10 @@
         </fieldset>
       
     </form>
-    <h2 id="registrosCliente">Registros encontrados</h2>
+    <h2 id="registros_usuario">Registros encontrados</h2>
 
     <div class="contenedor-tabla">
-        <table class="tabla" id="tabla_cliente">
+        <table class="tabla" id="tabla_usuario">
             <thead class="thead">
                 <tr>
                     <th>Cédula</th>
