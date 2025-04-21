@@ -33,7 +33,7 @@ export function javascript( done ) {
 
 export function imagenes(done) { 
     src('src/img/**/*') 
-        .pipe(imagemin()) // Opcional: optimizar imágenes 
+        // .pipe(imagemin()) // Opcional: optimizar imágenes 
         .pipe(dest('public/build/img')); 
     done(); 
 }
