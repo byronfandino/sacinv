@@ -1,6 +1,6 @@
 <header class="header__simple">
     <img src="/build/img/sistema/tabla.svg" alt="Icono de cuentas por cobrar" width="33px" height="30px">
-    <h1>Editar o Eliminar Tabla</h1>
+    <h1>Tabla</h1>
 </header>
 
 <main class="main">
