@@ -708,12 +708,14 @@ class DeudaController{
         // Agregar los estilos al PDF
         $mpdf->WriteHTML("<style>" . $stylesheet . "</style>", \Mpdf\HTMLParserMode::HEADER_CSS);   
         
+        // "/build/img/sistema/cxc.svg"
+        // "/build/img/sistema/logo.png"
         $fechaActual = date("Y-m-d");
         // Definir el encabezado
         $mpdf->SetHTMLHeader('
             <table class="tabla" width="100%">
                 <tr>
-                    <td><img class="logo" src="/build/img/sistema/logo.png" width="90" /></td>
+                    <td><img class="logo" src="/build/img/sistema/logo.jpg" width="90" /></td>
                     <td style="text-align:center;">
                         <h1 class="titulo-h1">&nbsp;Papelería y Miscelánea Sumercé</h1>
                         <p class="nit">Nit 23622049-3</p>

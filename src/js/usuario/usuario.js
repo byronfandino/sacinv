@@ -52,14 +52,14 @@ async function guardarUsuario(){
         idTotalRegistros : 'registros_usuario',
 
         //Propiedades locales de la clase usuario para cargar las ciudades en ventana Modal desde una tabla
-        idComboDepartModal : 'cod_depart_modal',
-        idComboCiudadModal : 'fk_ciudad_modal',
+        idComboDepartModal : 'nombre_depart_modal',
+        idComboCiudadModal : 'fk_ciudad_us_modal',
         
         // Son los campos que deben ir en la tabla al momento de consultar el servidor
         tabla : {
             idTabla: 'tabla_usuario',
             estructura : [
-                {cedula_nit: 'Cédula / Nit', posicion: 1, class:[]},
+                {cedula_us: 'Cédula / Nit', posicion: 1, class:[]},
                 {nombre: 'Nombre del Cliente', posicion: 2, class:[]},
                 {telefono: 'Celular', posicion:3, class: []},
                 {direccion: 'Dirección', posicion:4, class: []},
@@ -100,7 +100,7 @@ async function guardarUsuario(){
         filtroBusqueda: true
     }
 
-    const cliente = new Cliente(objetoUsuario);
+    const cliente = new Usuario(objetoUsuario);
     cliente.asignarValidacionCampos();
     cliente.formularioAgregar('form_cliente'); //id del formulario
     botonResetFormulario('reset_cliente', cliente, 'form_cliente'); //id_boton_reset, objeto para listar los registros

@@ -28,7 +28,6 @@
 
             <legend>Datos del Usuario</legend>
 
-            
             <input type="hidden" name="id_us">
             
             <div class="contenedor__campos" id="contenedor__campos">

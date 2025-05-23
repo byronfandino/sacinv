@@ -1,6 +1,6 @@
 
 <header class="header__simple">
-    <img src="/build/img/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
+    <img src="/build/img/sistema/cxc.svg" alt="Icono de cuentas por cobrar" width="30px" height="30px">
     <h1>Cuentas por cobrar</h1>
 </header>
 
