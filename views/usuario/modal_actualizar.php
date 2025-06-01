@@ -10,7 +10,7 @@
 
             <legend>Datos del usuario</legend>
 
-            <input type="hidden" name="id_us">
+            <input type="hidden" name="id_us_modal">
             
             <div class="contenedor__campos" id="contenedor__campos">
 
