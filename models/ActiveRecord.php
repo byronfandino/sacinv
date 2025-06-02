@@ -136,8 +136,6 @@ class ActiveRecord {
         $query .= join(", :", array_keys($array_datos));
         $query .= ") ";
 
-        // Nueva linea
-        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         // Preparar declaración sql
         $resultado = self::$pdo->prepare($query);
 
@@ -167,8 +165,6 @@ class ActiveRecord {
     // Actualizar el registro
     public function actualizar() {
 
-        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
         //Obtenemos el nombre del primer campo del arreglo de columnas
         $campoId = static::$columnasDB[0];
         
@@ -210,8 +206,6 @@ class ActiveRecord {
 
     // Eliminar un Registro por su ID
     public function eliminar($id) {
-
-        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $query = "DELETE FROM "  . static::$tabla . " WHERE " . static::$columnasDB[0] . " = :" . static::$columnasDB[0];
         $stmt = static::$pdo->prepare($query);
