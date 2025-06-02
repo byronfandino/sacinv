@@ -6,6 +6,7 @@ let usuarioGlobal = '';
 
 document.addEventListener('DOMContentLoaded', async ()=>{
 
+
     comboBoxCiudades();
     usuarioGlobal = await guardarUsuario();
     actualizarUsuario();
@@ -89,14 +90,16 @@ async function guardarUsuario(){
         
         //Se verifica que los campos diligenciados cumplan con estos registros
         validacionCampos : [
-            {cedula_us: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
-            {nombre_us: '^[A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
-            {nickname_us: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
-            {celular_us: '^[0-9]{10}$', message: 'Se permite 10 números', estado: false},
-            {direccion_us: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
-            {email_us: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: false},
-            {nombre_depart: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
-            {fk_ciudad: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
+            {cedula_us: /^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$/, message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
+            {nombre_us: /^[A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/, message: 'Solo acepta números y/o letras', estado: false},
+            {nickname_us: /^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/, message: 'Solo acepta números y/o letras', estado: false},
+            {password_us: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#-]{6,}$/, message: 'Solo acepta letras y números es opcional el uso de simbolos como @ # -', estado: false},
+            {password_conf: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#-]{6,}$/, message: 'Solo acepta letras, números y simbolos como @ # -', estado: false},
+            {celular_us: /^[0-9]{10}$/, message: 'Se permite 10 números', estado: false},
+            {direccion_us: /^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$/, message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
+            {email_us: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'No cumple con los requisitos de un correo electrónico', estado: false},
+            {nombre_depart: /^[0-9]{2}$/, message: 'Debe seleccionar un departamento', estado: false},
+            {fk_ciudad_us: /^[0-9]{1,5}$/, message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ],
 
         //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
@@ -127,14 +130,16 @@ function actualizarUsuario(){
         },
 
         validacionCampos : [
-            {cedula_us_modal: '^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$', message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
-            {nombre_us_modal: '^[A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
-            {nickname_us_modal: '^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$', message: 'Solo acepta números y/o letras', estado: false},
-            {celular_us_modal: '^[0-9]{10}$', message: 'Se permite 10 números', estado: false},
-            {direccion_us_modal: '^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$', message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
-            {email_us_modal: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', message: 'No cumple con los requisitos de un correo electrónico', estado: false},
-            {nombre_depart_modal: '^[0-9]{2}$', message: 'Debe seleccionar un departamento', estado: false},
-            {fk_ciudad_modal: '^[0-9]{1,5}$', message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
+            {cedula_us_modal: /^(?!.*--)[0-9]{4,15}$|^(?!.*--)[0-9-]{4,15}$/, message: 'Caracteres aceptados: números (0-9) y un solo guión', estado: false},
+            {nombre_us_modal: /^[A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/, message: 'Solo acepta números y/o letras', estado: false},
+            {nickname_us_modal: /^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/, message: 'Solo acepta números y/o letras', estado: false},
+            {password_us_modal: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#-]{6,}$/, message: 'Solo acepta letras y números es opcional el uso de simbolos como @ # -', estado: false},
+            {password_conf_modal: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@#-]{6,}$/, message: 'Solo acepta letras, números y simbolos como @ # -', estado: false},
+            {celular_us_modal: /^[0-9]{10}$/, message: 'Se permite 10 números', estado: false},
+            {direccion_us_modal: /^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$/, message: 'Se permiten letras, números, espacios y símbolos como: # -', estado: false},
+            {email_us_modal: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'No cumple con los requisitos de un correo electrónico', estado: false},
+            {nombre_depart_modal: /^[0-9]{2}$/, message: 'Debe seleccionar un departamento', estado: false},
+            {fk_ciudad_us_modal: /^[0-9]{1,5}$/, message: 'Debe seleccionar una ciudad después de seleccionar el departamento', estado: false}
         ],
         //Filtra los resultados en la tabla de acuerdo a los valores que digite el usuario en los campos
         filtroBusqueda: false

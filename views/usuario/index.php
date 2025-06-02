@@ -55,7 +55,7 @@
 
                 <div class="form__campo t-xl">
                     <label for="password_us">Contraseña</label>
-                    <input type="password" name="password_us" id="password_us" class="campo__input" require>
+                    <input type="text" name="password_us" id="password_us" class="campo__input" require>
                     <p class="label__error ocultar"></p>
                 </div>
 

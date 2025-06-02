@@ -32,10 +32,10 @@ class Usuario extends ActiveRecord{
         $this->celular_us = $args['celular_us'] ?? null;
         $this->email_us = $args['email_us'] ?? null;
         $this->direccion_us = $args['direccion_us'] ?? null;
-        $this->token_us = $args['token_us'] ?? null;
+        $this->token_us = $args['token_us'] ?? 'N';
         $this->fk_ciudad_us = $args['fk_ciudad_us'] ?? null;
         $this->confirmado_us = $args['confirmado_us'] ?? 'N';
-        $this->status_us = 1; $args['status_us'] ?? 'E';
+        $this->status_us = $args['status_us'] ?? 'E';
         
     }
 
@@ -56,7 +56,7 @@ class Usuario extends ActiveRecord{
         return self::$alertas;
     }
 
-    public function validarNuevoUsuario(){
+    public function validarCamposUsuario(){
         
         if(!$this->cedula_us){
             self::$alertas['error']['cedula_us'][] = "El campo Cédula es obligatorio";
@@ -116,7 +116,7 @@ class Usuario extends ActiveRecord{
 
         if(!$this->direccion_us){
             self::$alertas['error']['direccion_us'][] = "El campo Dirección es obligatorio";
-        }else if(!preg_match('/^[0-9A-ZÑa-züñáéíóúÁÉÍÓÚÜ ]{2,100}$/', $this->direccion_us)){
+        }else if(!preg_match('/^[a-zA-Z0-9#.\-áéíóúÁÉÍÓÚñÑ -]{5,100}$/', $this->direccion_us)){
             self::$alertas['error']['direccion_us'][] = "Solo acepta números y/o letras. No se permiten caracteres especiales";
         }else{  
             $this->direccion_us = trim($this->direccion_us);
@@ -130,15 +130,31 @@ class Usuario extends ActiveRecord{
             $this->fk_ciudad_us = trim($this->fk_ciudad_us);
         }
 
-        if(!$this->status_us){
-            self::$alertas['error']['status_us'][] = "El campo Status es obligatorio";
-        }else if(!preg_match('/^[A_Z]{1}$/', $this->status_us)){
-            self::$alertas['error']['status_us'][] = "El campo Status no es válido";
-        }else{  
-            $this->status_us = trim($this->status_us);
-        }
+        // if(!$this->status_us){
+        //     self::$alertas['error']['status_us'][] = "El campo Status es obligatorio";
+        // }else if(!preg_match('/^[A_Z]{1}$/', $this->status_us)){
+        //     self::$alertas['error']['status_us'][] = "El campo Status no es válido";
+        // }else{  
+        //     $this->status_us = trim($this->status_us);
+        // }
 
         return self::$alertas;
+    }
+
+    public function existeCedula ($cedula_us){
+        $query = "SELECT * FROM usuario_sistema WHERE cedula_us ='" . $cedula_us . "'";
+        $result = Usuario::SQL($query);
+        return isset($result[0]) ? true : false;
+    }
+    public function existeNickname ($nickname_us){
+        $query = "SELECT * FROM usuario_sistema WHERE nickname_us ='" . $nickname_us . "'";
+        $result = Usuario::SQL($query);
+        return isset($result[0]) ? true : false; 
+    }
+    public function existeEmail ($email_us){
+        $query = "SELECT * FROM usuario_sistema WHERE email ='" . $email_us . "'";
+        $result = Usuario::SQL($query);
+        return isset($result[0]) ? true : false; 
     }
 
     public function validarEmail(){

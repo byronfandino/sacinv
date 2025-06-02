@@ -10,12 +10,6 @@ use MVC\Router;
 
 class UsuarioController{
 
-    public static function existeCedula ($cedula_us){
-        $query = "SELECT * FROM usuario_sistema WHERE cedula_us ='" . $cedula_us . "'";
-        $result = Usuario::SQL($query);
-        return isset($result[0]) ? $result[0] : null; //Retorna un arreglo y por lo tanto se indica la primera posición para que retorne el objeto
-    }
-
     public static function inicio(Router $router){
         // session_start();
         // if(!isset($_SESSION['nombre'])){
@@ -39,13 +33,23 @@ class UsuarioController{
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $usuario = new Usuario($_POST);
-            $alertas = $usuario->validar();
+            $alertas = $usuario->validarCamposUsuario();
+
+            // echo json_encode([
+            //     "rta" => "false", 
+            //     "message" => "Guadado exitosamente",
+            //     "error" => $usuario
+            // ]);
 
             if (empty($alertas)){
 
-                $usuario_exist = self::existeCedula($usuario->cedula_us); 
+                $usuario_existCedula = $usuario->existeCedula($usuario->cedula_us); 
+                $usuario_existNickname = $usuario->existeNickname($usuario->nickname_us);
+                $usuario_existEmail = $usuario->existeEmail($usuario->email_us);
 
-                if (is_null($usuario_exist)){
+                $usuario_exist = $usuario_existCedula || $usuario_existNickname || $usuario_existEmail;
+                
+                if (!$usuario_exist){
 
                     $resultado = $usuario->crear();
                     
@@ -57,21 +61,23 @@ class UsuarioController{
                     }else{
                         echo json_encode([
                             "rta" => "false", 
-                            "message" => "Error de validación en la base de datos"
+                            "message" => "Error de validación en la base de datos",
+                            "error" => $resultado
                         ]);
                     }
                 }else{
                     echo json_encode([
                         "rta" => "false", 
-                        "message" => "El cliente ya existe en la base de datos"
+                        "message" => "El cliente ya existe en la base de datos",
+                        "error" => [$usuario_existCedula, $usuario_existNickname, $usuario_existEmail]
                     ]);
                 }
             }else{
-                
                 echo json_encode([
                     "rta" => "false",
                     "message" => "No cumple con la validación de campos", 
-                    "alertas" => $alertas
+                    "alertas" => $alertas,
+                    "error" => $alertas
                 ]);
             }
 

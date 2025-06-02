@@ -19,6 +19,8 @@ try {
 
     // Crear una nueva instancia de PDO
     $pdo = new PDO($dsn, $user, $password, $options);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
 } catch (PDOException $e) {
     // Manejar cualquier error de conexión
     // echo "Error en la conexión: " . $e->getMessage();

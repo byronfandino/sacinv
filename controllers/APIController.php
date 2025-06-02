@@ -16,18 +16,7 @@ class APIController{
 
     public static function listarUsuarios(){
         
-        $sql="
-            SELECT us.id_us, us.cedula, us.nombre_us, us.nickname_us, us.password_us, us.tipo_us, us.celular_us, us.email_us, us.direccion_us, us.token_us, us.confirmado_us, us.status_us, us.fk_ciudad_us, 
-                cd.nombre_ciudad, cd.codigo_depart, dp.nombre_depart
-            FROM 
-                usuario_sistema as us
-            INNER JOIN 
-                ciudad as cd ON us.fk_ciudad_us = cd.id_ciudad
-            INNER JOIN 
-                departamento as dp ON cd.codigo_depart = dp.cod_depart
-            ORDER BY 
-                us.nombre_us;
-        ";
+        $sql="SELECT us.id_us, us.cedula_us, us.nombre_us, us.nickname_us, us.password_us, us.tipo_us, us.celular_us, us.email_us, us.direccion_us, us.status_us, us.fk_ciudad_us, cd.nombre_ciudad, cd.codigo_depart, dp.nombre_depart FROM usuario_sistema as us INNER JOIN ciudad as cd ON us.fk_ciudad_us = cd.id_ciudad INNER JOIN departamento as dp ON cd.codigo_depart = dp.cod_depart ORDER BY us.nombre_us";
 
         $resultado = UsuarioAPI::SQL($sql);
         echo json_encode($resultado);
