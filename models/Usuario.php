@@ -32,8 +32,8 @@ class Usuario extends ActiveRecord{
         $this->celular_us = $args['celular_us'] ?? null;
         $this->email_us = $args['email_us'] ?? null;
         $this->direccion_us = $args['direccion_us'] ?? null;
-        $this->token_us = $args['token_us'] ?? 'N';
         $this->fk_ciudad_us = $args['fk_ciudad_us'] ?? null;
+        $this->token_us = $args['token_us'] ?? 'N';
         $this->confirmado_us = $args['confirmado_us'] ?? 'N';
         $this->status_us = $args['status_us'] ?? 'E';
         
@@ -142,19 +142,33 @@ class Usuario extends ActiveRecord{
     }
 
     public function existeCedula ($cedula_us){
-        $query = "SELECT * FROM usuario_sistema WHERE cedula_us ='" . $cedula_us . "'";
-        $result = Usuario::SQL($query);
-        return isset($result[0]) ? true : false;
+        try {
+            $query = "SELECT * FROM usuario_sistema WHERE cedula_us ='" . $cedula_us . "'";
+            $result = Usuario::SQL($query);
+            return isset($result[0]) ? true : false;
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
-    public function existeNickname ($nickname_us){
-        $query = "SELECT * FROM usuario_sistema WHERE nickname_us ='" . $nickname_us . "'";
-        $result = Usuario::SQL($query);
-        return isset($result[0]) ? true : false; 
+
+    public function existeNickname($nickname_us) {
+        try {
+            $query = "SELECT * FROM usuario_sistema WHERE nickname_us ='" . $nickname_us . "'";
+            $result = Usuario::SQL($query);
+            return isset($result[0]) ? true : false;
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
-    public function existeEmail ($email_us){
-        $query = "SELECT * FROM usuario_sistema WHERE email ='" . $email_us . "'";
-        $result = Usuario::SQL($query);
-        return isset($result[0]) ? true : false; 
+
+    public function existeEmail($email_us) {
+        try {
+            $query = "SELECT * FROM usuario_sistema WHERE email_us ='" . $email_us . "'";
+            $result = Usuario::SQL($query);
+            return isset($result[0]) ? true : false;
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
     public function validarEmail(){

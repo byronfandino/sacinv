@@ -35,17 +35,26 @@ class UsuarioController{
             $usuario = new Usuario($_POST);
             $alertas = $usuario->validarCamposUsuario();
 
-            // echo json_encode([
-            //     "rta" => "false", 
-            //     "message" => "Guadado exitosamente",
-            //     "error" => $usuario
-            // ]);
-
+            // Validar campos
             if (empty($alertas)){
 
                 $usuario_existCedula = $usuario->existeCedula($usuario->cedula_us); 
                 $usuario_existNickname = $usuario->existeNickname($usuario->nickname_us);
                 $usuario_existEmail = $usuario->existeEmail($usuario->email_us);
+
+                // Verifica si alguno es un error (string)
+                if (is_string($usuario_existCedula) || is_string($usuario_existNickname) || is_string($usuario_existEmail)) {
+                    echo json_encode([
+                        "rta" => "false",
+                        "message" => "Error en la base de datos",
+                        "error" => [
+                            "cedula" => $usuario_existCedula,
+                            "nickname" => $usuario_existNickname,
+                            "email" => $usuario_existEmail
+                        ]
+                    ]);
+                    return;
+                }
 
                 $usuario_exist = $usuario_existCedula || $usuario_existNickname || $usuario_existEmail;
                 
@@ -68,16 +77,14 @@ class UsuarioController{
                 }else{
                     echo json_encode([
                         "rta" => "false", 
-                        "message" => "El cliente ya existe en la base de datos",
-                        "error" => [$usuario_existCedula, $usuario_existNickname, $usuario_existEmail]
+                        "message" => "La cédula, el nickname o el email ya existe en la base de datos"
                     ]);
                 }
             }else{
                 echo json_encode([
                     "rta" => "false",
                     "message" => "No cumple con la validación de campos", 
-                    "alertas" => $alertas,
-                    "error" => $alertas
+                    "alertas" => $alertas
                 ]);
             }
 
