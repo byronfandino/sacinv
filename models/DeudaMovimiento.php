@@ -82,21 +82,21 @@
                 $this->valor_total = (int) trim($this->valor_total);
             }
             
-            if(!$this->fecha){
-                self::$alertas['error']['fecha'][] = "El campo fecha es obligatorio";
-            }else if(!preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/', $this->fecha)){
-                self::$alertas['error']['fecha'][] = "Debe seleccionar una fecha válida";
-            }else{
-                $this->fecha = trim($this->fecha);
-            }
+            // if(!$this->fecha){
+            //     self::$alertas['error']['fecha'][] = "El campo fecha es obligatorio";
+            // }else if(!preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/', $this->fecha)){
+            //     self::$alertas['error']['fecha'][] = "Debe seleccionar una fecha válida";
+            // }else{
+            //     $this->fecha = trim($this->fecha);
+            // }
 
-            if(!$this->hora){
-                self::$alertas['error']['hora'][] = "El campo hora es obligatorio";
-            }else if(!preg_match('/^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/', $this->hora)){
-                self::$alertas['error']['hora'][] = "Debe seleccionar una hora válida";
-            }else{
-                $this->hora = trim($this->hora);
-            }
+            // if(!$this->hora){
+            //     self::$alertas['error']['hora'][] = "El campo hora es obligatorio";
+            // }else if(!preg_match('/^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/', $this->hora)){
+            //     self::$alertas['error']['hora'][] = "Debe seleccionar una hora válida";
+            // }else{
+            //     $this->hora = trim($this->hora);
+            // }
 
             return self::$alertas;
 

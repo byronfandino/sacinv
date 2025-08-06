@@ -13,16 +13,20 @@ use Model\DeudoresReporte;
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('memory_limit', '512M');
+date_default_timezone_set("America/Bogota"); // Configurar la zona horaria de Colombia
 
 require_once '../includes/parameters.php';
 header("Access-Control-Allow-Origin: " . $urlJSON); 
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT"); 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
 date_default_timezone_set("America/Bogota"); // Configurar la zona horaria de Colombia
 
 class DeudaController{
     
+    public static function info(Router $router){
+                $router->renderIndex('info', []);
+    }
+
     public static function inicio(Router $router){
         
         $departamentos = Departamento::all('nombre_depart');
@@ -116,6 +120,7 @@ class DeudaController{
                         $fk_deuda = $deuda->getIdDeuda();
 
                         //Se agrega un NUEVO REGISTRO de deuda_movimiento
+                        date_default_timezone_set("America/Bogota"); // Configurar la zona horaria de Colombia
                         $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
                         $hora_actual = date("H:i"); // Obtiene la hora actual 
 
@@ -132,18 +137,19 @@ class DeudaController{
                             "hora" => $hora_actual,
                         ];
 
+                        
                         $deudaMovimiento = new DeudaMovimiento($newObjectMov);
                         $resultado = $deudaMovimiento->crear();
-
+                        
                         if($resultado == true){
-
+                            
                             //Agregamos la llave foránea al POST
                             $_POST['fk_deuda'] = $fk_deuda;
                             $_POST['saldo'] = (int) $_POST['valor_total'];
-
+                            
                             $deudaMovimiento = new DeudaMovimiento($_POST);
                             $alertas = $deudaMovimiento->validar();
-
+                            
                             if(empty($alertas)){
 
                                 $resultado = $deudaMovimiento->crear();
@@ -219,6 +225,14 @@ class DeudaController{
 
                     if ($_POST['tipo_mov'] == "D"){
 
+                        //Se agrega un NUEVO REGISTRO de deuda_movimiento
+                        date_default_timezone_set("America/Bogota"); // Configurar la zona horaria de Colombia
+                        $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
+                        $hora_actual = date("H:i"); // Obtiene la hora actual 
+
+                        $_POST['fecha'] = $fecha_actual;
+                        $_POST['hora'] = $hora_actual;
+
                         //Se crea un nuevo regitro en la tabla deuda
                         $deuda = new Deuda($_POST);
                         $resultado = $deuda->crear();
@@ -231,11 +245,6 @@ class DeudaController{
                             /** @var Deuda $clienteInDeuda */
                             $fk_deuda = $clienteInDeuda->getIdDeuda();
                             
-                            //Se agrega un NUEVO REGISTRO de deuda_movimiento
-    
-                            $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
-                            $hora_actual = date("H:i"); // Obtiene la hora actual 
-    
                             /*Se ingresa un registro en blanco a la tabla Movimiento de la Deuda*/
                             // Creamos un objeto arreglo asociativo nuevo 
                             $newObjectMov = [
@@ -249,23 +258,22 @@ class DeudaController{
                                 "fecha" => $fecha_actual,
                                 "hora" => $hora_actual,
                             ];
-    
+                            
                             $deudaMovimiento = new DeudaMovimiento($newObjectMov);
                             $resultado = $deudaMovimiento->crear();
-    
+                            
                             if($resultado == true){
-    
+                                
                                 //Agregamos la llave foránea al POST
                                 $_POST['fk_deuda'] = $fk_deuda;
                                 $_POST['saldo'] = (int) $_POST['valor_total'];
-    
                                 $deudaMovimiento = new DeudaMovimiento($_POST);
                                 $alertas = $deudaMovimiento->validar();
-    
+                                
                                 if(empty($alertas)){
-                                    
+                                       
                                     $resultado = $deudaMovimiento->crear();
-    
+                                    
                                     if ($resultado === true ){
                                         echo json_encode([
                                             "rta" => "true",
@@ -310,7 +318,8 @@ class DeudaController{
                     }
 
                 }else{
-                    
+                    $fecha_actual = date("Y-m-d"); // Obtiene la fecha actual 
+
                     //Se guarda el movimiento 
                     //Actualizamos el arreglo POST
                     $_POST['fk_deuda'] = $fk_deuda;
@@ -321,13 +330,15 @@ class DeudaController{
                     }else{
                         $_POST['saldo']= (int) $lastSaldo - (int) $_POST['valor_total'];
                     }
-    
+                    
+                    $_POST['fecha']=$fecha_actual;
+                    
                     //Se crea el objeto
                     $deuda_mov = new DeudaMovimiento($_POST);
                     $alertas = $deuda_mov->validar();
     
                     if(empty($alertas)){
-                        
+
                         $resultado = $deuda_mov->crear();
     
                         if($resultado === true){
@@ -811,8 +822,6 @@ class DeudaController{
 
         }
       
-        // $html .= "<h6 style='margin:0;font-size:1rem;'>Fecha Impresión: " . $fechaActual . "</h6>";
-        
         // Definir el pie de página
         $mpdf->SetHTMLFooter('
             <hr>

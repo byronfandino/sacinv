@@ -11,6 +11,10 @@ use Controllers\UsuarioController;
 
 $router = new Router();
 
+//Info PHP
+$router->get('/info', [DeudaController::class, 'info']);
+
+
 //API Ciudad
 $router->get('/ciudad/api', [APIController::class, 'listarCiudades']);
 
