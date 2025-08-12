@@ -6,7 +6,9 @@ use Model\Cliente;
 use Model\API\Departamento;
 
 require_once '../includes/parameters.php';
-header("Access-Control-Allow-Origin: " . $urlJSON); 
+foreach ($urlJSON as $url_single){
+    header('Access-Control-Allow-Origin: ' . $url_single ); 
+}
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT"); 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 

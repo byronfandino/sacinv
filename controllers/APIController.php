@@ -9,7 +9,9 @@ use Model\Tabla;
 
 require_once '../includes/parameters.php';
 
-header('Access-Control-Allow-Origin: ' . $urlJSON ); 
+foreach ($urlJSON as $url_single){
+    header('Access-Control-Allow-Origin: ' . $url_single ); 
+}
 header('Content-Type: application/json');
 
 class APIController{

@@ -1,4 +1,5 @@
-export const url = 'http://192.168.18.90'
+// export const url = 'http://192.168.18.90'
+export const url = 'http://localhost'
 export let clienteActualizado = false;
 
 export async function consultarAPI(rutaComplemento) {
