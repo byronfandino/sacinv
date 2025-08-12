@@ -1,5 +1,8 @@
 // export const url = 'http://192.168.18.90'
-export const url = 'http://localhost'
+export let url =  (window.location.hostname === 'http://localhost' || window.location.hostname === 'localhost')
+  ? 'http://localhost'       // Desarrollo local
+  : 'http://192.168.18.90'; // Desde red, usa la IP o nombre real
+  
 export let clienteActualizado = false;
 
 export async function consultarAPI(rutaComplemento) {
