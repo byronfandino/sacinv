@@ -3,7 +3,7 @@
         'name' => 'byron/deudores',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e78384b1d6e839d1efd5ee88ed568b9e9364d81e',
+        'reference' => '6da4c2e67d9a4391468787fa064aea58df12361b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'byron/deudores' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e78384b1d6e839d1efd5ee88ed568b9e9364d81e',
+            'reference' => '6da4c2e67d9a4391468787fa064aea58df12361b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
