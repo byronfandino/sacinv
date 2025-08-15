@@ -1,0 +1,36 @@
+services:
+  apache:
+    build: ./docker/apache-php
+    image: sacinv/apache:8.2
+    container_name: apache_php
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    depends_on:
+      - db
+
+  node:
+    build: ./docker/node
+    image: sacinv/node:18.0
+    container_name: node_dev
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    environment:
+      - LOCAL_UID=${LOCAL_UID}
+      - LOCAL_GID=${LOCAL_GID}
+
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data-postgres:/var/lib/postgresql/data
+      - ./backup_db:/backup_db
+    ports:
+      - "5432:5432"

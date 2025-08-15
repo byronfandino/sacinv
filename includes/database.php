@@ -6,6 +6,12 @@ $user = 'bfandino'; // Tu usuario de la base de datos
 $password = 'Laura0405@'; // Tu contraseña de la base de datos
 $port = '5432'; // Puerto por defecto de PostgreSQL
 
+// Probar conexión rápida a localhost antes de decidir
+if (!@fsockopen($host, $port, $errno, $errstr, 1)) {
+    // Si no se puede conectar a localhost, usar el nombre del contenedor
+    $host = 'postgres_db';
+}
+
 try {
     // Crear la cadena de conexión
     $dsn = "pgsql:host=$host;port=$port;dbname=$db";
