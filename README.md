@@ -23,9 +23,10 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
 
 2. **Ajusta permisos para PostgreSQL y ejecutar el script** 
    > *(solo la primera vez o si cambias de computador)*
-   
-   `sudo chmod +x ./preconfiguracion.sh`
-   `sudo ./mi_script.sh`
+   ```bash
+   sudo chmod +x ./preconfiguracion.sh
+   sudo ./mi_script.sh
+   ```
 
 3. **Colocar el backup de la base de datos**
    - Actualmente ya cuenta un backup con datos de prueba llamado `backup_db.backup` dentro del directorio `backup_db/`.
@@ -36,22 +37,26 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
 ## ▶️ Levantar el proyecto 
 
 1. **Construir e iniciar los contenedores**
-   `docker compose up -d --build`
+   ```bash
+   docker compose up -d --build
+   ```
 
 2. **Verificar que los contenedores estén activos**
-   `docker ps`
+   ```bash
+   docker ps
+   ```
 
-3. **Acceder al sitio web**
-   - Local: [http://localhost](http://localhost)
+3. **Acceder al sitio web local**
+   - [http://localhost](http://localhost)
 
 ---
 
 ## 🗄️ Restaurar la base de datos del directorio `backup_db`
 
 Para restaurar desde el backup se debe usar `pg_restore`, así:
-
-`docker exec -it postgres_db pg_restore -U bfandino -d dbdeudores ./backup_db/backup_db.backup`
-
+```bash
+docker exec -it postgres_db pg_restore -U bfandino -d dbdeudores ./backup_db/backup_db.backup
+```
 ---
 
 ## 📌 Notas
