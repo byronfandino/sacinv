@@ -9,7 +9,6 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
 
 - Docker y Docker Compose instalados.
 - Git instalado.
-- Archivo `.env` configurado con las variables de entorno necesarias, incluido en el proyecto
 
 ---
 
@@ -17,14 +16,15 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
 
 1. **Clonar el repositorio**
    ```bash
-   git clone <URL_DEL_REPOSITORIO>
+   git clone https://github.com/byronfandino/sacinv.git
    cd sacinv
    ```
 
-2. **Ajustar permisos para PostgreSQL** (solo la primera vez o si cambias de máquina)
-   ```bash
-   ./scripts/ajustar_permisos_postgres.sh
-   ```
+2. **Ajusta permisos para PostgreSQL y ejecutar el script** 
+   > *(solo la primera vez o si cambias de computador)*
+   
+   `sudo chmod +x ./preconfiguracion.sh`
+   `sudo ./mi_script.sh`
 
 3. **Colocar el backup de la base de datos**
    - Guardar el archivo `backup_db.backup` dentro del directorio `backup/`.
