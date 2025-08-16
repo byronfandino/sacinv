@@ -1,7 +1,7 @@
 # 📦 PROYECTO SACINV
 
 ## Entorno Docker
-Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2**, **Apache**, **PostgreSQL** y **Node.js** dentro de contenedores Docker.
+Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2**, **Apache**, **PostgreSQL** y **Node.js** usando `docker-compose`.
 
 ---
 
@@ -9,7 +9,8 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
 
 - Docker y Docker Compose instalados.
 - Git instalado.
-
+- No debe estar ocupado el puerto 80 👈🏻
+ 
 ---
 
 ## ⚙️ Preparación inicial
@@ -27,35 +28,29 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
    `sudo ./mi_script.sh`
 
 3. **Colocar el backup de la base de datos**
-   - Guardar el archivo `backup_db.backup` dentro del directorio `backup/`.
+   - Actualmente ya cuenta un backup con datos de prueba llamado `backup_db.backup` dentro del directorio `backup_db/`.
+   - Para importar otra base de datos con la misma estructura de tablas, el archivo debe llamarse `backup_db.backup` y ubicarla dentro del directorio `backup_db/`, ya que este directorio es un bind volume con el contenedor de postgres.
 
 ---
 
-## ▶️ Levantar el proyecto
+## ▶️ Levantar el proyecto 
 
 1. **Construir e iniciar los contenedores**
-   ```bash
-   docker compose up -d --build
-   ```
+   `docker compose up -d --build`
 
 2. **Verificar que los contenedores estén activos**
-   ```bash
-   docker ps
-   ```
+   `docker ps`
 
-3. **Acceder a la aplicación**
+3. **Acceder al sitio web**
    - Local: [http://localhost](http://localhost)
-   - En la LAN: [http://192.168.18.90](http://192.168.18.90)
 
 ---
 
-## 🗄 Restaurar la base de datos
+## 🗄️ Restaurar la base de datos del directorio `backup_db`
 
-Para restaurar desde el backup:
+Para restaurar desde el backup se debe usar `pg_restore`, así:
 
-```bash
-docker exec -it postgres_db pg_restore   -U bfandino   -d dbdeudores   ./backup/backup_db.backup
-```
+`docker exec -it postgres_db pg_restore -U bfandino -d dbdeudores ./backup_db/backup_db.backup`
 
 ---
 
@@ -64,7 +59,7 @@ docker exec -it postgres_db pg_restore   -U bfandino   -d dbdeudores   ./backup/
 - El puerto `80` está configurado para acceso local y en la red LAN.
 - Si modificas permisos en los volúmenes, puedes ejecutar el script de permisos nuevamente.
 - El contenedor de **Node** ejecuta automáticamente `npm install` y `gulp dev` al iniciar.
-- Los archivos estáticos y el `index.php` principal deben estar dentro de la carpeta `public/`.
+- El contenedor de **Apache** ejecuta automáticamente `composer install`.
 
 ---
 
