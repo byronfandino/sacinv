@@ -548,6 +548,7 @@ p {
   position: relative;
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
   gap: 0.7rem;
   overflow: hidden;
   transition: height 0.3s linear;

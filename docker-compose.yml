@@ -1,7 +1,7 @@
 services:
   apache:
     build: ./docker/apache-php
-    image: sacinv/apache:8.2
+    image: sacinv/apache:8.2-slim
     container_name: apache_php
     ports:
       - "80:80"
@@ -13,7 +13,7 @@ services:
 
   node:
     build: ./docker/node
-    image: sacinv/node:18.0
+    image: sacinv/node:18-slim
     container_name: node_dev
     volumes:
       - ./:/var/www
@@ -23,7 +23,7 @@ services:
       - LOCAL_GID=${LOCAL_GID}
 
   db:
-    image: postgres:17
+    image: postgres:17-alpine
     container_name: postgres_db
     environment:
       POSTGRES_USER: ${POSTGRES_USER}

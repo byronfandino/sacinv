@@ -3,4 +3,4 @@ echo "Ejecutando Composer Install..."
 composer install
 
 # Mantener Apache en primer plano
-apache2-foreground
+exec apache2-foreground
