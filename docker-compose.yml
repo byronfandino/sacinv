@@ -19,6 +19,7 @@ services:
       - ./:/var/www
     working_dir: /var/www
     environment:
+      - NODE_ENV=development
       - LOCAL_UID=${LOCAL_UID}
       - LOCAL_GID=${LOCAL_GID}
 

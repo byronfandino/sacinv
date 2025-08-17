@@ -1,50 +1,22 @@
-# #!/bin/bash
-# echo "Ajustando permisos y propietario..."
-
-# # Usar variables o valores por defecto
-# LOCAL_UID=${LOCAL_UID:-1000}
-# LOCAL_GID=${LOCAL_GID:-1000}
-
-# chown -R $LOCAL_UID:$LOCAL_GID /var/www/src
-# chmod -R ug+rwX /var/www/src
-
-# echo "Instalando dependencias NPM..."
-# npm install
-
-# echo "Ejecutando Gulp en modo dev..."
-# npx gulp dev
-
-# # Reajustar permisos después de npm/gulp
-# chown -R $LOCAL_UID:$LOCAL_GID /var/www/src
-# chmod -R ug+rwX /var/www/src
-
-# # Mantener el contenedor vivo
-# tail -f /dev/null
-
 #!/bin/bash
 
-# Detectar si el usuario actual es root
-if [ "$(id -u)" -eq 0 ]; then
-    echo "Ejecutando como root: no es necesario ajustar propietario."
+# Detectar si estamos en Linux o Windows (Docker Desktop)
+if grep -qi microsoft /proc/version; then
+    echo "Se detectò sistema operativo Windows, omitiendo ajustes de permisos..."
 else
-    echo "Ajustando permisos y propietario..."
+    echo "Se detectó sistema operativo linux, ajustando permisos..."
     LOCAL_UID=${LOCAL_UID:-1000}
     LOCAL_GID=${LOCAL_GID:-1000}
     chown -R $LOCAL_UID:$LOCAL_GID /var/www/src
     chmod -R ug+rwX /var/www/src
 fi
 
-echo "Instalando dependencias NPM..."
+echo "Instalando dependencias NPM"
 npm install
 
-echo "Ejecutando Gulp en modo dev..."
+echo "Ejecutando Gulp en modo dev"
 npx gulp dev
 
-# Si NO es root, volver a ajustar permisos después de npm/gulp
-if [ "$(id -u)" -ne 0 ]; then
-    chown -R $LOCAL_UID:$LOCAL_GID /var/www/src
-    chmod -R ug+rwX /var/www/src
-fi
-
-# Mantener el contenedor vivo
+# Mantener contenedor corriendo
+echo "Contenedor en ejecución, manteniendo activo..."
 tail -f /dev/null
