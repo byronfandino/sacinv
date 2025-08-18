@@ -1,0 +1,196 @@
+Quiero empezar a desarrollar un software de inventario de productos de una papelería y miscelánea que funciona en un mismo establecimiento comercial, para eso tengo estos requerimientos: 
+
+1. Necesito crear el modelo entidad relación.
+2. Este modelo E-R debe contener las siguientes tablas con sus respectivos campos:
+
+   2.1 Marca:
+      - id_marca
+      - descripcion_marca
+      - status_marca
+
+      Nota: El campo status_marca, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
+
+   2.2 Categoría:
+      - id_categoria
+      - descripcion_categoria
+      - status_categoria
+
+      Nota: El campo status_categoria, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
+      
+   2.3. Producto: 
+   - id_prod
+   - descripcion_prod
+   - observaciones_prod
+   - valor_venta_prod
+   - valor_descuento_prod
+   - cant_stock_prod
+   - status_prod
+   - fk_marca
+   - fk_categoria
+
+      Nota: El campo descripcion_prod guarda el nombre del producto, el campo observaciones_prod guardará funcionalidades del producto(como funciona, y que se necesita para que funcione, solo es información para el vendedor, no para el cliente), el campo valor_venta_prod, es el valor que tendrá por defecto para vender, sin embargo una vez al año se manejas las temporadas escolares en las que se realizan rebajas en los productos, y es necesario establecer otro valor de venta. El campo cant_stock_prod es para almacenar la cantidad mínima que se debe tener en stock, ya que si baja la cantidad, se debe crear nuevos registros en otra tabla llamada Pendiente_compra en las que muestra los productos que se están agotando. El campo status_prod al igual que en las anteriores tablas solo permitirá habilitar o deshabilitar el producto. Los campos fk_marca y fk_categoria son las llaves foráneas de las tablas marca y categoria.
+
+   2.4 Pendiente_compra: 
+      - id_pend
+      - fk_producto
+      - cant_pend
+
+      Nota: El campo cant_pend solo guardará la cantidad que se debe comprar al proveedor, ya sea por un cálculo automático a través del backend del software o modificado por el usuario del software. El campo fk_producto, es la llave foránea de la tabla producto
+   
+   2.5 Producto_img_video
+      - id_prodiv
+      - nombre_prodiv
+      - fk_producto
+
+      Nota: La tabla Producto_img_video es para almacenar los nombres de los archivos de imágenes y videos que muestran el producto.
+   
+   2.6 Producto_codigo
+      - id_cod
+      - codigo_barras
+      - codigo_manual
+      - fk_producto
+
+      Nota: La tabla Producto_codigo es para almacenar varios códigos de barra del mismo producto, ya que se ha presentado que, un producto viene en la caja con varios codigos de barras, sin embargo , por otra parte el campo codigo_manual almacenará los últimos 6 caracteres del código de barras. No obstante hay que tener en cuenta que no todos los productos tendrán códigos de barras, pero todos si tendrán un código manual.
+
+   2.7 Producto_oferta
+      - id_po
+      - fk_producto
+      - cant_po
+      - valor_venta_po
+      - status_po
+
+      Nota: La tabla Producto_oferta es utilizada para que el sistema consulte en la base de datos si la venta de un producto es igual o superior al almacenado en el campo cant_po entonces tendrá un valor especial sobre ese producto de forma unitaria. el cual es el almacenado en el campo valor_venta_po. El campo status_pro, cumple con la misma funcionalidad que los otros campos de status mencionados en otras tablas.
+
+   2.8 Ubicacion
+      - id_ub
+      - nombre_ub
+   
+   Nota: La tabla Ubicacion se crea para almacenar el nombre de los sitios donde se guardan los producto, por ejemplo Bodega1, Bodega2, etc, y así determinar qué producto se encuentra en cual ubicación, en la siguiente tabla.
+
+   2.9 Producto_ubicacion
+      - id_produb
+      - fk_producto
+      - fk_ubicacion
+      - cant
+   
+   Nota: En esta tabla se relaciona el registro de la ubicación del producto y la cantidad del mismo tipo de producto en cada lugar.
+
+   2.10  Departamento
+      - id_depart
+      - nombre_depart
+
+   2.11 Ciudad
+      - id_ciudad
+      - nombre_ciudad
+      - fk_depart // llave foránea de la tabla Departamento
+
+   2.12 Proveedor
+      - id_prov
+      - nit_prov
+      - razon_social_prov
+      - tel_prov
+      - email_prov
+      - direccion_prov
+      - status_prov
+      - fk_ciudad
+
+   2.13 Metodo_pago
+      - id_mp
+      - descipcion_mp
+      - status_mp // Se habilita o deshabilita el registro
+
+   2.14 Compra_master
+      - id_cm
+      - fk_proveedor
+      - nombre_adjunto_cm // Almacena el nombre del archivo guardado en el servidor
+      - fecha_cm
+      - total_descuento
+      - total_cm
+      - observaciones_cm
+      - cancela_cm
+
+      Nota: La tabla Compra_master guarda los datos generales de la factura, ya que los datos del detalle de la compra de cada producto se almacenará en la tabla Compra_detalle.
+   
+   2.15 Compra_detalle
+      - id_cd
+      - fk_cm // Llave foránea de la tabla compra_master
+      - fk_producto // Llave foránea de la tabla producto
+      - cant_cd
+      - valor_unit_cd // Valor unitario de la compra del producto
+      - xje_desc_cd // Almacena el porcentaje de descuento que ofrece el proveedor
+      - descuento_unit_cd // Almacena el valor del descuento de acuerdo al porcentaje el campo xje_desc_cd
+      - total_cd // Guarda el valor de la multiplicación de cant_cd por el valor_unit_cd 
+      - valor_venta_cd // Almacena el calculo el valor del producto con el porcentaje que necesita el usuario, y realizar comparaciones del valor con la última venta del producto almacenado en el campo valor_venta_prod de la tabla producto
+      - fecha_vencimiento_cd // Algunos productos tienen fecha de vencimiento
+
+   2.16 Pago_compra // Esta tabla verifica si se debe o se pagó la factura, ya que se pudo haber abonado, pero todavía se puede deber
+      - id_pc
+      - estado_pago_pc // Debe o Pagó
+      - nombre_comprobante_pc // Guarda el nombre del comprobante de pago el cual es un archivo guardado en el servidor
+      - fecha_pc // Fecha del pago total o abono
+      - fk_mp // Llave foránea del metodo_pago
+      - fk_cm // Llave foránea de la compra_master
+      - observaciones_pc
+
+   2.17 Usuario // Tabla para almacenar los usuarios que utilizarán el sistema web
+      - id_us
+      - nombre_us
+      - nickname_us
+      - password_us
+      - tel_us
+      - dir_us
+      - email_us
+      - fk_ciudad
+      - status_us
+
+   2.18 Cliente
+      - id_cli
+      - cedula_nit_cli
+      - razon_social_cli
+      - tel_cli
+      - direccion_cli
+      - email_cli
+      - fk_ciudad // llave foránea de la tabla ciudad
+
+   2.19 Empleado_cliente // Esta tabla almacena el nombre de los empleados de un cliente empresarial
+      - id_ec
+      - fk_cli // llave foránea del Cliente
+      - nombre_ec
+      - tel_ec
+
+   2.20 Venta_master
+      - id_vm
+      - fk_cli // Llave foránea del cliente
+      - fecha_vm // Fecha general de la factura
+      - subtotal_vm // Almacena la suma total de cada registro de los productos vendidos
+      - total_descuento_vm // Almacena la suma total de la multiplicación de la cantidad por el valor de descuento
+      - total_venta_vm // Almacena la operación realizada del subtotal_vm - total_descuento_vm
+      - observaciones_vm
+
+   2.21 Venta_detalle
+      - id_vd
+      - numero_venta
+      - fk_vm // Llave foránea de la tabla venta_master
+      - fk_producto // Llave foránea de la tabla producto
+      - fk_ec // Llave foránea Empleado_cliente
+      - fk_us // Llave foránea Usuario porque es necesario saber quién vendió el producto, ya que la venta se puede realizar en diferentes fechas
+      - cant_vd // cantidad de productos
+      - valor_unit_vd // Valor unitario de la venta del producto
+      - total_vd // Guarda el valor de la multiplicación de cant_vd por el valor_unit_vd 
+      - fecha_vd // Debido a que la venta de los productos se puede realizar en diferentes fechas, es necesario registrar la fecha de venta
+      - hora_vd // Hora de la venta
+   
+   2.22 Pago_venta // Esta tabla verifica si el cliente debe o pagó la factura, ya que se pudo haber abonado, pero todavía se puede deber
+      - id_pv
+      - estado_pago_pv // Debe o Pagó
+      - nombre_comprobante_pv // Guarda el nombre del comprobante de pago el cual es un archivo guardado en el servidor
+      - fecha_pv // Fecha del pago total o abono
+      - fk_mp // Llave foránea del metodo_pago
+      - fk_vm // Llave foránea de la venta_master
+      - observaciones_pv
+
+   Debido a que existen 3 tipos de inventarios (según lo que yo tengo entendido) que son LIFO, FIFO, y Ponderado, no sé como realizar la tabla inventario.
+
+   No sé si vincular al usuario en todas las tablas en las que necesito hacer seguimiento, con el fin de saber qué usuario creó qué registro.
+
+   Ayúdame a revisar si mi lógica está bien aplicada o que debo corregir, inclusive dame sugerencias para saber si es necesario otros campos que tal vez no tuve en cuenta en cualquiera de las tablas descritas anteriormente.
