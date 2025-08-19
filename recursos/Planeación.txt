@@ -1,20 +1,40 @@
 Software para Inventario SACINV
 
-Este modelo E-R debe contener las siguientes tablas con sus respectivos campos:
+Este modelo E-R contiene las siguientes tablas con sus respectivos campos:
 
 Marca:
     - id_marca
     - descripcion_marca
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
     - status_marca
 
     Nota: El campo status_marca, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
 
 Categoría:
-    - id_categoria
-    - descripcion_categoria
-    - status_categoria
+    - id_ctg
+    - descripcion_ctg
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
+    - status_ctg
 
-Nota: El campo status_categoria, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
+    Nota: El campo status_categoria, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
+
+Subcategoria:
+    - id_subctg
+    - descripcion_subctg
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
+    - fk_categoria
+    - status_subctg
+
+    Nota: El campo status_categoria, solo va a contener los valores 0 y 1, donde 0 significa que se deshabilitará la opción de disponibilidad y 1 significa que se habilita la opción de disponibilidad para seleccionar el registro
 
 Producto:
     - id_prod
@@ -23,15 +43,20 @@ Producto:
     - valor_venta_prod
     - valor_descuento_prod
     - cant_stock_prod
-    - status_prod
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
     - fk_marca
-    - fk_categoria
+    - fk_subcategoria
+    - status_prod
 
     Nota: El campo descripcion_prod guarda el nombre del producto, el campo observaciones_prod guardará funcionalidades del producto(como funciona, y que se necesita para que funcione, solo es información para el vendedor, no para el cliente), el campo valor_venta_prod, es el valor que tendrá por defecto para vender, sin embargo una vez al año se manejas las temporadas escolares en las que se realizan rebajas en los productos, y es necesario establecer otro valor de venta. El campo cant_stock_prod es para almacenar la cantidad mínima que se debe tener en stock, ya que si baja la cantidad, se debe crear nuevos registros en otra tabla llamada Pendiente_compra en las que muestra los productos que se están agotando. El campo status_prod al igual que en las anteriores tablas solo permitirá habilitar o deshabilitar el producto. Los campos fk_marca y fk_categoria son las llaves foráneas de las tablas marca y categoria.
 
 Pendiente_compra: 
     - id_pend
     - fk_producto
+    - fecha_pend  -- Desde cuando está pendiente la compra
     - cant_pend
 
     Nota: El campo cant_pend solo guardará la cantidad que se debe comprar al proveedor, ya sea por un cálculo automático a través del backend del software o modificado por el usuario del software. El campo fk_producto, es la llave foránea de la tabla producto
@@ -39,6 +64,7 @@ Pendiente_compra:
 Producto_img_video
     - id_prodiv
     - nombre_prodiv
+    - tipo_archivo_prodiv
     - fk_producto
 
     Nota: La tabla Producto_img_video es para almacenar los nombres de los archivos de imágenes y videos que muestran el producto.
@@ -63,6 +89,11 @@ Producto_oferta
 Ubicacion
     - id_ub
     - nombre_ub
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
+    - status_ub 
 
     Nota: La tabla Ubicacion se crea para almacenar el nombre de los sitios donde se guardan los producto, por ejemplo Bodega1, Bodega2, etc, y así determinar qué producto se encuentra en cual ubicación, en la siguiente tabla.
 
@@ -87,11 +118,15 @@ Proveedor
     - id_prov
     - nit_prov
     - razon_social_prov
-    - tel_prov
     - email_prov
     - direccion_prov
     - status_prov
     - fk_ciudad
+
+Telefono_proveedor
+    - id_tel_prov
+    - numero_tel_prov
+    - fk_proveedor
 
 Metodo_pago
     - id_mp
@@ -107,6 +142,11 @@ Compra_master
     - total_cm
     - observaciones_cm
     - cancela_cm
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
+    - estado_cm  -- Conocer el estado de la compra (Registrada, Pagada, Anulada)
 
     Nota: La tabla Compra_master guarda los datos generales de la factura, ya que los datos del detalle de la compra de cada producto se almacenará en la tabla Compra_detalle.
 
@@ -165,6 +205,11 @@ Venta_master
     - total_descuento_vm // Almacena la suma total de la multiplicación de la cantidad por el valor de descuento
     - total_venta_vm // Almacena la operación realizada del subtotal_vm - total_descuento_vm
     - observaciones_vm
+    - creado_por         -- FK a usuario_sistema(id_us)
+    - fecha_creacion     
+    - actualizado_por    -- FK a usuario_sistema(id_us)
+    - fecha_actualizacion
+    - estado_venta   // (Registrada, Pagada, Anulada)
 
 Venta_detalle
     - id_vd
@@ -188,8 +233,40 @@ Pago_venta // Esta tabla verifica si el cliente debe o pagó la factura, ya que 
     - fk_vm // Llave foránea de la venta_master
     - observaciones_pv
 
-Debido a que existen 3 tipos de inventarios (según lo que yo tengo entendido) que son LIFO, FIFO, y Ponderado, no sé como realizar la tabla inventario.
+Movimiento_inventario
+    - id_mov
+    - fk_producto
+    - tipo_mov ENUM(
+                    'COMPRA',      -- Entrada por compra
+                    'VENTA',       -- Salida por venta
+                    'DEV_CLI',     -- Devolución de cliente (entrada)
+                    'DEV_PROV',    -- Devolución al proveedor (salida)
+                    'AJUSTE_POS',  -- Ajuste + (apareció producto)
+                    'AJUSTE_NEG',  -- Ajuste - (faltante, daño, robo, vencido)
+                    'INV_INICIAL'  -- Inventario inicial
+                    )
+    - cant_mov
+    - valor_unit_mov  -- aplica solo para movimientos de entrada
+    - fecha_mov
+    - fk_cd
+    - fk_vd
+    - observaciones
 
-No sé si vincular al usuario en todas las tablas en las que necesito hacer seguimiento, con el fin de saber qué usuario creó qué registro.
+Stock_actual //Esta tabla guarda la cantidad x producto y solo existirá un solo registro por producto
+    - id_st
+    - fk_producto
+    - cant_st
 
-Ayúdame a revisar si mi lógica está bien aplicada o que debo corregir, inclusive dame sugerencias para saber si es necesario otros campos que tal vez no tuve en cuenta en cualquiera de las tablas descritas anteriormente.
+Tabla
+    - id_tabla
+    - nombre_tabla
+
+Permisos_Usuario_Tabla
+    - id_tabla
+    - fk_usuario
+    - fk_tabla
+    - lectura_registro
+    - crear_registro
+    - actualizar_registro
+    - eliminar_registro
+
