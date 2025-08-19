@@ -2,7 +2,7 @@
 
 ## Tabla Marca
 
-Descripción: Almacena las marcas de los productos.
+**Descripción:** Almacena las marcas de los productos.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -16,8 +16,8 @@ Descripción: Almacena las marcas de los productos.
 
 ## Tabla Categoría
 
-Descripción: Contiene las categorías generales para clasificar las subcategorias.  
-Ejemplo: Tecnología, Belleza, Papeleria...
+**Descripción:** Contiene las categorías generales para clasificar las subcategorias.  
+**Ejemplo:** Tecnología, Belleza, Papeleria...
 
 | Campo | Descripción |
 |-------|-------------|
@@ -31,8 +31,8 @@ Ejemplo: Tecnología, Belleza, Papeleria...
 
 ## Tabla Subcategoría
 
-Descripción: Contiene las subcategorías a la que pertenece cada producto.  
-Ejemplo: Lápiz, Tajalápiz, Borrador... 
+**Descripción:** Contiene las subcategorías a la que pertenece cada producto.  
+**Ejemplo:** Lápiz, Tajalápiz, Borrador... 
 
 | Campo | Descripción |
 |-------|-------------|
@@ -47,7 +47,7 @@ Ejemplo: Lápiz, Tajalápiz, Borrador...
 
 ## Tabla Producto
 
-Descripción: Registra la información detallada de cada producto.
+**Descripción:** Registra la información detallada de cada producto.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -67,7 +67,7 @@ Descripción: Registra la información detallada de cada producto.
 
 ## Tabla Pendiente_compra
 
-Descripción: Guarda las compras pendientes generadas por bajo stock.
+**Descripción:** Guarda las compras pendientes generadas por bajo stock.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -77,7 +77,7 @@ Descripción: Guarda las compras pendientes generadas por bajo stock.
 | cant_pend | Cantidad que se debe comprar al proveedor |
 
 ## Tabla Producto_img_video
-Descripción: Guarda los nombres de las imágenes y videos del producto.
+**Descripción:** Guarda los nombres de las imágenes y videos del producto.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -87,7 +87,7 @@ Descripción: Guarda los nombres de las imágenes y videos del producto.
 | fk_producto | Referencia al producto relacionado |
 
 ## Tabla Producto_codigo
-Descripción: Un mismo tipo de producto puede tener varios códigos de barra y por ende varios códigos manuales, sobretodo marcas blancas
+**Descripción:** Un mismo tipo de producto puede tener varios códigos de barra y por ende varios códigos manuales, sobretodo marcas blancas
 
 | Campo | Descripción |
 |-------|-------------|
@@ -97,8 +97,8 @@ Descripción: Un mismo tipo de producto puede tener varios códigos de barra y p
 | fk_producto | Referencia al producto |
 
 ## Tabla Producto_oferta
-Descripción: Las ofertas son aquellas que representan un valor menor del producto a partir de una cantidad mínima de venta.    
-Ejemplo: 12 lápices normalmente costarían $12.000, sin embargo por la cantidad se puede realizar un descuento $10.000.
+**Descripción:** Las ofertas son aquellas que representan un valor menor del producto a partir de una cantidad mínima de venta.    
+**Ejemplo:** 12 lápices normalmente costarían $12.000, sin embargo por la cantidad se puede realizar un descuento $10.000.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -109,8 +109,8 @@ Ejemplo: 12 lápices normalmente costarían $12.000, sin embargo por la cantidad
 | status_po | Indica si la oferta está habilitada (1) o deshabilitada (0) |
 
 ## Tabla Ubicacion
-Descripción: El mismo tipo de producto puede estar almacenados en diferentes lugares.   
-Ejemplo: Bodega 1, Bodega 2, Almacén
+**Descripción:** El mismo tipo de producto puede estar almacenados en diferentes lugares.   
+**Ejemplo:** Bodega 1, Bodega 2, Almacén
 
 | Campo | Descripción |
 |-------|-------------|
@@ -123,8 +123,8 @@ Ejemplo: Bodega 1, Bodega 2, Almacén
 | status_ub | Indica si la ubicación está habilitada (1) o deshabilitada (0) |
 
 ## Tabla Producto_ubicacion
-Descripción: Relaciona el tipo de producto y en cuantas ubicaciones se encuentra así como la cantidad almacenada.  
-Ejemplo: 200 Lapices Mirado en Bodega 1, 25 Lapices Mirado en Almacén  
+**Descripción:** Relaciona el tipo de producto y en cuantas ubicaciones se encuentra así como la cantidad almacenada.  
+**Ejemplo:** 200 Lapices Mirado en Bodega 1, 25 Lapices Mirado en Almacén  
 
 | Campo | Descripción |
 |-------|-------------|
@@ -134,7 +134,7 @@ Ejemplo: 200 Lapices Mirado en Bodega 1, 25 Lapices Mirado en Almacén
 | cant | Cantidad del producto en esa ubicación |
 
 ## Tabla Departamento
-Descripción: Almacena los nombres de los departamentos de Colombia
+**Descripción:** Almacena los nombres de los departamentos de Colombia
 
 | Campo | Descripción |
 |-------|-------------|
@@ -142,7 +142,7 @@ Descripción: Almacena los nombres de los departamentos de Colombia
 | nombre_depart | Nombre del departamento |
 
 ## Tabla Ciudad
-Descripción: Almacena los nombres de los municipios y ciudades que pertenencen a los departamentos de Colombia.
+**Descripción:** Almacena los nombres de los municipios y ciudades que pertenencen a los departamentos de Colombia.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -157,11 +157,22 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | id_prov | Identificador del proveedor |
 | nit_prov | NIT del proveedor |
 | razon_social_prov | Razón social del proveedor |
-| tel_prov | Teléfono del proveedor |
 | email_prov | Correo electrónico del proveedor |
 | direccion_prov | Dirección del proveedor |
 | status_prov | Indica si el proveedor está habilitado (1) o deshabilitado (0) |
 | fk_ciudad | Referencia a la ciudad del proveedor |
+
+## Tabla Telefono_proveedor
+**Descripción:** Por lo general un proveedor tiene varios teléfonos y es necesario guardarlos todos
+
+| Campo | Descripción |
+|-------|-------------|
+| id_tel_prov | Identificador del telefono |
+| numero_tel_prov | Número de teléfono |
+| whatsapp_tel_prov | Si el número está registrado en whatsapp (1) sino (0) |
+| telegram_tel_prov | Si el número está registrado en telegram (1) sino (0) |
+| fk_proveedor | Referencia a proveedor |
+| status_tel_prov | Indica si el numero teléfónico está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Metodo_pago
 
@@ -177,12 +188,11 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 |-------|-------------|
 | id_cm | Identificador de la compra |
 | fk_proveedor | Referencia al proveedor |
-| nombre_adjunto_cm | Nombre del archivo adjunto guardado |
+| nombre_adjunto_cm | Nombre del archivo adjunto guardado (factura) |
 | fecha_cm | Fecha de la compra |
 | total_descuento | Monto total del descuento aplicable |
 | total_cm | Total general de la compra |
 | observaciones_cm | Observaciones sobre la compra |
-| cancela_cm | Indicador si la compra fue cancelada |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación de la compra |
 | actualizado_por | Usuario que actualizó el registro |
@@ -196,7 +206,7 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | id_cd | Identificador del detalle de compra |
 | fk_cm | Referencia a compra_master |
 | fk_producto | Referencia al producto comprado |
-| cant_cd | Cantidad de producto comprada |
+| cant_cd | Cantidad de producto comprado |
 | valor_unit_cd | Valor unitario del producto |
 | xje_desc_cd | Porcentaje de descuento ofrecido por el proveedor |
 | descuento_unit_cd | Valor del descuento generado |
@@ -205,12 +215,13 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | fecha_vencimiento_cd | Fecha de vencimiento del producto (si aplica) |
 
 ## Tabla Pago_compra
+**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos  o pagos realizados.
 
 | Campo | Descripción |
 |-------|-------------|
 | id_pc | Identificador del pago |
 | estado_pago_pc | Estado del pago (Debe o Pagó) |
-| nombre_comprobante_pc | Nombre del archivo de comprobante de pago |
+| nombre_comprobante_pc | Nombre del archivo de comprobante de pago (.jpg) |
 | fecha_pc | Fecha del pago |
 | fk_mp | Referencia al método de pago |
 | fk_cm | Referencia a la compra_master |
@@ -222,15 +233,17 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 |-------|-------------|
 | id_us | Identificador del usuario |
 | nombre_us | Nombre del usuario |
-| nickname_us | Apodo o usuario de acceso |
+| nickname_us | Usuario de acceso |
 | password_us | Contraseña de acceso |
 | tel_us | Teléfono del usuario |
 | dir_us | Dirección del usuario |
 | email_us | Correo electrónico del usuario |
+| token_us | Token para activar la cuenta o recuperar la contraseña |
 | fk_ciudad | Ciudad del usuario |
 | status_us | Indica si el usuario está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Cliente
+**Descripción:** Almacena clientes tanto corporativos como particulares
 
 | Campo | Descripción |
 |-------|-------------|
@@ -240,14 +253,17 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | tel_cli | Teléfono del cliente |
 | direccion_cli | Dirección del cliente |
 | email_cli | Correo electrónico del cliente |
+| tipo_cli | Es un cliente Particular o Corporativo |
 | fk_ciudad | Ciudad del cliente |
 
 ## Tabla Empleado_cliente
+**Descripción:** Registra los nombres de los empleados que trabajan para los clientes corporativos que solicitan los productos. Pensado en la trazabilidad de las solicitudes en compras a cŕedito.
 
 | Campo | Descripción |
 |-------|-------------|
 | id_ec | Identificador del empleado del cliente |
-| fk_cli | Referencia al cliente empresarial |
+| fk_cli | Referencia al cliente corporativo |
+| cedula_ec | Cédula del empleado |
 | nombre_ec | Nombre del empleado |
 | tel_ec | Teléfono del empleado |
 
@@ -290,7 +306,7 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 |-------|-------------|
 | id_pv | Identificador del pago |
 | estado_pago_pv | Estado del pago (Debe o Pagó) |
-| nombre_comprobante_pv | Nombre del comprobante de pago |
+| nombre_comprobante_pv | Nombre del comprobante de pago (.jpg)|
 | fecha_pv | Fecha del pago |
 | fk_mp | Referencia al método de pago |
 | fk_vm | Referencia a la venta |
@@ -311,6 +327,7 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | observaciones | Observaciones del movimiento |
 
 ## Tabla Stock_actual
+**Descripción:** Se basa en la cantidad del stock actual basado en la tabla llamada Movimiento_inventario
 
 | Campo | Descripción |
 |-------|-------------|
@@ -318,18 +335,18 @@ Descripción: Almacena los nombres de los municipios y ciudades que pertenencen 
 | fk_producto | Referencia al producto |
 | cant_st | Cantidad actual del producto |
 
-## Tabla Tabla
-
+## Tabla Modulo
+**Descripción:** Almacena el nombre de cada uno de los módulos visibles para el usuario
 | Campo | Descripción |
 |-------|-------------|
-| id_tabla | Identificador de la tabla |
-| nombre_tabla | Nombre de la tabla |
+| id_mod | Identificador del módulo |
+| nombre_mod | Nombre del módulo |
 
-## Tabla Permisos_Usuario_Tabla
-
+## Tabla Permisos_Usuario_Modulo
+**Descripción:** Almacena el 
 | Campo | Descripción |
 |-------|-------------|
-| id_tabla | Identificador del registro |
+| id_pu | Identificador del registro |
 | fk_usuario | Referencia al usuario |
 | fk_tabla | Referencia a la tabla |
 | lectura_registro | Permiso para leer registros |

@@ -126,6 +126,8 @@ Proveedor
 Telefono_proveedor
     - id_tel_prov
     - numero_tel_prov
+    - whatsapp_tel_prov
+    - telegram_tel_prov
     - fk_proveedor
 
 Metodo_pago
@@ -141,7 +143,6 @@ Compra_master
     - total_descuento
     - total_cm
     - observaciones_cm
-    - cancela_cm
     - creado_por         -- FK a usuario_sistema(id_us)
     - fecha_creacion     
     - actualizado_por    -- FK a usuario_sistema(id_us)
