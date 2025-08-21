@@ -163,6 +163,7 @@
 | fk_ciudad | Referencia a la ciudad del proveedor |
 
 ## Tabla Telefono_proveedor
+
 **Descripción:** Por lo general un proveedor tiene varios teléfonos y es necesario guardarlos todos
 
 | Campo | Descripción |
@@ -215,6 +216,7 @@
 | fecha_vencimiento_cd | Fecha de vencimiento del producto (si aplica) |
 
 ## Tabla Pago_compra
+
 **Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos  o pagos realizados.
 
 | Campo | Descripción |
@@ -313,6 +315,7 @@
 | observaciones_pv | Observaciones del pago |
 
 ## Tabla Movimiento_inventario
+**Descripción:** Se realizarán los 3 inventarios LIFO FIFO Y PONDERADO
 
 | Campo | Descripción |
 |-------|-------------|
@@ -354,3 +357,22 @@
 | actualizar_registro | Permiso para actualizar registros |
 | eliminar_registro | Permiso para eliminar registros |
 
+## Tabla Datos_empresa
+**Descripción:** Almacena los datos de la empresa que hace uso del software para mostrarlo en los reportes.
+
+| Campo | Descripción |
+|-------|-------------|
+| id_de | Identificador del registro |
+| nit_de | Nit de la empresa |
+| razon_social_de | Razón social de la empresa |
+| slogan_de | Frase utilizada por la empresa para conectar con los clientes |
+| regimen_de | Tipo de régimen |
+| direccion_de | Dirección |
+| tel_de | Teléfono de la empresa |
+| email_de | Email de la empresa |
+| logo_de | Nombre de la imagen de la empresa que carga en los informes |
+| fk_usuario | Referencia al usuario |
+| creado_por | Usuario que creó el registro |
+| fecha_creacion | Fecha de creación del registro |
+| actualizado_por | Usuario que actualizó el registro |
+| fecha_actualizacion | Fecha de actualización del registro |
