@@ -229,6 +229,19 @@
 | fk_cm | Referencia a la compra_master |
 | observaciones_pc | Observaciones del pago |
 
+## Tabla Devolucion_compra
+
+**Descripción:** Esta tabla relaciona los productos que se devuelven al proveedor con su respectiva justificación.
+
+| Campo | Descripción |
+|-------|-------------|
+| id_dc | Identificador de la devolución |
+| fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
+| fecha_dc | Fecha de la devolución |
+| cant_dc | Cantidad devuelta del producto |
+| estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
+| observaciones_dc | Justificaciónd de la devolución |
+
 ## Tabla Usuario
 
 | Campo | Descripción |
@@ -295,12 +308,28 @@
 | fk_vm | Referencia a venta_master |
 | fk_producto | Referencia al producto vendido |
 | fk_ec | Referencia al empleado del cliente |
-| fk_us | Usuario que realizó la venta |
+| creado_por | Usuario que creó el registro |
+| fecha_creacion | Fecha de creación del registro |
+| actualizado_por | Usuario que actualizó el registro |
+| fecha_actualizacion | Fecha de actualización del registro |
 | cant_vd | Cantidad vendida |
 | valor_unit_vd | Valor unitario vendido |
 | total_vd | Total del detalle |
 | fecha_vd | Fecha de la venta |
 | hora_vd | Hora de la venta |
+
+## Tabla Devolucion_venta
+
+**Descripción:** Esta tabla relaciona los productos que se devuelven al proveedor con su respectiva justificación.
+
+| Campo | Descripción |
+|-------|-------------|
+| id_dc | Identificador de la devolución |
+| fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
+| fecha_dc | Fecha de la devolución |
+| cant_dc | Cantidad devuelta del producto |
+| estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
+| observaciones_dc | Justificaciónd de la devolución |
 
 ## Tabla Pago_venta
 
@@ -369,8 +398,10 @@
 | regimen_de | Tipo de régimen |
 | direccion_de | Dirección |
 | tel_de | Teléfono de la empresa |
+| whatsapp_de | Whatsapp de la empresa |
 | email_de | Email de la empresa |
 | logo_de | Nombre de la imagen de la empresa que carga en los informes |
+| xje_venta_de | Indica cual es el porcentaje de venta para que el sistema calcule de forma autormática al momento de realizar una compra |
 | fk_usuario | Referencia al usuario |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación del registro |
