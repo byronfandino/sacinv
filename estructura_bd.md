@@ -238,6 +238,7 @@
 | id_dc | Identificador de la devolución |
 | fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
 | fecha_dc | Fecha de la devolución |
+| hora_dc | Hora de la devolución |
 | cant_dc | Cantidad devuelta del producto |
 | estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
 | observaciones_dc | Justificaciónd de la devolución |
@@ -324,12 +325,12 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_dc | Identificador de la devolución |
-| fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
-| fecha_dc | Fecha de la devolución |
-| cant_dc | Cantidad devuelta del producto |
-| estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
-| observaciones_dc | Justificaciónd de la devolución |
+| id_dv | Identificador de la devolución |
+| fk_dv | Llave foránea de la factura Venta Detalle para obtener datos no solo del producto, si no datos adicionales de la venta master
+| fecha_dv | Fecha de la devolución |
+| hora_dv | Hora de la devolución |
+| cant_dv | Cantidad devuelta del producto |
+| observaciones_dv | Justificaciónd de la devolución |
 
 ## Tabla Pago_venta
 
