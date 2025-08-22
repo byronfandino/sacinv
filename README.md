@@ -68,7 +68,7 @@ docker exec -it postgres_db pg_restore -U bfandino -d dbdeudores ./backup_db/bac
 
 ---
 
-## 📂 Estructura del proyecto
+## 📂 Estructura de directorios
 
 ```
 sacinv/
@@ -84,3 +84,7 @@ sacinv/
 ├── .env                  # Variables de entorno
 └── README.md
 ```
+
+## Ver estructura de la base de datos
+
+Aquí puedes ver la [estructura de la base de datos](estructura_db.md).
