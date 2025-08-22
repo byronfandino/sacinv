@@ -321,7 +321,7 @@
 
 ## Tabla Devolucion_venta
 
-**Descripción:** Esta tabla relaciona los productos que se devuelven al proveedor con su respectiva justificación.
+**Descripción:** Esta tabla relaciona los productos que se devuelven por parte del cliente con su respectiva justificación.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -337,11 +337,12 @@
 | Campo | Descripción |
 |-------|-------------|
 | id_pv | Identificador del pago |
-| estado_pago_pv | Estado del pago (Debe o Pagó) |
+| estado_pago_pv | Estado del pago (Debe (0) o Pagado (1)) |
+| monto_pago_pv | Valor abonado o pagado por el cliente |
 | nombre_comprobante_pv | Nombre del comprobante de pago (.jpg)|
-| fecha_pv | Fecha del pago |
+| fecha_hora_pv | Fecha y hora del pago |
 | fk_mp | Referencia al método de pago |
-| fk_vm | Referencia a la venta |
+| fk_vm | Referencia a la venta master |
 | observaciones_pv | Observaciones del pago |
 
 ## Tabla Movimiento_inventario
