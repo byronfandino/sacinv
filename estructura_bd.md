@@ -354,13 +354,27 @@
 | tipo_mov | Tipo de movimiento (COMPRA, VENTA, DEV_CLI, DEV_PROV, AJUSTE_POS, AJUSTE_NEG, INV_INICIAL) |
 | cant_mov | Cantidad del movimiento |
 | valor_unit_mov | Valor unitario (solo para entradas) |
-| fecha_mov | Fecha del movimiento |
+| fecha_hora_mov | Fecha y hora del movimiento |
 | fk_cd | Referencia al detalle de compra |
 | fk_vd | Referencia al detalle de venta |
+| fk_usuario | Referencia al usuario que realiza la acción|
 | observaciones | Observaciones del movimiento |
 
+## Tabla Snapshot_inventario
+**Descripción:** Registra el corte mensual de cada uno de los inventarios para evitar consultas lentas
+
+| Campo | Descripción |
+|-------|-------------|
+| id_sh | Identificador del corte del inventario |
+| fecha_corte_sh | Fecha del corte es la misma fecha de creación |
+| fk_producto_sh | Referencia del producto |
+| cant_final_sh | cantidad final del producto |
+| costo_lifo_sh | Costo final del inventario FIFO |
+| costo_fifo_sh | Costo final del inventario LIFO |
+| costo_ponderado_sh | Costo final del inventario Ponderado |
+
 ## Tabla Stock_actual
-**Descripción:** Se basa en la cantidad del stock actual basado en la tabla llamada Movimiento_inventario
+**Descripción:** Se basa en la cantidad del stock actual de cada producto basado en la tabla llamada Movimiento_inventario
 
 | Campo | Descripción |
 |-------|-------------|
