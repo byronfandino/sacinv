@@ -21,7 +21,7 @@ Sistema de inventario para papelería y miscelánea, desarrollado con **PHP 8.2*
    cd sacinv
    ```
 
-2. **Ajusta permisos para PostgreSQL y ejecutar el script** 
+2. **Ajusta permisos para PostgreSQL y ejecutar el script** *(Para distribuciones de linux)*
    > *(solo la primera vez o si cambias de computador)*
    ```bash
    sudo chmod +x ./preconfiguracion.sh
@@ -72,7 +72,7 @@ docker exec -it postgres_db pg_restore -U bfandino -d dbdeudores ./backup_db/bac
 
 ```
 sacinv/
-├── backup/               # Archivos de respaldo de la BD
+├── backup_db/            # Archivos de respaldo de la BD
 ├── data-postgres/        # Datos persistentes de PostgreSQL
 ├── docker/               # Archivos Dockerfile y scripts
 │   ├── apache/
@@ -81,6 +81,6 @@ sacinv/
 ├── public/               # Carpeta pública (index.php)
 ├── vistas/               # Vistas del sistema
 ├── docker-compose.yml
-├── .env
+├── .env                  # Variables de entorno
 └── README.md
 ```
