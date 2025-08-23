@@ -87,7 +87,7 @@
 | fk_producto | Referencia al producto relacionado |
 
 ## Tabla Producto_codigo
-**Descripción:** Un mismo tipo de producto puede tener varios códigos de barra y por ende varios códigos manuales, sobretodo marcas blancas
+**Descripción:** Un mismo tipo de producto puede tener varios códigos de barra y por ende varios códigos manuales, sobretodo marcas blancas. El software mostrará en pantalla las opciones encontradas con el mismo código en caso de repetirse con la de algún otro producto. Ya que varios proveedores manejan su propio sistema de códigos de barra.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -98,7 +98,7 @@
 
 ## Tabla Producto_oferta
 **Descripción:** Las ofertas son aquellas que representan un valor menor del producto a partir de una cantidad mínima de venta.    
-**Ejemplo:** 12 lápices normalmente costarían $12.000, sin embargo por la cantidad se puede realizar un descuento $10.000.
+**Ejemplo:** 12 lápices normalmente se vendería en $12.000, sin embargo por la cantidad se puede realizar un pequeño descuento, y cuya venta puede darse en $10.000.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -171,7 +171,6 @@
 | id_tel_prov | Identificador del telefono |
 | numero_tel_prov | Número de teléfono |
 | whatsapp_tel_prov | Si el número está registrado en whatsapp (1) sino (0) |
-| telegram_tel_prov | Si el número está registrado en telegram (1) sino (0) |
 | fk_proveedor | Referencia a proveedor |
 | status_tel_prov | Indica si el numero teléfónico está habilitado (1) o deshabilitado (0) |
 
@@ -184,6 +183,8 @@
 | status_mp | Indica si el método está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Compra_master
+
+**Descripción:** Almacena los datos generales de una compra, pero la relación de productos comprados, se realiza en otra tabla llamada *Compra_detalle*
 
 | Campo | Descripción |
 |-------|-------------|
@@ -202,6 +203,8 @@
 
 ## Tabla Compra_detalle
 
+**Descripción:** Relaciona todos los productos comprados que pertenezcan a la tabla *Compra_Master*
+
 | Campo | Descripción |
 |-------|-------------|
 | id_cd | Identificador del detalle de compra |
@@ -217,14 +220,15 @@
 
 ## Tabla Pago_compra
 
-**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos  o pagos realizados.
+**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos realizados o pago total. Según esta tabla se puede saber la cantidad de veces que ha abonado al proveedor a la misma factura 
 
 | Campo | Descripción |
 |-------|-------------|
 | id_pc | Identificador del pago |
-| estado_pago_pc | Estado del pago (Debe o Pagó) |
+| estado_pago_pc | Estado del pago (Abonó o Pagado) |
+| monto_pc | Valor abonado o pagado |
 | nombre_comprobante_pc | Nombre del archivo de comprobante de pago (.jpg) |
-| fecha_pc | Fecha del pago |
+| fecha_hora_pc | Fecha y hora del pago (Diligenciado por el usuario, sin embargo el sistema le sugiere la fecha y hora actual del mismo)|
 | fk_mp | Referencia al método de pago |
 | fk_cm | Referencia a la compra_master |
 | observaciones_pc | Observaciones del pago |
@@ -237,11 +241,10 @@
 |-------|-------------|
 | id_dc | Identificador de la devolución |
 | fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
-| fecha_dc | Fecha de la devolución |
-| hora_dc | Hora de la devolución |
+| fecha_hora_dc | Fecha de la devolución |
 | cant_dc | Cantidad devuelta del producto |
 | estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
-| observaciones_dc | Justificaciónd de la devolución |
+| observaciones_dc | Justificación de la devolución |
 
 ## Tabla Usuario
 
@@ -269,10 +272,11 @@
 | tel_cli | Teléfono del cliente |
 | direccion_cli | Dirección del cliente |
 | email_cli | Correo electrónico del cliente |
-| tipo_cli | Es un cliente Particular o Corporativo |
-| fk_ciudad | Ciudad del cliente |
+| tipo_cli | Es un cliente Particular(P) o Corporativo(C) |
+| fk_ciudad | Referencia a la tabla Ciudad |
 
 ## Tabla Empleado_cliente
+
 **Descripción:** Registra los nombres de los empleados que trabajan para los clientes corporativos que solicitan los productos. Pensado en la trazabilidad de las solicitudes en compras a cŕedito.
 
 | Campo | Descripción |
@@ -284,6 +288,8 @@
 | tel_ec | Teléfono del empleado |
 
 ## Tabla Venta_master
+
+**Descripción:** Al igual que la tabla *Compra_master*, almacena los datos generales de la Venta
 
 | Campo | Descripción |
 |-------|-------------|
@@ -301,6 +307,8 @@
 | estado_venta | Estado de la venta (Registrada, Pagada, Anulada) |
 
 ## Tabla Venta_detalle
+
+**Descripción:** Se relaciona el detalle de cada producto vendido al cliente, la razón por la cual se relaciona el usuario en esta tabla se debe a las ventas a *crédito* que se pueden realizar a un cliente en diferentes fechas, y por lo tanto, pudo venderse el producto por empleados diferentes.
 
 | Campo | Descripción |
 |-------|-------------|
@@ -327,17 +335,17 @@
 |-------|-------------|
 | id_dv | Identificador de la devolución |
 | fk_dv | Llave foránea de la factura Venta Detalle para obtener datos no solo del producto, si no datos adicionales de la venta master
-| fecha_dv | Fecha de la devolución |
-| hora_dv | Hora de la devolución |
+| fecha_hora_dv | Fecha de la devolución |
 | cant_dv | Cantidad devuelta del producto |
-| observaciones_dv | Justificaciónd de la devolución |
+| observaciones_dv | Justificación de la devolución |
 
 ## Tabla Pago_venta
+**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos realizados o pago total. Según esta tabla se puede saber la cantidad de veces que ha abonado un cliente a la misma factura 
 
 | Campo | Descripción |
 |-------|-------------|
 | id_pv | Identificador del pago |
-| estado_pago_pv | Estado del pago (Debe (0) o Pagado (1)) |
+| estado_pago_pv | Estado del pago (Abonó o Pagado) |
 | monto_pago_pv | Valor abonado o pagado por el cliente |
 | nombre_comprobante_pv | Nombre del comprobante de pago (.jpg)|
 | fecha_hora_pv | Fecha y hora del pago |
@@ -352,7 +360,7 @@
 |-------|-------------|
 | id_mov | Identificador del movimiento |
 | fk_producto | Referencia al producto |
-| tipo_mov | Tipo de movimiento (COMPRA, VENTA, DEV_CLI, DEV_PROV, AJUSTE_POS, AJUSTE_NEG, INV_INICIAL) |
+| tipo_mov | Tipo de movimiento (COMPRA (C), VENTA (V), DEVOLUCION_CLIENTE (DC), DEVOLUCION_PROVEEDOR (DP), AJUSTE_POSITIVO (AP), AJUSTE_NEGATIVO (AN), INVENTARIO_INICIAL (IN)) |
 | cant_mov | Cantidad del movimiento |
 | valor_unit_mov | Valor unitario (solo para entradas) |
 | fecha_hora_mov | Fecha y hora del movimiento |
@@ -362,7 +370,7 @@
 | observaciones | Observaciones del movimiento |
 
 ## Tabla Snapshot_inventario
-**Descripción:** Registra el corte mensual de cada uno de los inventarios para evitar consultas lentas
+**Descripción:** Registra el corte mensual de cada uno de los inventarios de los productos para evitar consultas lentas en la tabla *Inventario_Movimiento*
 
 | Campo | Descripción |
 |-------|-------------|
@@ -375,7 +383,7 @@
 | costo_ponderado_sh | Costo final del inventario Ponderado |
 
 ## Tabla Stock_actual
-**Descripción:** Se basa en la cantidad del stock actual de cada producto basado en la tabla llamada Movimiento_inventario
+**Descripción:** Se basa en la cantidad del stock actual de cada producto basado en la tabla llamada Movimiento_inventario, con el fin de obtener el saldo de cada producto en tiempo real
 
 | Campo | Descripción |
 |-------|-------------|
@@ -391,7 +399,8 @@
 | nombre_mod | Nombre del módulo |
 
 ## Tabla Permisos_Usuario_Modulo
-**Descripción:** Almacena el 
+**Descripción:** Almacena la relación de los permisos de tiene cada usuario con respecto a cada uno de los módulos visible en el software web
+
 | Campo | Descripción |
 |-------|-------------|
 | id_pu | Identificador del registro |
