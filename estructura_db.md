@@ -42,7 +42,7 @@
 | fecha_creacion | Fecha de creación del registro |
 | actualizado_por | Usuario que actualizó el registro (FK a usuario_sistema.id_us) |
 | fecha_actualizacion | Fecha de actualización del registro |
-| fk_categoria | Fecha de actualización del registro |
+| fk_categoria | Referencia a la categoría principal |
 | status_subctg | Indica si la categoría está habilitada (1) o deshabilitada (0) |
 
 ## Tabla Producto
@@ -51,19 +51,19 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_prod | Identificador único del producto |
-| descripcion_prod | Nombre del producto |
-| observaciones_prod | Información funcional para uso interno sobre el producto |
-| valor_venta_prod | Valor de venta por defecto del producto |
-| valor_descuento_prod | Valor de descuento aplicado durante temporadas especiales |
-| cant_stock_prod | Cantidad mínima de stock para generar compras pendientes |
+| id_producto | Identificador único del producto |
+| descripcion_producto | Nombre del producto |
+| observaciones_producto | Información funcional para uso interno sobre el producto |
+| valor_venta_producto | Valor de venta por defecto del producto |
+| valor_descuento_producto | Valor de descuento aplicado durante temporadas especiales |
+| stock_minimo | Cantidad mínima de stock para generar compras pendientes |
 | creado_por | Usuario que creó el registro (FK a usuario_sistema.id_us) |
 | fecha_creacion | Fecha de creación del registro |
 | actualizado_por | Usuario que actualizó el registro (FK a usuario_sistema.id_us) |
 | fecha_actualizacion | Fecha de actualización del registro |
 | fk_marca | Referencia a la marca del producto |
 | fk_subcategoria | Referencia a la subcategoría del producto |
-| status_prod | Indica si el producto está habilitado (1) o deshabilitado (0) |
+| status_producto | Indica si el producto está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Pendiente_compra
 
@@ -91,7 +91,7 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_cod | Identificador único del código |
+| id_codigo | Identificador único del código |
 | codigo_barras | Código de barras del producto (pueden existir varios) |
 | codigo_manual | Últimos 6 caracteres del código de barras (usado como identificación manual) |
 | fk_producto | Referencia al producto |
@@ -102,11 +102,11 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_po | Identificador único de la oferta |
+| id_oferta | Identificador único de la oferta |
 | fk_producto | Referencia al producto |
-| cant_po | Cantidad mínima para aplicar el precio en oferta |
-| valor_venta_po | Precio de venta unitario durante la oferta |
-| status_po | Indica si la oferta está habilitada (1) o deshabilitada (0) |
+| cant_oferta | Cantidad mínima para aplicar el precio en oferta |
+| valor_venta_oferta | Precio de venta unitario durante la oferta |
+| status_oferta | Indica si la oferta está habilitada (1) o deshabilitada (0) |
 
 ## Tabla Ubicacion
 **Descripción:** El mismo tipo de producto puede estar almacenados en diferentes lugares.   
@@ -114,13 +114,13 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_ub | Identificador único de ubicación |
-| nombre_ub | Nombre del lugar donde se almacena el producto |
+| id_ubicacion | Identificador único de ubicación |
+| nombre_ubicacion | Nombre del lugar donde se almacena el producto |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación del registro |
 | actualizado_por | Usuario que actualizó el registro |
 | fecha_actualizacion | Fecha de actualización del registro |
-| status_ub | Indica si la ubicación está habilitada (1) o deshabilitada (0) |
+| status_ubicacion | Indica si la ubicación está habilitada (1) o deshabilitada (0) |
 
 ## Tabla Producto_ubicacion
 **Descripción:** Relaciona el tipo de producto y en cuantas ubicaciones se encuentra así como la cantidad almacenada.  
@@ -131,7 +131,7 @@
 | id_produb | Identificador único |
 | fk_producto | Referencia al producto |
 | fk_ubicacion | Referencia al lugar de ubicación |
-| cant | Cantidad del producto en esa ubicación |
+| cant_produb | Cantidad del producto en esa ubicación |
 
 ## Tabla Departamento
 **Descripción:** Almacena los nombres de los departamentos de Colombia
@@ -154,12 +154,12 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_prov | Identificador del proveedor |
-| nit_prov | NIT del proveedor |
-| razon_social_prov | Razón social del proveedor |
-| email_prov | Correo electrónico del proveedor |
-| direccion_prov | Dirección del proveedor |
-| status_prov | Indica si el proveedor está habilitado (1) o deshabilitado (0) |
+| id_proveedor | Identificador del proveedor |
+| nit_proveedor | NIT del proveedor |
+| razon_social_proveedor | Razón social del proveedor |
+| email_proveedor | Correo electrónico del proveedor |
+| direccion_proveedor | Dirección del proveedor |
+| status_proveedor | Indica si el proveedor está habilitado (1) o deshabilitado (0) |
 | fk_ciudad | Referencia a la ciudad del proveedor |
 
 ## Tabla Telefono_proveedor
@@ -168,19 +168,19 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_tel_prov | Identificador del telefono |
-| numero_tel_prov | Número de teléfono |
-| whatsapp_tel_prov | Si el número está registrado en whatsapp (1) sino (0) |
+| id_tel_proveedor | Identificador del telefono |
+| numero_tel_proveedor | Número de teléfono |
+| whatsapp_tel_proveedor | Si el número está registrado en whatsapp (1) sino (0) |
 | fk_proveedor | Referencia a proveedor |
-| status_tel_prov | Indica si el numero teléfónico está habilitado (1) o deshabilitado (0) |
+| status_tel_proveedor | Indica si el numero teléfónico está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Metodo_pago
 
 | Campo | Descripción |
 |-------|-------------|
-| id_mp | Identificador del método de pago |
-| descipcion_mp | Descripción del método de pago |
-| status_mp | Indica si el método está habilitado (1) o deshabilitado (0) |
+| id_metodo_pago | Identificador del método de pago |
+| descipcion_metodo_pago | Descripción del método de pago |
+| status_metodo_pago | Indica si el método está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Compra_master
 
@@ -188,18 +188,18 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_cm | Identificador de la compra |
+| id_compra_master | Identificador de la compra |
 | fk_proveedor | Referencia al proveedor |
-| nombre_adjunto_cm | Nombre del archivo adjunto guardado (factura) |
-| fecha_cm | Fecha de la compra |
+| nombre_adjunto_compra_master | Nombre del archivo adjunto guardado (factura) |
+| fecha_compra_master | Fecha de la compra |
 | total_descuento | Monto total del descuento aplicable |
-| total_cm | Total general de la compra |
-| observaciones_cm | Observaciones sobre la compra |
+| total_compra_master | Total general de la compra |
+| observaciones_compra_master | Observaciones sobre la compra |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación de la compra |
 | actualizado_por | Usuario que actualizó el registro |
 | fecha_actualizacion | Fecha de actualización de la compra |
-| estado_cm | Estado de la compra (Registrada, Pagada, Anulada) |
+| estado_compra_master | Estado de la compra (Registrada, Pagada, Anulada) |
 
 ## Tabla Compra_detalle
 
@@ -207,31 +207,31 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_cd | Identificador del detalle de compra |
-| fk_cm | Referencia a compra_master |
+| id_compra_detalle | Identificador del detalle de compra |
+| fk_compra_master | Referencia a compra_master |
 | fk_producto | Referencia al producto comprado |
-| cant_cd | Cantidad de producto comprado |
-| valor_unit_cd | Valor unitario del producto |
-| xje_desc_cd | Porcentaje de descuento ofrecido por el proveedor |
-| descuento_unit_cd | Valor del descuento generado |
-| total_cd | Total del detalle (cant_cd * valor_unit_cd) |
-| valor_venta_cd | Valor de venta calculado del producto |
-| fecha_vencimiento_cd | Fecha de vencimiento del producto (si aplica) |
+| cant_compra_detalle | Cantidad de producto comprado |
+| valor_unit_compra_detalle | Valor unitario del producto |
+| xje_desc_compra_detalle | Porcentaje de descuento ofrecido por el proveedor |
+| descuento_unit_compra_detalle | Valor del descuento generado |
+| total_compra_detalle | Total del detalle (cant_compra_detalle * valor_unit_compra_detalle) |
+| valor_venta_compra_detalle | Valor de venta calculado del producto |
+| fecha_vencimiento_compra_detalle | Fecha de vencimiento del producto (si aplica) |
 
-## Tabla Pago_compra
+## Tabla Abono_compra
 
-**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos realizados o pago total. Según esta tabla se puede saber la cantidad de veces que ha abonado al proveedor a la misma factura 
+**Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos realizados o pago total. Según esta tabla se puede saber la cantidad de veces que ha abonado al proveedor sobre la misma factura 
 
 | Campo | Descripción |
 |-------|-------------|
-| id_pc | Identificador del pago |
-| estado_pago_pc | Estado del pago (Abonó o Pagado) |
-| monto_pc | Valor abonado o pagado |
-| nombre_comprobante_pc | Nombre del archivo de comprobante de pago (.jpg) |
-| fecha_hora_pc | Fecha y hora del pago (Diligenciado por el usuario, sin embargo el sistema le sugiere la fecha y hora actual del mismo)|
-| fk_mp | Referencia al método de pago |
-| fk_cm | Referencia a la compra_master |
-| observaciones_pc | Observaciones del pago |
+| id_abono_compra | Identificador del abono |
+| movimiento_abono_compra | Movimiento realizado (Abonó(A) - Devolución(D) - Cancelado(C)) |
+| monto_abono_compra | Valor abonado o pagado |
+| nombre_comprobante_abono_compra | Nombre del archivo de comprobante de pago (.jpg) |
+| fecha_hora_abono_compra | Fecha y hora (Diligenciado por el usuario, sin embargo el sistema le sugiere la fecha y hora actual del tiempo real)|
+| fk_metodo_pago | Referencia al método de pago |
+| fk_compra_master | Referencia a la compra_master |
+| observaciones_abono_compra | Observaciones |
 
 ## Tabla Devolucion_compra
 
@@ -239,40 +239,40 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_dc | Identificador de la devolución |
-| fk_dc | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
-| fecha_hora_dc | Fecha de la devolución |
-| cant_dc | Cantidad devuelta del producto |
-| estado_dc | (0) Si está pendiente (1) si ya se realizó la devolución |
-| observaciones_dc | Justificación de la devolución |
+| id_devolucion_compra | Identificador de la devolución |
+| fk_compra_detalle | Llave foránea de la factura Compra Detalle para obtener datos no solo del producto, si no datos adicionales de la compra master
+| fecha_hora_devolucion_compra | Fecha de la devolución |
+| cant_devolucion_compra | Cantidad devuelta del producto |
+| estado_devolucion_compra | (0) Si está pendiente (1) si ya se realizó la devolución |
+| observaciones_devolucion_compra | Justificación de la devolución |
 
 ## Tabla Usuario
 
 | Campo | Descripción |
 |-------|-------------|
-| id_us | Identificador del usuario |
-| nombre_us | Nombre del usuario |
-| nickname_us | Usuario de acceso |
-| password_us | Contraseña de acceso |
-| tel_us | Teléfono del usuario |
-| dir_us | Dirección del usuario |
-| email_us | Correo electrónico del usuario |
-| token_us | Token para activar la cuenta o recuperar la contraseña |
+| id_usuario_sistema | Identificador del usuario |
+| nombre_usuario_sistema | Nombre del usuario |
+| nickname_usuario_sistema | Usuario de acceso |
+| password_usuario_sistema | Contraseña de acceso |
+| tel_usuario_sistema | Teléfono del usuario |
+| dir_usuario_sistema | Dirección del usuario |
+| email_usuario_sistema | Correo electrónico del usuario |
+| token_usuario_sistema | Token para activar la cuenta o recuperar la contraseña |
 | fk_ciudad | Ciudad del usuario |
-| status_us | Indica si el usuario está habilitado (1) o deshabilitado (0) |
+| status_usuario_sistema | Indica si el usuario está habilitado (1) o deshabilitado (0) |
 
 ## Tabla Cliente
 **Descripción:** Almacena clientes tanto corporativos como particulares
 
 | Campo | Descripción |
 |-------|-------------|
-| id_cli | Identificador del cliente |
-| cedula_nit_cli | Cédula o NIT del cliente |
-| razon_social_cli | Nombre o razón social del cliente |
-| tel_cli | Teléfono del cliente |
-| direccion_cli | Dirección del cliente |
-| email_cli | Correo electrónico del cliente |
-| tipo_cli | Es un cliente Particular(P) o Corporativo(C) |
+| id_cliente | Identificador del cliente |
+| cedula_nit_cliente | Cédula o NIT del cliente |
+| razon_social_cliente | Nombre o razón social del cliente |
+| tel_cliente | Teléfono del cliente |
+| direccion_cliente | Dirección del cliente |
+| email_cliente | Correo electrónico del cliente |
+| tipo_cliente | Es un cliente Particular(P) o Corporativo(C) |
 | fk_ciudad | Referencia a la tabla Ciudad |
 
 ## Tabla Empleado_cliente
@@ -281,11 +281,11 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_ec | Identificador del empleado del cliente |
-| fk_cli | Referencia al cliente corporativo |
-| cedula_ec | Cédula del empleado |
-| nombre_ec | Nombre del empleado |
-| tel_ec | Teléfono del empleado |
+| id_empleado_cliente | Identificador del empleado del cliente |
+| fk_cliente | Referencia al cliente corporativo |
+| cedula_empleado_cliente | Cédula del empleado |
+| nombre_empleado_cliente | Nombre del empleado |
+| tel_empleado_cliente | Teléfono del empleado |
 
 ## Tabla Venta_master
 
@@ -293,18 +293,18 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_vm | Identificador de la venta |
-| fk_cli | Referencia al cliente |
-| fecha_vm | Fecha de la factura |
-| subtotal_vm | Suma total de los registros vendidos |
-| total_descuento_vm | Suma total de descuentos |
-| total_venta_vm | Valor total después del descuento |
-| observaciones_vm | Observaciones de la venta |
+| id_venta_master | Identificador de la venta |
+| numero_venta_master | Número consecutivo de venta al expedir un recibo |
+| fk_cliente | Referencia al cliente |
+| fecha_hora_venta_master | Fecha de la factura |
+| subtotal_venta_master | Suma total de los registros vendidos |
+| total_descuento_venta_master | Suma total de descuentos |
+| total_venta_venta_master | Valor total después del descuento |
+| observaciones_venta_master | Observaciones de la venta |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación del registro |
 | actualizado_por | Usuario que actualizó el registro |
 | fecha_actualizacion | Fecha de actualización del registro |
-| estado_venta | Estado de la venta (Registrada, Pagada, Anulada) |
 
 ## Tabla Venta_detalle
 
@@ -312,20 +312,17 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_vd | Identificador del detalle de venta |
-| numero_venta | Número de la venta |
-| fk_vm | Referencia a venta_master |
+| id_venta_detalle | Identificador del detalle de venta |
+| fk_venta_master | Referencia a venta_master |
 | fk_producto | Referencia al producto vendido |
-| fk_ec | Referencia al empleado del cliente |
+| fk_empleado_cliente | Referencia al empleado del cliente |
 | creado_por | Usuario que creó el registro |
 | fecha_creacion | Fecha de creación del registro |
 | actualizado_por | Usuario que actualizó el registro |
 | fecha_actualizacion | Fecha de actualización del registro |
-| cant_vd | Cantidad vendida |
-| valor_unit_vd | Valor unitario vendido |
-| total_vd | Total del detalle |
-| fecha_vd | Fecha de la venta |
-| hora_vd | Hora de la venta |
+| cant_venta_detalle | Cantidad vendida |
+| valor_unit_venta_detalle | Valor unitario vendido |
+| total_venta_detalle | Total del detalle |
 
 ## Tabla Devolucion_venta
 
@@ -333,79 +330,79 @@
 
 | Campo | Descripción |
 |-------|-------------|
-| id_dv | Identificador de la devolución |
-| fk_dv | Llave foránea de la factura Venta Detalle para obtener datos no solo del producto, si no datos adicionales de la venta master
-| fecha_hora_dv | Fecha de la devolución |
-| cant_dv | Cantidad devuelta del producto |
-| observaciones_dv | Justificación de la devolución |
+| id_devolucion_venta | Identificador de la devolución |
+| fk_devolucion_venta | Llave foránea de la factura Venta Detalle para obtener datos no solo del producto, si no datos adicionales de la venta master
+| fecha_hora_devolucion_venta | Fecha de la devolución |
+| cant_devolucion_venta | Cantidad devuelta del producto |
+| observaciones_devolucion_venta | Justificación de la devolución |
 
-## Tabla Pago_venta
+## Tabla Abono_venta
 **Descripción:** Esta tabla almacena los diferentes nombres de los archivos adjuntos que son comprobantes de abonos realizados o pago total. Según esta tabla se puede saber la cantidad de veces que ha abonado un cliente a la misma factura 
 
 | Campo | Descripción |
 |-------|-------------|
-| id_pv | Identificador del pago |
-| estado_pago_pv | Estado del pago (Abonó o Pagado) |
-| monto_pago_pv | Valor abonado o pagado por el cliente |
-| nombre_comprobante_pv | Nombre del comprobante de pago (.jpg)|
-| fecha_hora_pv | Fecha y hora del pago |
-| fk_mp | Referencia al método de pago |
-| fk_vm | Referencia a la venta master |
-| observaciones_pv | Observaciones del pago |
+| id_abono_venta | Identificador del pago |
+| movimiento_abono_venta | Estado del pago (Abonó(A) - Devolución(D) - Cancelado(C)) Se presenta cuando el cliente devuelve el producto y se devuelve el pago o abono realizado|
+| valor_abono_venta | Valor abonado o pagado por el cliente |
+| comprobante_abono_venta | Nombre del comprobante de pago (.jpg)|
+| fecha_hora_abono_venta | Fecha y hora del pago |
+| fk_metodo_pago | Referencia al método de pago |
+| fk_venta_master | Referencia a la venta master |
+| observaciones_abono_venta | Observaciones del pago |
 
 ## Tabla Movimiento_inventario
 **Descripción:** Se realizarán los 3 inventarios LIFO FIFO Y PONDERADO
 
 | Campo | Descripción |
 |-------|-------------|
-| id_mov | Identificador del movimiento |
+| id_inventario | Identificador del movimiento |
 | fk_producto | Referencia al producto |
-| tipo_mov | Tipo de movimiento (COMPRA (C), VENTA (V), DEVOLUCION_CLIENTE (DC), DEVOLUCION_PROVEEDOR (DP), AJUSTE_POSITIVO (AP), AJUSTE_NEGATIVO (AN), INVENTARIO_INICIAL (IN)) |
-| cant_mov | Cantidad del movimiento |
-| valor_unit_mov | Valor unitario (solo para entradas) |
-| fecha_hora_mov | Fecha y hora del movimiento |
-| fk_cd | Referencia al detalle de compra |
-| fk_vd | Referencia al detalle de venta |
+| tipo_inventario | Tipo de movimiento (COMPRA (C), VENTA (V), DEVOLUCION_CLIENTE (DC), DEVOLUCION_PROVEEDOR (DP), AJUSTE_POSITIVO (AP), AJUSTE_NEGATIVO (AN), INVENTARIO_INICIAL (IN)) |
+| cant_inventario | Cantidad del movimiento |
+| valor_unit_inventario | Valor unitario (solo para entradas) |
+| fecha_hora_inventario | Fecha y hora del movimiento |
+| fk_compra_detalle | Referencia al detalle de compra |
+| fk_venta_detalle | Referencia al detalle de venta |
 | fk_usuario | Referencia al usuario que realiza la acción|
-| observaciones | Observaciones del movimiento |
+| observaciones_inventario | Observaciones del movimiento |
 
 ## Tabla Snapshot_inventario
 **Descripción:** Registra el corte mensual de cada uno de los inventarios de los productos para evitar consultas lentas en la tabla *Inventario_Movimiento*
 
 | Campo | Descripción |
 |-------|-------------|
-| id_sh | Identificador del corte del inventario |
-| fecha_corte_sh | Fecha del corte es la misma fecha de creación |
-| fk_producto_sh | Referencia del producto |
-| cant_final_sh | cantidad final del producto |
-| costo_lifo_sh | Costo final del inventario FIFO |
-| costo_fifo_sh | Costo final del inventario LIFO |
-| costo_ponderado_sh | Costo final del inventario Ponderado |
+| id_snapshot | Identificador del corte del inventario |
+| fecha_corte_snapshot | Fecha del corte es la misma fecha de creación |
+| fk_producto_snapshot | Referencia del producto |
+| cant_final_snapshot | cantidad final del producto |
+| costo_lifo_snapshot | Costo final del inventario FIFO |
+| costo_fifo_snapshot | Costo final del inventario LIFO |
+| costo_ponderado_snapshot | Costo final del inventario Ponderado |
 
 ## Tabla Stock_actual
 **Descripción:** Se basa en la cantidad del stock actual de cada producto basado en la tabla llamada Movimiento_inventario, con el fin de obtener el saldo de cada producto en tiempo real
 
 | Campo | Descripción |
 |-------|-------------|
-| id_st | Identificador del registro |
+| id_stock | Identificador del registro |
 | fk_producto | Referencia al producto |
-| cant_st | Cantidad actual del producto |
+| cant_stock | Cantidad actual del producto |
 
 ## Tabla Modulo
 **Descripción:** Almacena el nombre de cada uno de los módulos visibles para el usuario
 | Campo | Descripción |
 |-------|-------------|
-| id_mod | Identificador del módulo |
-| nombre_mod | Nombre del módulo |
+| id_modulo | Identificador del módulo |
+| nombre_modulo | Nombre del módulo |
 
 ## Tabla Permisos_Usuario_Modulo
 **Descripción:** Almacena la relación de los permisos de tiene cada usuario con respecto a cada uno de los módulos visible en el software web
 
 | Campo | Descripción |
 |-------|-------------|
-| id_pu | Identificador del registro |
+| id_permiso | Identificador del registro |
 | fk_usuario | Referencia al usuario |
-| fk_tabla | Referencia a la tabla |
+| fk_modulo | Referencia a al módulo |
 | lectura_registro | Permiso para leer registros |
 | crear_registro | Permiso para crear registros |
 | actualizar_registro | Permiso para actualizar registros |
